@@ -5,5 +5,7 @@ import json
 from django.shortcuts import render
 
 def index(request):
-     #return HttpResponse('hello1')
      return render(request, 'index.html')
+
+def api(request):
+    return render(request, '/api/index.html')

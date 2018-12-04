@@ -25,6 +25,7 @@ from .application import default
 urlpatterns = [
     #url(r'^admin/', admin.site.urls),
     url(r'^test/index$', default.index),
+    url(r'^test/api$', default.api),
     url(r'^test/admin/([a-z,A-Z]+)$', admin.index),
     url(r'^test/app/([a-z,A-Z]+)$', app.index),
     url(r'^test/web/([a-z,A-Z]+)$', web.index),
