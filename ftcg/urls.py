@@ -27,7 +27,7 @@ from .application import statistics
 
 urlpatterns = [
     #url(r'^admin/', admin.site.urls),
-    url(r'^test/admin/ $', admin.index),
+    url(r'^test/([a-z,A-Z]+)$', admin.index),
     url(r'^test/user/([a-z,A-Z]+)$', user.index),
     url(r'^test/assessment/([a-z,A-Z]+)$', assessment.index),
     url(r'^test/sorting/([a-z,A-Z]+)$', sorting.index),

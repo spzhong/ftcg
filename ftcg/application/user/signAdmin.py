@@ -4,7 +4,9 @@ import django.utils.log
 import logging.handlers
 import json
 import time
-from ....ftcg.models import user
+import sys
+sys.path.append('...')
+from ftcg.models import user
 
 def sign(request):
     callBackDict = {}
