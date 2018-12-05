@@ -2,16 +2,18 @@
 
 from django.http import HttpResponse
 import json
-from .logicApp import userAdmin
-
+import signAdmin
+import userAdmin
 
 def index(request,route):
     if route == 'sign':
-        callBackDict = userAdmin.signUser(request)
+        callBackDict = signAdmin.sign(request)
+    elif route == 'signOut':
+        callBackDict = signAdmin.signOut(request)
     elif route == 'register':
         callBackDict = userAdmin.registerUser(request)
     elif route == 'updateUser':
         callBackDict = userAdmin.updateUser(request)
     else:
-         return HttpResponse("Hello world ! ")
+         return HttpResponse("no found !!!")
     return HttpResponse(json.dumps(callBackDict))

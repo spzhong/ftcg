@@ -4,9 +4,11 @@ import django.utils.log
 import logging.handlers
 import json
 import time
-import sys
-sys.path.append('...')
-from ftcg.models import user
+#import sys
+#sys.path.append('...')
+#from ftcg.models import user
+
+from ....ftcg.models import user
 
 
 # 查询用户信息
@@ -66,7 +68,4 @@ def registerUser(request):
 def updateUser(request):
     return
 
-def signUser(request):
-    callBackDict = {}
 
-    return callBackDict
