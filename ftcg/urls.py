@@ -27,9 +27,9 @@ from .application import statistics
 
 urlpatterns = [
     #url(r'^admin/', admin.site.urls),
-    url(r'^testftcg/config/([a-z,A-Z]+)$', admin.index),
-    url(r'^testftcg/user/([a-z,A-Z]+)$', user.index),
-    url(r'^testftcg/assessment/([a-z,A-Z]+)$', assessment.index),
-    url(r'^testftcg/sorting/([a-z,A-Z]+)$', sorting.index),
-    url(r'^testftcg/statistics/([a-z,A-Z]+)$', statistics.index),
+    url(r'^/config/([a-z,A-Z]+)$', admin.index),
+    url(r'^/user/([a-z,A-Z]+)$', user.index),
+    url(r'^/assessment/([a-z,A-Z]+)$', assessment.index),
+    url(r'^/sorting/([a-z,A-Z]+)$', sorting.index),
+    url(r'^/statistics/([a-z,A-Z]+)$', statistics.index),
 ]
