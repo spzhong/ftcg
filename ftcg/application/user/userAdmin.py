@@ -28,7 +28,8 @@ def selectUser(name):
     return "账号为空"
 
 
-# 注册用户信息
+
+# 注册用户
 def registerUser(request):
     name = request.GET['name'];
     code = request.GET['code'];
@@ -69,3 +70,14 @@ def updateUser(request):
     return
 
 
+# 获取用户信息
+def info(request):
+    return
+
+# 第一次修改密码
+def firstPassword(request):
+    return
+
+# 修改密码
+def changePassword(request):
+    return

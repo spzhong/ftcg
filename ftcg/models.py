@@ -15,3 +15,6 @@ class sign(models.Model):
     token = models.CharField(max_length=32)
     userId = models.IntegerField(db_index =True)
     signTime = models.CharField(null=True,max_length=20)
+
+class sorting (models.Model):
+    id = models.UUIDField(primary_key=True)

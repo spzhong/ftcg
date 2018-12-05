@@ -18,7 +18,7 @@ Including another URLconf
 from django.conf.urls import url
 from django.contrib import admin
 
-from .application import admin
+from .application import config
 from .application import user
 from .application import assessment
 from .application import sorting
@@ -27,7 +27,7 @@ from .application import statistics
 
 urlpatterns = [
     #url(r'^admin/', admin.site.urls),
-    url(r'^testftcg/config/([a-z,A-Z]+)$', admin.index),
+    url(r'^testftcg/config/([a-z,A-Z]+)$', config.index),
     url(r'^testftcg/user/([a-z,A-Z]+)$', user.index),
     url(r'^testftcg/assessment/([a-z,A-Z]+)$', assessment.index),
     url(r'^testftcg/sorting/([a-z,A-Z]+)$', sorting.index),
