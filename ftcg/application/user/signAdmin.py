@@ -8,7 +8,8 @@ import json
 import time
 import sys
 
-from Crypto.Hash import MD5
+import hashlib
+
 
 sys.path.append('...')
 from ftcg.models import user
@@ -50,7 +51,10 @@ def signOut(request):
 def createSignRecord(userId):
     try:
         createTime = int(time.time() * 1000)
-        token = MD5(MD5(str(createTime)))
+        m2 = hashlib.md5()
+        # 两次计算MD5
+        m2.update(str(createTime).encode('utf-8'))
+        token = m2.update(str(m2.hexdigest()))
         uid = str(uuid.uuid1())
         obj = sign.objects.create(id=uid, token=token, userId=userId, signTime=createTime)
         obj.save()
