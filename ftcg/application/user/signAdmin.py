@@ -19,6 +19,7 @@ def signIn(request):
     name = request.GET['name']
     code = request.GET['code']
     callBackDict = {}
+    logger = logging.getLogger("django")
     if len(name) < 5:
         callBackDict['code'] = '0'
         callBackDict['msg'] = '账号太短了'
@@ -32,12 +33,14 @@ def signIn(request):
         oneUserList = user.objects.filter(**select)
         if len(oneUserList) > 0:
             userObj = oneUserList[0]
+            logger.info('查询出来用户了')
             signObj = createSignRecord(userObj.id)
             if isinstance(signObj, sign):
-                dict['token'] = signObj.token
+                logger.info('插入成功了')
                 callBackDict['code'] = '1'
                 callBackDict['data'] = {"id":signObj.userId,"token":signObj.token}
             else:
+                logger.info('没有插入用户登录的记录')
                 callBackDict['code'] = '0'
                 callBackDict['msg'] = '登录异常'
         else:
@@ -46,7 +49,6 @@ def signIn(request):
     except BaseException as e:
         callBackDict['code'] = '0'
         callBackDict['msg'] = '账号密码错误'
-        logger = logging.getLogger("django")
         logger.info(str(e))
     return callBackDict
 
