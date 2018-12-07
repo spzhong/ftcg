@@ -17,9 +17,11 @@ class sign(models.Model):
     userId = models.IntegerField(db_index =True)
     signTime = models.IntegerField(default=0)
 
+
 class sorting (models.Model):
     id = models.UUIDField(primary_key=True)
-
+    villageId = models.IntegerField(default=0)
+    streetId = models.IntegerField(default=0)
 
 
 
