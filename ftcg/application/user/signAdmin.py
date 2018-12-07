@@ -15,7 +15,7 @@ sys.path.append('...')
 from ftcg.models import user
 from ftcg.models import sign
 
-def sign(request):
+def signIn(request):
     name = request.GET['name'];
     code = request.GET['code'];
     callBackDict = {}
@@ -58,9 +58,14 @@ def createSignRecord(userId):
         uid = str(uuid.uuid1())
         obj = sign.objects.create(id=uid, token=token, userId=userId, signTime=createTime)
         obj.save()
+        logger = logging.getLogger("django")
+        logger.info("插入正常")
         return obj
     except BaseException as e:
+        logger = logging.getLogger("django")
+        logger.info(str(e))
         return "登录异常"
+
 
 
 # 验证token

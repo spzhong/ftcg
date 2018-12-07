@@ -7,7 +7,7 @@ import userAdmin
 
 def index(request,route):
     if route == 'sign':
-        callBackDict = signAdmin.sign(request)
+        callBackDict = signAdmin.signIn(request)
     elif route == 'signOut':
         callBackDict = signAdmin.signOut(request)
     elif route == 'register':
