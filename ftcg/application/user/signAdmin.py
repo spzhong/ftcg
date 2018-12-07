@@ -32,8 +32,14 @@ def signIn(request):
         oneUserList = user.objects.filter(**select)
         if len(oneUserList) > 0:
             userObj = oneUserList[0]
-            callBackDict['code'] = '1'
-            callBackDict['data'] = createSignRecord(userObj.id)
+            signObj = createSignRecord(userObj.id)
+            if isinstance(signObj, sign):
+                dict['token'] = signObj.token
+                callBackDict['code'] = '1'
+                callBackDict['data'] = {"id":signObj.userId,"token":signObj.token}
+            else:
+                callBackDict['code'] = '0'
+                callBackDict['msg'] = '登录异常'
         else:
             callBackDict['code'] = '0'
             callBackDict['msg'] = '账号密码错误'
