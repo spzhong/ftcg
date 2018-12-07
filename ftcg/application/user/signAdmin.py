@@ -38,7 +38,7 @@ def signIn(request):
             callBackDict['msg'] = '账号密码错误'
     except BaseException as e:
         callBackDict['code'] = '0'
-        callBackDict['msg'] = '账号不存在'
+        callBackDict['msg'] = '账号密码错误'
     return callBackDict
 
 # 登出操作
