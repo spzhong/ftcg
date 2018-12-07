@@ -16,8 +16,8 @@ from ftcg.models import user
 from ftcg.models import sign
 
 def signIn(request):
-    name = request.GET.get('name')
-    code = request.GET.get('code')
+    name = request.GET['name']
+    code = request.GET['code']
     callBackDict = {}
     if len(name) < 5:
         callBackDict['code'] = '0'
@@ -30,7 +30,7 @@ def signIn(request):
     try:
         select = {'name':name,'code':code}
         oneUserList = user.objects.filter(**select)
-        if len(oneUserList) == 0:
+        if len(oneUserList) > 0:
             userObj = oneUserList[0]
             callBackDict['code'] = '1'
             callBackDict['data'] = createSignRecord(userObj.id)
