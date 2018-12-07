@@ -7,14 +7,16 @@ import time
 import sys
 sys.path.append('...')
 from ftcg.models import user
+from ftcg.models import sign
 
+import signAdmin
 
 
 
 # 查询用户信息
 def selectUser(name):
     if name :
-        if len(name) > 5:
+        if len(name) > 4:
             try:
                 oneUserList = user.objects.filter(name=name)
                 if len(oneUserList) == 0:
@@ -40,7 +42,7 @@ def registerUser(request):
         return callBackDict
     if len(code) != 32:
         callBackDict['code'] = '0'
-        callBackDict['msg'] = '账号密码多错误'
+        callBackDict['msg'] = '账号密码错误'
         return callBackDict
     try:
         # 查询用户信息
@@ -52,11 +54,15 @@ def registerUser(request):
             callBackDict['msg'] = '用户账号已存在'
         else:
             # 帐户不存在，进行创建用户信息
-            createTime = str(int(time.time()*1000))
+            createTime = int(time.time()*1000)
             obj = user.objects.create(name=name, code=code, createTime=createTime)
             obj.save()
             callBackDict['code'] = '1'
             dict = {'id':obj.id}
+            # 插入一条的登录记录
+            signObj = signAdmin.createSignRecord(obj.id)
+            if isinstance(signObj, sign):
+                dict['token'] = signObj.token
             callBackDict['data'] = dict
     except BaseException as e:
         callBackDict['code'] = '0'
