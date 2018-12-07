@@ -47,12 +47,14 @@ def registerUser(request):
         return callBackDict
     if len(token) != 32:
         callBackDict['code'] = '0'
-        callBackDict['msg'] = 'token异常，无法注册'
+        callBackDict['msg'] = 'token验证失败'
         return callBackDict
     try:
         # 查看登录的token
         if signAdmin.verificationToken(token) == False:
-            return
+            callBackDict['code'] = '0'
+            callBackDict['msg'] = 'token异常，无法注册'
+            return callBackDict
         # 查询用户信息
         userInfo = selectUser(name)
         logger = logging.getLogger("django")
@@ -75,8 +77,6 @@ def registerUser(request):
     except BaseException as e:
         callBackDict['code'] = '0'
         callBackDict['msg'] = '系统异常'
-        logger = logging.getLogger("django")
-        logger.info(str(e))
     return callBackDict
 
 # 更新用户信息
