@@ -16,8 +16,8 @@ from ftcg.models import user
 from ftcg.models import sign
 
 def signIn(request):
-    name = request.GET['name'];
-    code = request.GET['code'];
+    name = request.GET.get('name')
+    code = request.GET.get('code')
     callBackDict = {}
     if len(name) < 5:
         callBackDict['code'] = '0'
@@ -28,7 +28,8 @@ def signIn(request):
         callBackDict['msg'] = '账号密码错误'
         return callBackDict
     try:
-        oneUserList = user.objects.filter(name=name, code=code)
+        select = {'name':name,'code':code}
+        oneUserList = user.objects.filter(**select)
         if len(oneUserList) == 0:
             userObj = oneUserList[0]
             callBackDict['code'] = '1'
