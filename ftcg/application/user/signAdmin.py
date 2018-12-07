@@ -52,20 +52,15 @@ def createSignRecord(userId):
     try:
         logger = logging.getLogger("django")
         createTime = int(time.time() * 1000)
-        m2 = hashlib.md5()
-        # 两次计算MD5
-        m2.update(str(createTime).encode('utf-8'))
-        token = m2.update(str(m2.hexdigest()))
-
-        logger.info('token:'+token);
+        # 两次加密
+        hash = hashlib.md5()
+        hash.update(str(createTime))
+        md = hash.hexdigest()
+        hash.update(str(md))
+        token = str(hash.hexdigest())
         uid = str(uuid.uuid1())
-        logger.info('uid:' + uid);
-        logger.info('userId:' + userId);
-        logger.info('signTime:' + str(createTime));
-
         obj = sign.objects.create(id=uid, token=token, userId=userId, signTime=createTime)
         obj.save()
-        logger.info("插入正常")
         return obj
     except BaseException as e:
         logger.info(str(e))
