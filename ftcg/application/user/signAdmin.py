@@ -40,6 +40,8 @@ def signIn(request):
     except BaseException as e:
         callBackDict['code'] = '0'
         callBackDict['msg'] = '账号密码错误'
+        logger = logging.getLogger("django")
+        logger.info(str(e))
     return callBackDict
 
 # 登出操作
