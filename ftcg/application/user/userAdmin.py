@@ -35,6 +35,7 @@ def selectUser(name):
 def registerUser(request):
     name = request.GET['name'];
     code = request.GET['code'];
+    token = request.GET['token'];
     callBackDict = {}
     if len(name) < 5:
         callBackDict['code'] = '0'
@@ -44,12 +45,19 @@ def registerUser(request):
         callBackDict['code'] = '0'
         callBackDict['msg'] = '账号密码错误'
         return callBackDict
+    if len(token) != 32:
+        callBackDict['code'] = '0'
+        callBackDict['msg'] = 'token异常，无法注册'
+        return callBackDict
     try:
+        # 查看登录的token
+        if signAdmin.verificationToken(token) == False:
+            return
         # 查询用户信息
         userInfo = selectUser(name)
         logger = logging.getLogger("django")
         logger.info(str(userInfo))
-	if isinstance(userInfo,user):
+    	if isinstance(userInfo,user):
             callBackDict['code'] = '0'
             callBackDict['msg'] = '用户账号已存在'
         else:
