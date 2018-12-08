@@ -89,8 +89,9 @@ def registerUser(request):
             #创建一条关联的用户和城市之间的关系
             if role == 2 or role == 3:
                 #返回用户的区域信息
-                region = userConfigAdmin.createUserAndStreetRS(obj.id,villageId)
-                dict['region'] = region
+                regionDict = userConfigAdmin.createUserAndStreetRS(obj.id,villageId)
+                if regionDict :
+                    dict['region'] = json.dumps(regionDict)
             # 插入一条的登录记录
             signObj = signAdmin.createSignRecord(obj.id)
             if isinstance(signObj, sign):
