@@ -17,8 +17,8 @@ from ftcg.models import sign
 import userConfigAdmin
 
 def signIn(request):
-    name = request.GET('name')
-    password = request.GET('password')
+    name = request.GET['name'];
+    password = request.GET['password']
     callBackDict = {}
     if len(name) < 5:
         callBackDict['code'] = '0'
@@ -38,11 +38,11 @@ def signIn(request):
             if isinstance(signObj, sign):
                 callBackDict['code'] = '1'
                 # 物业管理员和小区的用户，需要锁定其管理的区域
-                if signObj.role == 2 | signObj.role == 3:
+                if userObj.role == 2 | userObj.role == 3:
                     region = userConfigAdmin.selectUserAndStreetRS(signObj.userId)
-                    callBackDict['data'] = {"id": signObj.userId, "token": signObj.token, "role": signObj.role ,"region":region}
+                    callBackDict['data'] = {"id": signObj.userId, "token": signObj.token, "role": userObj.role ,"region":region}
                 else:
-                    callBackDict['data'] = {"id":signObj.userId,"token":signObj.token,"role":signObj.role}
+                    callBackDict['data'] = {"id":signObj.userId,"token":signObj.token,"role":userObj.role}
             else:
                 callBackDict['code'] = '0'
                 callBackDict['msg'] = '登录异常'
