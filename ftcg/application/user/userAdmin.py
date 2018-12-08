@@ -34,10 +34,11 @@ def selectUser(name):
 
 # 注册用户
 def registerUser(request):
-    name = request.GET['name'];
-    password = request.GET['password'];
-    token = request.GET['token'];
-    role = request.GET['role'];
+    name = request.REQUEST.get['name'];
+    password = request.REQUEST.get['password'];
+    token = request.REQUEST.get['token'];
+    roles = request.REQUEST.get['role'];
+    role = int(roles)
     callBackDict = {}
     if len(name) < 5:
         callBackDict['code'] = '0'

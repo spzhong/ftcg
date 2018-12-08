@@ -18,6 +18,7 @@ class sign(models.Model):
     signTime = models.BigIntegerField(default=0)
 
 
+
 class sorting(models.Model):
     id = models.UUIDField(primary_key=True)
     villageId = models.IntegerField(default=0)
@@ -41,14 +42,3 @@ class rsStreetVillage(models.Model):
 class rsUserVillage(models.Model):
     userId = models.IntegerField(db_index=True)
     villageId = models.IntegerField(db_index=True)
-
-
-# 基础数据
-obj1 = street.objects.create(name='福田街道')
-obj1.save()
-
-obj2 = village.objects.create(name='福田小区')
-obj2.save()
-
-obj3 = rsStreetVillage.objects.create(streetId=1,village=1)
-obj3.save()
