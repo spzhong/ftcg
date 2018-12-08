@@ -10,6 +10,7 @@ from ftcg.models import street
 from ftcg.models import village
 from ftcg.models import rsStreetVillage
 from django.db import IntegrityError, transaction
+from django.db import transaction
 
 def baseConfigQuestion(request):
     callBackDict = {}
@@ -33,6 +34,7 @@ def baseConfigStreet(request):
     return callBackDict
 
 
+@transaction.commit_manually
 def baseConfigVillage(request):
     streetId = request.GET['streetId'];
     name = request.GET['name'];
@@ -45,17 +47,19 @@ def baseConfigVillage(request):
         callBackDict['code'] = '0'
         callBackDict['msg'] = '小区名称为空'
         return callBackDict
+    # 开启一个事物
     try:
-        with transaction.atomic():
-            #创建一个小区
-            obj = village.objects.create(name=name)
-            obj.save()
-            # 小区和街道的关系
-            rsStreetVillageObj = rsStreetVillage.objects.create(streetId2=streetId,villageId=obj.id)
-            rsStreetVillageObj.save()
-            callBackDict['code'] = '1'
-            callBackDict['data'] = obj.id
+        #创建一个小区
+        obj = village.objects.create(name=name)
+        obj.save()
+        # 小区和街道的关系
+        rsStreetVillageObj = rsStreetVillage.objects.create(streetId=streetId,villageId=obj.id)
+        rsStreetVillageObj.save()
+        transaction.commit()
+        callBackDict['code'] = '1'
+        callBackDict['data'] = obj.id
     except BaseException as e:
+        transaction.rollback()
         callBackDict['code'] = '0'
         callBackDict['msg'] = '系统异常'
     return callBackDict
