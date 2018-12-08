@@ -91,7 +91,7 @@ def registerUser(request):
                 #返回用户的区域信息
                 regionDict = userConfigAdmin.createUserAndStreetRS(obj.id,villageId)
                 if regionDict :
-                    dict['region'] = json.dumps(regionDict)
+                    dict['region'] = regionDict
             # 插入一条的登录记录
             signObj = signAdmin.createSignRecord(obj.id)
             if isinstance(signObj, sign):

@@ -33,7 +33,8 @@ def createUserAndStreetRS(userId,villageId):
         # 创建一条用户和小区的关系
         obj = rsUserVillage.objects.create(userId=userId, villageId=villageId)
         obj.save()
-        return {'villageId':villageId,'villageName':villageObj.name,'streetId':streetId,'streetName':street.name}
+        regionDict = {'villageId':villageId,'villageName':villageObj.name,'streetId':streetId,'streetName':streetObj.name}
+        return regionDict
     except BaseException as e:
         logger = logging.getLogger("django")
         logger.info(str(e))
