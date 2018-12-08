@@ -19,37 +19,31 @@ def signIn(request):
     name = request.GET['name']
     code = request.GET['code']
     callBackDict = {}
-    logger = logging.getLogger("django")
     if len(name) < 5:
         callBackDict['code'] = '0'
         callBackDict['msg'] = '账号太短了'
         return callBackDict
     if len(code) != 32:
         callBackDict['code'] = '0'
-        callBackDict['msg'] = '账号密码错误'
+        callBackDict['msg'] = '密码错误'
         return callBackDict
     try:
-        select = {'name':name,'code':code}
-        oneUserList = user.objects.filter(**select)
+        oneUserList = user.objects.filter(name=name,code=code)
         if len(oneUserList) > 0:
             userObj = oneUserList[0]
-            logger.info('查询出来用户了')
             signObj = createSignRecord(userObj.id)
             if isinstance(signObj, sign):
-                logger.info('插入成功了')
                 callBackDict['code'] = '1'
                 callBackDict['data'] = {"id":signObj.userId,"token":signObj.token}
             else:
-                logger.info('没有插入用户登录的记录')
                 callBackDict['code'] = '0'
                 callBackDict['msg'] = '登录异常'
         else:
             callBackDict['code'] = '0'
-            callBackDict['msg'] = '账号密码错误'
+            callBackDict['msg'] = '账号不存在'
     except BaseException as e:
         callBackDict['code'] = '0'
         callBackDict['msg'] = '账号密码错误'
-        logger.info(str(e))
     return callBackDict
 
 # 登出操作
