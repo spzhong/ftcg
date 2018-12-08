@@ -41,7 +41,7 @@ def createUserAndStreetRS(userId,villageId):
         return None
 
 
-# 查询用户和小区的关系
+# 查询用户所在的街道和小区的关系
 def selectUserAndStreetRS(userId):
     try:
         # 查询小区-和街道的关系
@@ -54,7 +54,7 @@ def selectUserAndStreetRS(userId):
         villageObj = village.objects.get(id=villageId)
 
         # 返回用户和小区及街道的关系
-        return {'villageId':villageId,'villageName':villageObj.name,'streetId':streetId,'streetName':street.name}
+        return {'villageId':villageId,'villageName':villageObj.name,'streetId':streetId,'streetName':streetObj.name}
     except BaseException as e:
         logger = logging.getLogger("django")
         logger.info(str(e))
