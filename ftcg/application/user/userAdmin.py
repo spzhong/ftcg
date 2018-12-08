@@ -8,9 +8,10 @@ import sys
 sys.path.append('...')
 from ftcg.models import user
 from ftcg.models import sign
+from ftcg.models import village
 
 import signAdmin
-
+import userConfigAdmin
 
 
 # 查询用户信息
@@ -36,6 +37,7 @@ def registerUser(request):
     name = request.GET['name'];
     password = request.GET['password'];
     token = request.GET['token'];
+    role = request.GET['role'];
     callBackDict = {}
     if len(name) < 5:
         callBackDict['code'] = '0'
@@ -49,6 +51,20 @@ def registerUser(request):
         callBackDict['code'] = '0'
         callBackDict['msg'] = 'token验证失败'
         return callBackDict
+    if len(token) != 32:
+        callBackDict['code'] = '0'
+        callBackDict['msg'] = 'token验证失败'
+        return callBackDict
+    if role < 0 | role > 3:
+        callBackDict['code'] = '0'
+        callBackDict['msg'] = '注册用户类型不存在'
+        return callBackDict
+    if role == 2 | role == 3:
+        villageId = request.GET['villageId']
+        if len(villageId) == 0:
+            callBackDict['code'] = '0'
+            callBackDict['msg'] = '用户所在小区不存在'
+            return callBackDict
     try:
         # 查看登录的token
         if signAdmin.verificationToken(token) == False:
@@ -65,10 +81,15 @@ def registerUser(request):
         else:
             # 帐户不存在，进行创建用户信息
             createTime = int(time.time()*1000)
-            obj = user.objects.create(name=name, password=password, createTime=createTime)
+            obj = user.objects.create(name=name, password=password, createTime=createTime,role=role)
             obj.save()
             callBackDict['code'] = '1'
             dict = {'id':obj.id}
+            #创建一条关联的用户和城市之间的关系
+            if role == 2 | role == 3:
+                #返回用户的区域信息
+                region = userConfigAdmin.createUserAndStreetRS(obj.id,villageId)
+                dict['region'] = region
             # 插入一条的登录记录
             signObj = signAdmin.createSignRecord(obj.id)
             if isinstance(signObj, sign):
