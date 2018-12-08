@@ -34,7 +34,6 @@ def baseConfigStreet(request):
     return callBackDict
 
 
-@transaction.commit_manually
 def baseConfigVillage(request):
     streetId = request.GET['streetId'];
     name = request.GET['name'];
@@ -55,11 +54,9 @@ def baseConfigVillage(request):
         # 小区和街道的关系
         rsStreetVillageObj = rsStreetVillage.objects.create(streetId=streetId,villageId=obj.id)
         rsStreetVillageObj.save()
-        transaction.commit()
         callBackDict['code'] = '1'
         callBackDict['data'] = obj.id
     except BaseException as e:
-        transaction.rollback()
         callBackDict['code'] = '0'
         callBackDict['msg'] = '系统异常'
     return callBackDict
