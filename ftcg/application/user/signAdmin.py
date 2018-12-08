@@ -17,18 +17,18 @@ from ftcg.models import sign
 
 def signIn(request):
     name = request.GET['name']
-    inCode = request.GET['code']
+    password = request.GET['password']
     callBackDict = {}
     if len(name) < 5:
         callBackDict['code'] = '0'
         callBackDict['msg'] = '账号太短了'
         return callBackDict
-    if len(inCode) != 32:
+    if len(password) != 32:
         callBackDict['code'] = '0'
         callBackDict['msg'] = '密码错误'
         return callBackDict
     try:
-        oneUserList = user.objects.filter(name=name,code=inCode)
+        oneUserList = user.objects.filter(name=name,password=password)
         if len(oneUserList) > 0:
             userObj = oneUserList[0]
             signObj = createSignRecord(userObj.id)

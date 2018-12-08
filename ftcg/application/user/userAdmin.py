@@ -34,14 +34,14 @@ def selectUser(name):
 # 注册用户
 def registerUser(request):
     name = request.GET['name'];
-    code = request.GET['code'];
+    password = request.GET['password'];
     token = request.GET['token'];
     callBackDict = {}
     if len(name) < 5:
         callBackDict['code'] = '0'
         callBackDict['msg'] = '账号太短了'
         return callBackDict
-    if len(code) != 32:
+    if len(password) != 32:
         callBackDict['code'] = '0'
         callBackDict['msg'] = '账号密码错误'
         return callBackDict
@@ -65,7 +65,7 @@ def registerUser(request):
         else:
             # 帐户不存在，进行创建用户信息
             createTime = int(time.time()*1000)
-            obj = user.objects.create(name=name, code=code, createTime=createTime)
+            obj = user.objects.create(name=name, password=password, createTime=createTime)
             obj.save()
             callBackDict['code'] = '1'
             dict = {'id':obj.id}
