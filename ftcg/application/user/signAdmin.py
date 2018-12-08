@@ -29,6 +29,9 @@ def signIn(request):
         return callBackDict
     try:
         userObj = user.objects.get(name=name)
+        logger = logging.getLogger("django")
+        logger.info(userObj.password)
+        logger.info(password)
         if userObj.password == password:
             signObj = createSignRecord(userObj.id)
             if isinstance(signObj, sign):
@@ -39,10 +42,10 @@ def signIn(request):
                 callBackDict['msg'] = '登录异常'
         else:
             callBackDict['code'] = '0'
-            callBackDict['msg'] = '账号不存在'
+            callBackDict['msg'] = '账号密码错误'
     except BaseException as e:
         callBackDict['code'] = '0'
-        callBackDict['msg'] = '账号密码错误'
+        callBackDict['msg'] = '账号不存在'
         logger = logging.getLogger("django")
         logger.info(str(e))
     return callBackDict
