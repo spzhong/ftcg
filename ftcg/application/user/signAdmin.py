@@ -17,8 +17,8 @@ from ftcg.models import sign
 import userConfigAdmin
 
 def signIn(request):
-    name = request.REQUEST.get('name')
-    password = request.REQUEST.get('password')
+    name = request.GET('name')
+    password = request.GET('password')
     callBackDict = {}
     if len(name) < 5:
         callBackDict['code'] = '0'
