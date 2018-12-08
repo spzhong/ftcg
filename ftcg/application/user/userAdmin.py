@@ -65,7 +65,7 @@ def registerUser(request):
         else:
             # 帐户不存在，进行创建用户信息
             createTime = int(time.time()*1000)
-            obj = user.objects.create(name=name, code=code, createTime=createTime)
+            obj = user.objects.create(name=name, code=code, createTime=str(createTime))
             obj.save()
             callBackDict['code'] = '1'
             dict = {'id':obj.id}

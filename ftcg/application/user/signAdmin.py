@@ -17,18 +17,18 @@ from ftcg.models import sign
 
 def signIn(request):
     name = request.GET['name']
-    code = request.GET['code']
+    inCode = request.GET['code']
     callBackDict = {}
     if len(name) < 5:
         callBackDict['code'] = '0'
         callBackDict['msg'] = '账号太短了'
         return callBackDict
-    if len(code) != 32:
+    if len(inCode) != 32:
         callBackDict['code'] = '0'
         callBackDict['msg'] = '密码错误'
         return callBackDict
     try:
-        oneUserList = user.objects.filter(name=name,code=code)
+        oneUserList = user.objects.filter(name=name,code=inCode)
         if len(oneUserList) > 0:
             userObj = oneUserList[0]
             signObj = createSignRecord(userObj.id)
@@ -64,7 +64,7 @@ def createSignRecord(userId):
         hash.update(str(md))
         token = str(hash.hexdigest())
         uid = str(uuid.uuid1())
-        obj = sign.objects.create(id=uid, token=token, userId=userId, signTime=createTime)
+        obj = sign.objects.create(id=uid, token=token, userId=userId, signTime=str(createTime))
         obj.save()
         return obj
     except BaseException as e:
