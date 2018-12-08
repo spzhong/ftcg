@@ -64,7 +64,7 @@ def createSignRecord(userId):
         hash.update(str(md))
         token = str(hash.hexdigest())
         uid = str(uuid.uuid1())
-        obj = sign.objects.create(id=uid, token=token, userId=userId, signTime=str(createTime))
+        obj = sign.objects.create(id=uid, token=token, userId=userId, signTime=createTime)
         obj.save()
         return obj
     except BaseException as e:

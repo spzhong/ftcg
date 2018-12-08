@@ -5,17 +5,17 @@ from django.db import models
 
 class user(models.Model):
     name = models.CharField(max_length=255, db_index=True, unique=True)
-    code = models.CharField(max_length=32,null=True)
+    password = models.CharField(max_length=64,null=True)
     phone = models.CharField(max_length=15, null=True)
     role = models.IntegerField(default=0)
-    createTime = models.CharField(default=0,max_length=30)
+    createTime = models.BigIntegerField(default=0)
 
 
 class sign(models.Model):
     id = models.UUIDField(primary_key=True)
     token = models.CharField(max_length=32)
     userId = models.IntegerField(db_index =True)
-    signTime = models.CharField(default=0,max_length=30)
+    signTime = models.BigIntegerField(default=0)
 
 
 class sorting (models.Model):
