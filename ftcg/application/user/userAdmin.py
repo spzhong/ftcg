@@ -56,11 +56,11 @@ def registerUser(request):
         callBackDict['code'] = '0'
         callBackDict['msg'] = 'token验证失败'
         return callBackDict
-    if role < 0 | role > 3:
+    if role < 0 or role > 3:
         callBackDict['code'] = '0'
         callBackDict['msg'] = '注册用户类型不存在'
         return callBackDict
-    if role == 2 | role == 3:
+    if role == 2 or role == 3:
         villageId = request.GET['villageId']
         if len(villageId) == 0:
             callBackDict['code'] = '0'
@@ -87,7 +87,7 @@ def registerUser(request):
             callBackDict['code'] = '1'
             dict = {'id':obj.id}
             #创建一条关联的用户和城市之间的关系
-            if role == 2 | role == 3:
+            if role == 2 or role == 3:
                 #返回用户的区域信息
                 region = userConfigAdmin.createUserAndStreetRS(obj.id,villageId)
                 dict['region'] = region
