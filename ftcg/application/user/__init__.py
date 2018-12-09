@@ -12,14 +12,15 @@ def index(request,route):
         callBackDict = signAdmin.signOut(request)
     elif route == 'register':
         callBackDict = userAdmin.registerUser(request)
-    elif route == 'updateUser':
-        callBackDict = userAdmin.updateUser(request)
     elif route == 'changePassword':
         callBackDict = userAdmin.changePassword(request)
     elif route == 'firstPassword':
         callBackDict = userAdmin.firstPassword(request)
     elif route == 'info':
         callBackDict = userAdmin.info(request)
+    elif route == 'getAllUserList':
+        callBackDict = userAdmin.getAllUserList(request)
     else:
          return HttpResponse("no found !!!")
     return HttpResponse(json.dumps(callBackDict))
+

@@ -37,12 +37,15 @@ def signIn(request):
             signObj = createSignRecord(userObj.id)
             if isinstance(signObj, sign):
                 callBackDict['code'] = '1'
+                isReSetPassword = 0;
+                if len(userObj.code) == 0:
+                    isReSetPassword = 1;
                 # 物业管理员和小区的用户，需要锁定其管理的区域
                 if userObj.role == 2 | userObj.role == 3:
                     region = userConfigAdmin.selectUserAndStreetRS(signObj.userId)
-                    callBackDict['data'] = {"id": signObj.userId, "token": signObj.token, "role": userObj.role ,"region":region}
+                    callBackDict['data'] = {"id": signObj.userId, "token": signObj.token,"name":userObj.name,"phone":userObj.phone,"role": userObj.role ,"region":region,"isReSetPassword":isReSetPassword}
                 else:
-                    callBackDict['data'] = {"id":signObj.userId,"token":signObj.token,"role":userObj.role}
+                    callBackDict['data'] = {"id":signObj.userId,"token":signObj.token,"name":userObj.name,"phone":userObj.phone,"role":userObj.role,"isReSetPassword":isReSetPassword}
             else:
                 callBackDict['code'] = '0'
                 callBackDict['msg'] = '登录异常'
@@ -56,10 +59,29 @@ def signIn(request):
         logger.info(str(e))
     return callBackDict
 
+
+
 # 登出操作
 def signOut(request):
     callBackDict = {}
+    token = request.GET['token'];
+    if len(token) != 32:
+        callBackDict['code'] = '0'
+        callBackDict['msg'] = 'token错误'
+        return callBackDict
+    if verificationToken(token) == False:
+        callBackDict['code'] = '0'
+        callBackDict['msg'] = 'token异常'
+        return callBackDict
+    try:
+        sign.objects.filter(token=token).delete()
+        callBackDict['code'] = '1'
+        callBackDict['msg'] = '删除成功'
+    except BaseException as e:
+        callBackDict['code'] = '0'
+        callBackDict['msg'] = '系统异常'
     return callBackDict
+
 
 
 # 创建一条的登录记录
