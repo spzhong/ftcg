@@ -86,14 +86,11 @@ def createSignRecord(userId):
 def verificationToken(token):
     nowTime = int(time.time() * 1000)
     try:
-        signList = sign.objects.filter(token=token,signTime__lte = (nowTime - 7 * 24 * 3600))
-        logger = logging.getLogger("django")
-        logger.info('token->正常')
-        if len(signList) == 0:
-            return False
-        logger = logging.getLogger("django")
-        logger.info('token->正常->无数据')
-        return True
+        signObj = sign.objects.get(token=token)
+        if signObj:
+            if nowTime - signObj.signTime < 7*24*3600:
+                return True
+        return False
     except BaseException as e:
         logger = logging.getLogger("django")
         logger.info('token->异常')
