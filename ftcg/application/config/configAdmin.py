@@ -128,10 +128,13 @@ def getVillages(request):
         rsStreetVillageList = rsStreetVillage.objects.filter(streetId=streetId)
         list = []
         for rsvillage in rsStreetVillageList:
-            onevillage = village.objects.filter(id=rsvillage.villageId)
-            # 查询出来存在的小区
-            if onevillage :
-                list.append({'id': onevillage.id, 'name': onevillage.name})
+            if rsvillage.villageId :
+                logger = logging.getLogger("django")
+                logger.info('rsvillage.villageId + ',str(rsvillage.villageId))
+                onevillage = village.objects.filter(id=rsvillage.villageId)
+                # 查询出来存在的小区
+                if onevillage :
+                    list.append({'id': onevillage.id, 'name': onevillage.name})
         callBackDict['code'] = '1'
         callBackDict['msg'] = list
     except BaseException as e:
@@ -154,11 +157,13 @@ def deleteStreet(request):
     if verificationToken(request) == False:
         callBackDict['code'] = '0'
         callBackDict['msg'] = 'token异常'
-        return
+        return callBackDict
     try:
         # 执行删除数据及关系
         street.objects.filter(id=streetId).delete()
         rsStreetVillage.objects.filter(streetId=streetId).delete()
+        callBackDict['code'] = '1'
+        callBackDict['msg'] = '删除成功'
     except BaseException as e:
         callBackDict['code'] = '0'
         callBackDict['msg'] = '系统异常'
@@ -179,14 +184,17 @@ def deleteVillage(request):
     if verificationToken(request) == False:
         callBackDict['code'] = '0'
         callBackDict['msg'] = 'token异常'
-        return
+        return callBackDict
     try:
         # 执行删除数据及关系
         village.objects.filter(id=villageId).delete()
         rsStreetVillage.objects.filter(villageId=villageId).delete()
+        callBackDict['code'] = '1'
+        callBackDict['msg'] = '删除成功'
     except BaseException as e:
         callBackDict['code'] = '0'
         callBackDict['msg'] = '系统异常'
+        return callBackDict
         logger = logging.getLogger("django")
         logger.info(str(e))
     return callBackDict
