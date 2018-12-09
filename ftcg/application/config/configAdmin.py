@@ -12,12 +12,15 @@ from ftcg.models import rsStreetVillage
 from django.db import IntegrityError, transaction
 from django.db import transaction
 from ..user import signAdmin
+import django.utils.log
 
 
 # 验证token
 def verificationToken(request):
     token = request.GET['token'];
     if len(token) == 32:
+        logger = logging.getLogger("django")
+        logger.info('token->')
         return signAdmin.verificationToken(token)
     return False
 

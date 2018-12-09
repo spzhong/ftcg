@@ -87,8 +87,14 @@ def verificationToken(token):
     nowTime = int(time.time() * 1000)
     try:
         signList = sign.objects.filter(token=token,signTime__lte = (nowTime - 7 * 24 * 3600))
+        logger = logging.getLogger("django")
+        logger.info('token->正常')
         if len(signList) == 0:
             return False
+        logger = logging.getLogger("django")
+        logger.info('token->正常->无数据')
         return True
     except BaseException as e:
+        logger = logging.getLogger("django")
+        logger.info('token->异常')
         return False
