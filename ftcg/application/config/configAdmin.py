@@ -106,6 +106,8 @@ def getStreets(request):
     except BaseException as e:
         callBackDict['code'] = '0'
         callBackDict['msg'] = '系统异常'
+        logger = logging.getLogger("django")
+        logger.info(str(e))
     return callBackDict
 
 
@@ -127,12 +129,16 @@ def getVillages(request):
         list = []
         for rsvillage in rsStreetVillageList:
             onevillage = village.objects.filter(id=rsvillage.villageId)
-            list.append({'id': onevillage.id, 'name': onevillage.name})
+            # 查询出来存在的小区
+            if onevillage :
+                list.append({'id': onevillage.id, 'name': onevillage.name})
         callBackDict['code'] = '1'
         callBackDict['msg'] = list
     except BaseException as e:
         callBackDict['code'] = '0'
         callBackDict['msg'] = '系统异常'
+        logger = logging.getLogger("django")
+        logger.info(str(e))
     return callBackDict
 
 
@@ -156,6 +162,8 @@ def deleteStreet(request):
     except BaseException as e:
         callBackDict['code'] = '0'
         callBackDict['msg'] = '系统异常'
+        logger = logging.getLogger("django")
+        logger.info(str(e))
     return callBackDict
 
 
@@ -179,5 +187,7 @@ def deleteVillage(request):
     except BaseException as e:
         callBackDict['code'] = '0'
         callBackDict['msg'] = '系统异常'
+        logger = logging.getLogger("django")
+        logger.info(str(e))
     return callBackDict
 
