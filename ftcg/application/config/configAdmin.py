@@ -123,9 +123,10 @@ def getVillages(request):
         callBackDict['msg'] = 'token异常'
         return callBackDict
     try:
-        villageList = village.objects.all()
+        rsStreetVillageList = rsStreetVillage.objects.filter(streetId=streetId)
         list = []
-        for onevillage in villageList:
+        for rsvillage in rsStreetVillageList:
+            onevillage = village.objects.filter(id=rsvillage.villageId)
             list.append({'id': onevillage.id, 'name': onevillage.name})
         callBackDict['code'] = '1'
         callBackDict['msg'] = list
