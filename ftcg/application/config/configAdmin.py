@@ -35,7 +35,7 @@ def baseConfigStreet(request):
     if verificationToken(request) == False:
         callBackDict['code'] = '0'
         callBackDict['msg'] = 'token异常'
-        return
+        return callBackDict
     if len(name) == 0:
         callBackDict['code'] = '0'
         callBackDict['msg'] = '街道名称为空'
@@ -60,7 +60,7 @@ def baseConfigVillage(request):
     if verificationToken(request) == False:
         callBackDict['code'] = '0'
         callBackDict['msg'] = 'token异常'
-        return
+        return callBackDict
     if len(streetId) == 0:
         callBackDict['code'] = '0'
         callBackDict['msg'] = '所属街道ID为空'
@@ -92,7 +92,7 @@ def getStreets(request):
     if verificationToken(request) == False:
         callBackDict['code'] = '0'
         callBackDict['msg'] = 'token异常'
-        return
+        return callBackDict
     try:
         streetList = street.objects.all()
         list = []
@@ -118,7 +118,7 @@ def getVillages(request):
     if verificationToken(request) == False:
         callBackDict['code'] = '0'
         callBackDict['msg'] = 'token异常'
-        return
+        return callBackDict
     try:
         villageList = village.objects.all()
         list = []
