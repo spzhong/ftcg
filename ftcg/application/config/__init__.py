@@ -10,6 +10,19 @@ def index(request,route):
         callBackDict = configAdmin.baseConfigStreet(request)
     elif route == 'baseConfigVillage':
         callBackDict = configAdmin.baseConfigVillage(request)
+    elif route == 'getVillages':
+        callBackDict = configAdmin.getVillages(request)
+    elif route == 'getStreets':
+        callBackDict = configAdmin.getStreets(request)
+    elif route == 'deleteStreet':
+        callBackDict = configAdmin.deleteStreet(request)
+    elif route == 'deleteVillage':
+        callBackDict = configAdmin.deleteVillage(request)
     else:
          return HttpResponse("no found !!!")
     return HttpResponse(json.dumps(callBackDict))
+
+
+
+
+
