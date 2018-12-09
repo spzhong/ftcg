@@ -133,7 +133,7 @@ def getVillages(request):
             if rsvillage.villageId :
                 logger = logging.getLogger("django")
                 logger.info('rsvillage.villageId + ',str(rsvillage.villageId))
-                onevillage = village.objects.filter(id=rsvillage.villageId)
+                onevillage = village.objects.get(id=rsvillage.villageId)
                 # 查询出来存在的小区
                 if onevillage :
                     list.append({'id': onevillage.id, 'name': onevillage.name})
