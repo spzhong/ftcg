@@ -4,6 +4,7 @@ from django.db import models
 
 
 class user(models.Model):
+    id = models.IntegerField(primary_key=True, auto_created=True)
     name = models.CharField(max_length=255, db_index=True, unique=True)
     password = models.CharField(max_length=64,null=True)
     phone = models.CharField(max_length=15, null=True)
@@ -27,18 +28,22 @@ class sorting(models.Model):
 
 # 小区
 class village(models.Model):
+    id = models.IntegerField(primary_key=True,auto_created=True)
     name = models.CharField(max_length=255, db_index=True, unique=True)
 
 # 街道
 class street(models.Model):
+    id = models.IntegerField(primary_key=True, auto_created=True)
     name = models.CharField(max_length=255, db_index=True, unique=True)
 
 # 小区和街道的关系
 class rsStreetVillage(models.Model):
+    id = models.IntegerField(primary_key=True, auto_created=True)
     streetId = models.IntegerField(db_index=True)
     villageId = models.IntegerField(db_index=True)
 
 # 用户和小区的关系
 class rsUserVillage(models.Model):
+    id = models.IntegerField(primary_key=True, auto_created=True)
     userId = models.IntegerField(db_index=True)
     villageId = models.IntegerField(db_index=True)
