@@ -23,11 +23,11 @@ def baseConfigQuestion(request):
         callBackDict['code'] = '0'
         callBackDict['msg'] = '请输入问题的标题'
         return callBackDict
-    if  plusFraction > 0 and plusFraction < 100:
+    if  plusFraction < 0 or plusFraction > 100:
         callBackDict['code'] = '0'
         callBackDict['msg'] = '请输入0-100的加分数'
         return callBackDict
-    if  minusFraction > 0 and minusFraction < 100:
+    if  minusFraction < 0 or minusFraction > 100:
         callBackDict['code'] = '0'
         callBackDict['msg'] = '请输入0-100的减分数'
         return callBackDict

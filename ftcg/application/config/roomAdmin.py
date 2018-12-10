@@ -12,7 +12,7 @@ import django.utils.log
 import configAdmin
 
 
-# 创建问题
+# 关联小区和房间号
 def addRoomNum(request):
     callBackDict = {}
     numberText = request.GET['numberText']
@@ -43,7 +43,7 @@ def addRoomNum(request):
     return callBackDict
 
 
-# 删除问题
+# 删除关联小区和房间号
 def deleteRoomNum(request):
     callBackDict = {}
     roomId = request.GET['id']
