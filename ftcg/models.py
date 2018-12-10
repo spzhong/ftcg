@@ -20,7 +20,7 @@ class sign(models.Model):
 
 # 小区的房间号
 class roomNumber(models.Model):
-    numberText = models.CharField(max_length=1024,unique=True)
+    numberText = models.CharField(max_length=1024)
     villageId = models.IntegerField(default=0,db_index=True)
 
 
@@ -68,7 +68,7 @@ class sorting(models.Model):
     remarks = models.CharField(max_length=2024,null=True)
     imgs = models.CharField(max_length=2024,null=True)
     # 二维码的id，允许为空
-    qrCodeId = models.UUIDField(primary_key=True,null=True)
+    qrCodeId = models.UUIDField(null=True)
     createTime = models.BigIntegerField(default=0)
 
 
