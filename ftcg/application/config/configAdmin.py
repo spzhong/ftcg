@@ -25,9 +25,6 @@ def verificationToken(request):
     return False
 
 
-def baseConfigQuestion(request):
-    callBackDict = {}
-    return callBackDict
 
 
 # 创建街道的数据
@@ -112,7 +109,7 @@ def getStreets(request):
         for oneStreet in streetList:
             list.append({'id':oneStreet.id,'name':oneStreet.name})
         callBackDict['code'] = '1'
-        callBackDict['msg'] = list
+        callBackDict['data'] = list
     except BaseException as e:
         callBackDict['code'] = '0'
         callBackDict['msg'] = '系统异常'
@@ -146,7 +143,7 @@ def getVillages(request):
                 if onevillage :
                     list.append({'id': onevillage.id, 'name': onevillage.name})
         callBackDict['code'] = '1'
-        callBackDict['msg'] = list
+        callBackDict['data'] = list
     except BaseException as e:
         callBackDict['code'] = '0'
         callBackDict['msg'] = '系统异常'
@@ -208,4 +205,6 @@ def deleteVillage(request):
         logger = logging.getLogger("django")
         logger.info(str(e))
     return callBackDict
+
+
 
