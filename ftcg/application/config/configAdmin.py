@@ -50,16 +50,18 @@ def baseConfigStreet(request):
         callBackDict['data'] = obj.id
     except BaseException as e:
         callBackDict['code'] = '0'
-        callBackDict['msg'] = '系统异常'
+        callBackDict['msg'] = '街道已存在'
         logger = logging.getLogger("django")
         logger.info(str(e))
     return callBackDict
 
 
 # 创建小区的数据
+# 0是普通小区，1是学校，2是政府机关
 def baseConfigVillage(request):
     streetId = request.GET['streetId'];
     name = request.GET['name'];
+    type = request.GET['type'];
     callBackDict = {}
     # 验证token
     if verificationToken(request) == False:
@@ -74,10 +76,14 @@ def baseConfigVillage(request):
         callBackDict['code'] = '0'
         callBackDict['msg'] = '小区名称为空'
         return callBackDict
+    if len(type) == 0:
+        callBackDict['code'] = '0'
+        callBackDict['msg'] = '请选择小区的类型'
+        return callBackDict
     # 开启一个事物
     try:
         #创建一个小区
-        obj = village.objects.create(name=name)
+        obj = village.objects.create(name=name,type=type)
         obj.save()
         # 小区和街道的关系
         rsStreetVillageObj = rsStreetVillage.objects.create(streetId=streetId,villageId=obj.id)
@@ -86,7 +92,7 @@ def baseConfigVillage(request):
         callBackDict['data'] = obj.id
     except BaseException as e:
         callBackDict['code'] = '0'
-        callBackDict['msg'] = '系统异常'
+        callBackDict['msg'] = '小区已存在，请加上小区全名'
         logger = logging.getLogger("django")
         logger.info(str(e))
     return callBackDict
