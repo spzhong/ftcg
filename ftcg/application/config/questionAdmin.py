@@ -72,7 +72,7 @@ def deleteConfigQuestion(request):
         callBackDict['data'] = '删除成功'
     except BaseException as e:
         callBackDict['code'] = '0'
-        callBackDict['msg'] = '系统异常'
+        callBackDict['msg'] = '已经删除'
         logger = logging.getLogger("django")
         logger.info(str(e))
     return callBackDict
