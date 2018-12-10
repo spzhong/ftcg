@@ -33,7 +33,6 @@ class village(models.Model):
 
 # 街道
 class street(models.Model):
-    id = models.IntegerField(primary_key=True, auto_created=True)
     name = models.CharField(max_length=255, db_index=True, unique=True)
 
 # 小区和街道的关系

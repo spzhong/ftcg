@@ -38,7 +38,7 @@ def signIn(request):
             if isinstance(signObj, sign):
                 callBackDict['code'] = '1'
                 isReSetPassword = 0;
-                if len(userObj.code) == 0:
+                if len(userObj.password) == 0:
                     isReSetPassword = 1;
                 # 物业管理员和小区的用户，需要锁定其管理的区域
                 if userObj.role == 2 | userObj.role == 3:

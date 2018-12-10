@@ -51,6 +51,8 @@ def baseConfigStreet(request):
     except BaseException as e:
         callBackDict['code'] = '0'
         callBackDict['msg'] = '系统异常'
+        logger = logging.getLogger("django")
+        logger.info(str(e))
     return callBackDict
 
 
