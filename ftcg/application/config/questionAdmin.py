@@ -81,8 +81,8 @@ def deleteConfigQuestion(request):
 # 获取配置的问题
 def getConfigQuestion(request):
     callBackDict = {}
-    type = request.GET['type']
-    if  type < 0 or type > 3:
+    type = int(request.GET['type'])
+    if type < 0 or type > 3:
         callBackDict['code'] = '0'
         callBackDict['msg'] = '请输入正确的问题分类'
         return callBackDict
