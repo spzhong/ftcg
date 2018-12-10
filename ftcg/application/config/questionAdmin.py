@@ -81,6 +81,7 @@ def deleteConfigQuestion(request):
 # 获取配置的问题
 def getConfigQuestion(request):
     callBackDict = {}
+    type = request.GET['type']
     if  type < 0 or type > 3:
         callBackDict['code'] = '0'
         callBackDict['msg'] = '请输入正确的问题分类'
@@ -91,7 +92,7 @@ def getConfigQuestion(request):
         callBackDict['msg'] = 'token异常'
         return callBackDict
     try:
-        questionList = question.objects.all()
+        questionList = question.objects.filter(type=type)
         list = []
         for oneQuestion in questionList:
             list.append({'id': oneQuestion.id, 'title': oneQuestion.title, 'plusFraction':oneQuestion.plusFraction,'minusFraction':oneQuestion.minusFraction,'type':oneQuestion.type})

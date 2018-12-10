@@ -67,3 +67,31 @@ def deleteRoomNum(request):
         logger.info(str(e))
     return callBackDict
 
+
+
+# 获取关联小区和房间号
+def getRoomNumList(request):
+    callBackDict = {}
+    villageId = request.GET['villageId']
+    if len(villageId) == 0:
+        callBackDict['code'] = '0'
+        callBackDict['msg'] = '请输入小区的id'
+        return callBackDict
+    # 验证token
+    if configAdmin.verificationToken(request) == False:
+        callBackDict['code'] = '0'
+        callBackDict['msg'] = 'token异常'
+        return callBackDict
+    try:
+        roomNumList = roomNumber.objects.filter(villageId=villageId)
+        list = []
+        for oneRoom in roomNumList:
+            list.append({'id': oneRoom.id, 'numberText': oneRoom.numberText, 'villageId': oneRoom.villageId})
+        callBackDict['code'] = '1'
+        callBackDict['data'] = list
+    except BaseException as e:
+        callBackDict['code'] = '0'
+        callBackDict['msg'] = '获取数据异常'
+        logger = logging.getLogger("django")
+        logger.info(str(e))
+    return callBackDict

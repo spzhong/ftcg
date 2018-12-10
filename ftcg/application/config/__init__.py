@@ -28,7 +28,9 @@ def index(request,route):
     elif route == 'addRoomNum':
         callBackDict = roomAdmin.addRoomNum(request)
     elif route == 'deleteRoomNum':
-        callBackDict = questionAdmin.deleteRoomNum(request)
+        callBackDict = roomAdmin.deleteRoomNum(request)
+    elif route == 'getRoomNumList':
+        callBackDict = roomAdmin.getRoomNumList(request)
     else:
          return HttpResponse("no found !!!")
     return HttpResponse(json.dumps(callBackDict))
