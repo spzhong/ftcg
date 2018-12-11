@@ -58,6 +58,7 @@ def registerUser(request):
         callBackDict['code'] = '0'
         callBackDict['msg'] = '注册用户类型不存在'
         return callBackDict
+    password = None
     if role == 2 or role == 3:
         villageId = request.GET['villageId']
         if len(villageId) == 0:
@@ -78,8 +79,6 @@ def registerUser(request):
             return callBackDict
         # 查询用户信息
         userInfo = selectUser(name)
-        logger = logging.getLogger("django")
-        logger.info(str(userInfo))
     	if isinstance(userInfo,user):
             callBackDict['code'] = '0'
             callBackDict['msg'] = '用户账号已存在'
@@ -107,6 +106,8 @@ def registerUser(request):
     except BaseException as e:
         callBackDict['code'] = '0'
         callBackDict['msg'] = '系统异常'
+        logger = logging.getLogger("django")
+        logger.info(str(e))
     return callBackDict
 
 
@@ -160,6 +161,8 @@ def firstPassword(request):
     except BaseException as e:
         callBackDict['code'] = '0'
         callBackDict['msg'] = '系统异常'
+        logger = logging.getLogger("django")
+        logger.info(str(e))
     return callBackDict
 
 
