@@ -71,7 +71,6 @@ def registerUser(request):
     logger.info(str(md))
     hash.update(str(md).encode("utf-8"))
     password = str(hash.hexdigest())
-    logger.info(str(password))
     if role == 2 or role == 3:
         villageId = request.GET['villageId']
         if len(villageId) == 0:
@@ -189,10 +188,22 @@ def adminResetPassword(request):
         # 更新密码
         signObj = sign.objects.get(token=token)
         obj = user.objects.get(id=signObj.userId)
-        obj.password = None
+        if obj.role == 0:
+            callBackDict['code'] = '0'
+            callBackDict['msg'] = '管理员账户无法重置'
+            return callBackDict
+        # 默认密码就是他的手机号
+        hash = hashlib.md5()
+        hash.update(str(signObj.phone).encode("utf-8"))
+        md = hash.hexdigest()
+        logger = logging.getLogger("django")
+        logger.info(str(md))
+        hash.update(str(md).encode("utf-8"))
+        password = str(hash.hexdigest())
+        obj.password = password
         obj.save()
         callBackDict['code'] = '1'
-        callBackDict['msg'] = '设置成功'
+        callBackDict['msg'] = '已重置为手机号为登录密码'
     except BaseException as e:
         callBackDict['code'] = '0'
         callBackDict['msg'] = '重置成功'
