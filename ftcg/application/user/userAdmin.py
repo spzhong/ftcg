@@ -12,7 +12,7 @@ from ftcg.models import village
 
 import signAdmin
 import userConfigAdmin
-
+import re
 
 # 查询用户信息
 def selectUser(name):
@@ -37,6 +37,7 @@ def registerUser(request):
     name = request.GET['name'];
     token = request.GET['token'];
     roles = request.GET['role'];
+    phone = request.GET['phone'];
     role = int(roles)
     callBackDict = {}
     if len(name) < 5:
@@ -47,9 +48,11 @@ def registerUser(request):
         callBackDict['code'] = '0'
         callBackDict['msg'] = 'token验证失败'
         return callBackDict
-    if len(token) != 32:
+    # 匹配手机号
+    ret = re.match(r"^1[35678]\d{9}$", phone)
+    if ret is None:
         callBackDict['code'] = '0'
-        callBackDict['msg'] = 'token验证失败'
+        callBackDict['msg'] = '手机号码验证失败'
         return callBackDict
     if role < 0 or role > 3:
         callBackDict['code'] = '0'
@@ -84,9 +87,9 @@ def registerUser(request):
             # 帐户不存在，进行创建用户信息
             createTime = int(time.time()*1000)
             if password:
-                obj = user.objects.create(name=name, password=password, createTime=createTime,role=role)
+                obj = user.objects.create(name=name, password=password, createTime=createTime,role=role,phone=phone)
             else:
-                obj = user.objects.create(name=name, createTime=createTime, role=role)
+                obj = user.objects.create(name=name, createTime=createTime, role=role,phone=phone)
             obj.save()
             callBackDict['code'] = '1'
             dict = {'id':obj.id}
