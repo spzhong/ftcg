@@ -235,3 +235,5 @@ def getAllUserList(request):
         logger = logging.getLogger("django")
         logger.info(str(e))
     return callBackDict
+
+

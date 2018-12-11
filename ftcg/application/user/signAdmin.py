@@ -137,6 +137,9 @@ def verificationToken(token):
     try:
         signObj = sign.objects.get(token=token)
         if signObj:
+            # 管理元的角色才算有效
+            if signObj.role != 0:
+                return False
             if nowTime - signObj.signTime < 7*24*3600*1000:
                 return True
         return False
