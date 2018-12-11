@@ -33,7 +33,7 @@ def createUserAndStreetRS(userId,villageId):
         # 创建一条用户和小区的关系
         obj = rsUserVillage.objects.create(userId=userId, villageId=villageId)
         obj.save()
-        regionDict = {'villageId':villageId,'villageName':villageObj.name,'streetId':streetId,'streetName':streetObj.name}
+        regionDict = {'villageInfo':{'villageId':villageId,'villageName':villageObj.name,'type':villageObj.type},'streetInfo':{'streetId':streetId,'streetName':streetObj.name}}
         return regionDict
     except BaseException as e:
         logger = logging.getLogger("django")
@@ -42,19 +42,19 @@ def createUserAndStreetRS(userId,villageId):
 
 
 # 查询用户所在的街道和小区的关系
-def selectUserAndStreetRS(userId):
+def selectUserAndStreetRS(villageId):
     try:
         # 查询小区-和街道的关系
-        rsStreetVillageObj = rsStreetVillage.objects.get(userId=userId)
+        rsStreetVillageObj = rsStreetVillage.objects.get(villageId=villageId)
         streetId = rsStreetVillageObj.streetId
         villageId = rsStreetVillageObj.villageId
 
-        # 查询街道和小区的关系
+        # 查询街道和小区的名字
         streetObj = street.objects.get(id=streetId)
         villageObj = village.objects.get(id=villageId)
 
         # 返回用户和小区及街道的关系
-        return {'villageId':villageId,'villageName':villageObj.name,'streetId':streetId,'streetName':streetObj.name}
+        return {'villageInfo':{'villageId':villageId,'villageName':villageObj.name,'type':villageObj.type},'streetInfo':{'streetId':streetId,'streetName':streetObj.name}}
     except BaseException as e:
         logger = logging.getLogger("django")
         logger.info(str(e))

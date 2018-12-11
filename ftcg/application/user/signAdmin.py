@@ -35,7 +35,7 @@ def signIn(request):
             if isinstance(signObj, sign):
                 callBackDict['code'] = '1'
                 # 物业管理员和小区的用户，需要锁定其管理的区域
-                if userObj.role == 2 | userObj.role == 3:
+                if userObj.role == 2 or userObj.role == 3:
                     region = userConfigAdmin.selectUserAndStreetRS(signObj.userId)
                     callBackDict['data'] = {"id": signObj.userId, "token": signObj.token,"name":userObj.name,"phone":userObj.phone,"role": userObj.role ,"region":region}
                 else:
@@ -74,8 +74,8 @@ def autoSign(request):
             callBackDict['code'] = '1'
             userObj = user.objects.get(id=signObj.userId)
             # 物业管理员和小区的用户，需要锁定其管理的区域
-            if userObj.role == 2 | userObj.role == 3:
-                region = userConfigAdmin.selectUserAndStreetRS(signObj.userId)
+            if userObj.role == 2 or userObj.role == 3:
+                region = userConfigAdmin.selectUserAndStreetRS(userObj.villageId)
                 callBackDict['data'] = {"id": signObj.userId, "token": signObj.token, "name": userObj.name,
                                         "phone": userObj.phone, "role": userObj.role, "region": region}
             else:
