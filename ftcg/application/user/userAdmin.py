@@ -59,24 +59,21 @@ def registerUser(request):
         callBackDict['code'] = '0'
         callBackDict['msg'] = '注册用户类型不存在'
         return callBackDict
-    password = None
+    if role == 0:
+        callBackDict['code'] = '0'
+        callBackDict['msg'] = '管理员用户不支持注册'
+        return callBackDict
+    # 默认密码就是他的手机号
+    hash = hashlib.md5()
+    hash.update(str(phone))
+    md = hash.hexdigest()
+    hash.update(str(md))
+    password = str(hash.hexdigest())
     if role == 2 or role == 3:
         villageId = request.GET['villageId']
         if len(villageId) == 0:
             callBackDict['code'] = '0'
             callBackDict['msg'] = '用户所在小区不存在'
-            return callBackDict
-        # 默认密码就是他的手机号
-        hash = hashlib.md5()
-        hash.update(str(phone))
-        md = hash.hexdigest()
-        hash.update(str(md))
-        password = str(hash.hexdigest())
-    else:
-        password = request.GET['password'];
-        if len(password) != 32:
-            callBackDict['code'] = '0'
-            callBackDict['msg'] = '账号密码错误'
             return callBackDict
     try:
         # 查看登录的token
