@@ -65,10 +65,13 @@ def registerUser(request):
         return callBackDict
     # 默认密码就是他的手机号
     hash = hashlib.md5()
-    hash.update(str(phone))
+    hash.update(str(phone).encode("utf-8"))
     md = hash.hexdigest()
-    hash.update(str(md))
+    logger = logging.getLogger("django")
+    logger.info(str(md))
+    hash.update(str(md).encode("utf-8"))
     password = str(hash.hexdigest())
+    logger.info(str(password))
     if role == 2 or role == 3:
         villageId = request.GET['villageId']
         if len(villageId) == 0:
