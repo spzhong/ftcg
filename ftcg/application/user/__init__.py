@@ -16,8 +16,8 @@ def index(request,route):
         callBackDict = userAdmin.registerUser(request)
     elif route == 'adminResetPassword':
         callBackDict = userAdmin.adminResetPassword(request)
-    elif route == 'firstPassword':
-        callBackDict = userAdmin.firstPassword(request)
+    elif route == 'resetPassword':
+        callBackDict = userAdmin.resetPassword(request)
     elif route == 'info':
         callBackDict = userAdmin.info(request)
     elif route == 'getAllUserList':

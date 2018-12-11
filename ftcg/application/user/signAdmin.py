@@ -30,22 +30,16 @@ def signIn(request):
         return callBackDict
     try:
         userObj = user.objects.get(name=name)
-        logger = logging.getLogger("django")
-        logger.info(userObj.password)
-        logger.info(password)
         if userObj.password == password:
             signObj = createSignRecord(userObj.id)
             if isinstance(signObj, sign):
                 callBackDict['code'] = '1'
-                isReSetPassword = 0;
-                if len(userObj.password) == 0:
-                    isReSetPassword = 1;
                 # 物业管理员和小区的用户，需要锁定其管理的区域
                 if userObj.role == 2 | userObj.role == 3:
                     region = userConfigAdmin.selectUserAndStreetRS(signObj.userId)
-                    callBackDict['data'] = {"id": signObj.userId, "token": signObj.token,"name":userObj.name,"phone":userObj.phone,"role": userObj.role ,"region":region,"isReSetPassword":isReSetPassword}
+                    callBackDict['data'] = {"id": signObj.userId, "token": signObj.token,"name":userObj.name,"phone":userObj.phone,"role": userObj.role ,"region":region}
                 else:
-                    callBackDict['data'] = {"id":signObj.userId,"token":signObj.token,"name":userObj.name,"phone":userObj.phone,"role":userObj.role,"isReSetPassword":isReSetPassword}
+                    callBackDict['data'] = {"id":signObj.userId,"token":signObj.token,"name":userObj.name,"phone":userObj.phone,"role":userObj.role}
             else:
                 callBackDict['code'] = '0'
                 callBackDict['msg'] = '登录异常'
@@ -79,19 +73,14 @@ def autoSign(request):
             signObj = createSignRecord(oldeSignObj.userId)
             callBackDict['code'] = '1'
             userObj = user.objects.get(id=signObj.userId)
-            isReSetPassword = 0;
-            if len(userObj.password) == 0:
-                isReSetPassword = 1;
             # 物业管理员和小区的用户，需要锁定其管理的区域
             if userObj.role == 2 | userObj.role == 3:
                 region = userConfigAdmin.selectUserAndStreetRS(signObj.userId)
                 callBackDict['data'] = {"id": signObj.userId, "token": signObj.token, "name": userObj.name,
-                                        "phone": userObj.phone, "role": userObj.role, "region": region,
-                                        "isReSetPassword": isReSetPassword}
+                                        "phone": userObj.phone, "role": userObj.role, "region": region}
             else:
                 callBackDict['data'] = {"id": signObj.userId, "token": signObj.token, "name": userObj.name,
-                                        "phone": userObj.phone, "role": userObj.role,
-                                        "isReSetPassword": isReSetPassword}
+                                        "phone": userObj.phone, "role": userObj.role}
 
             return callBackDict
     except BaseException as e:

@@ -13,6 +13,7 @@ from ftcg.models import village
 import signAdmin
 import userConfigAdmin
 import re
+import hashlib
 
 # 查询用户信息
 def selectUser(name):
@@ -65,6 +66,12 @@ def registerUser(request):
             callBackDict['code'] = '0'
             callBackDict['msg'] = '用户所在小区不存在'
             return callBackDict
+        # 默认密码就是他的手机号
+        hash = hashlib.md5()
+        hash.update(str(phone))
+        md = hash.hexdigest()
+        hash.update(str(md))
+        password = str(hash.hexdigest())
     else:
         password = request.GET['password'];
         if len(password) != 32:
@@ -85,13 +92,10 @@ def registerUser(request):
         else:
             # 帐户不存在，进行创建用户信息
             createTime = int(time.time()*1000)
-            if password:
-                obj = user.objects.create(name=name, password=password, createTime=createTime,role=role,phone=phone)
-            else:
-                obj = user.objects.create(name=name, createTime=createTime, role=role,phone=phone)
+            obj = user.objects.create(name=name, password=password, createTime=createTime, role=role, phone=phone)
             obj.save()
             callBackDict['code'] = '1'
-            dict = {'id':obj.id}
+            dict = {'id':obj.id,'name':name,'phone':phone,'role':role}
             #创建一条关联的用户和城市之间的关系
             if role == 2 or role == 3:
                 #返回用户的区域信息
@@ -133,10 +137,11 @@ def info(request):
 
 
 
-# 第一次修改密码
-def firstPassword(request):
+# 用户重置密码
+def resetPassword(request):
     token = request.GET['token'];
-    password = request.GET['password'];
+    password = request.GET['password']
+    oldPassword = request.GET['oldPassword']
     callBackDict = {}
     if len(token) != 32:
         callBackDict['code'] = '0'
@@ -144,27 +149,26 @@ def firstPassword(request):
         return callBackDict
     if len(password) != 32:
         callBackDict['code'] = '0'
-        callBackDict['msg'] = '密码错误'
+        callBackDict['msg'] = '新的密码错误'
+        return callBackDict
+    if len(oldPassword) != 32:
+        callBackDict['code'] = '0'
+        callBackDict['msg'] = '老的密码错误'
         return callBackDict
     try:
         # 更新密码
         signObj = sign.objects.get(token=token)
-        obj = user.objects.get(id=signObj.userId)
-        if obj.password :
-            obj.password = password
-            obj.save()
-            callBackDict['code'] = '1'
-            callBackDict['msg'] = '设置成功'
-        else:
-            callBackDict['code'] = '0'
-            callBackDict['msg'] = '密码已经存在'
+        obj = user.objects.get(id=signObj.userId,password=oldPassword)
+        obj.password = password
+        obj.save()
+        callBackDict['code'] = '1'
+        callBackDict['msg'] = '设置成功'
     except BaseException as e:
         callBackDict['code'] = '0'
-        callBackDict['msg'] = '系统异常'
+        callBackDict['msg'] = '密码错误'
         logger = logging.getLogger("django")
         logger.info(str(e))
     return callBackDict
-
 
 
 
