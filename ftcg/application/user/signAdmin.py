@@ -61,6 +61,44 @@ def signIn(request):
 
 
 
+# 自动登录
+def autoSign(request):
+    callBackDict = {}
+    token = request.GET['token'];
+    if len(token) != 32:
+        callBackDict['code'] = '0'
+        callBackDict['msg'] = 'token错误'
+        return callBackDict
+    if verificationToken(token) == False:
+        callBackDict['code'] = '0'
+        callBackDict['msg'] = 'token失效，请重新登录'
+        return callBackDict
+    try:
+        oldeSignObj = sign.objects.get(token=token)
+        if oldeSignObj:
+            signObj = createSignRecord(oldeSignObj.userId)
+            callBackDict['code'] = '1'
+            userObj = user.objects.get(id=signObj.userId)
+            isReSetPassword = 0;
+            if len(userObj.password) == 0:
+                isReSetPassword = 1;
+            # 物业管理员和小区的用户，需要锁定其管理的区域
+            if userObj.role == 2 | userObj.role == 3:
+                region = userConfigAdmin.selectUserAndStreetRS(signObj.userId)
+                callBackDict['data'] = {"id": signObj.userId, "token": signObj.token, "name": userObj.name,
+                                        "phone": userObj.phone, "role": userObj.role, "region": region,
+                                        "isReSetPassword": isReSetPassword}
+            else:
+                callBackDict['data'] = {"id": signObj.userId, "token": signObj.token, "name": userObj.name,
+                                        "phone": userObj.phone, "role": userObj.role,
+                                        "isReSetPassword": isReSetPassword}
+
+            return callBackDict
+    except BaseException as e:
+        callBackDict['code'] = '0'
+        callBackDict['msg'] = '自动登录异常，请重新登录'
+        return callBackDict
+
 # 登出操作
 def signOut(request):
     callBackDict = {}
@@ -110,7 +148,7 @@ def verificationToken(token):
     try:
         signObj = sign.objects.get(token=token)
         if signObj:
-            if nowTime - signObj.signTime < 7*24*3600:
+            if nowTime - signObj.signTime < 7*24*3600*1000:
                 return True
         return False
     except BaseException as e:

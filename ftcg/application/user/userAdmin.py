@@ -162,39 +162,25 @@ def firstPassword(request):
 
 
 
-# 修改密码
-def changePassword(request):
+# 重置成功
+def adminResetPassword(request):
     token = request.GET['token'];
-    oldPassword = request.GET['oldPassword'];
-    password = request.GET['password'];
     callBackDict = {}
     if len(token) != 32:
         callBackDict['code'] = '0'
         callBackDict['msg'] = 'token错误'
         return callBackDict
-    if len(oldPassword) != 32:
-        callBackDict['code'] = '0'
-        callBackDict['msg'] = '老的密码错误'
-        return callBackDict
-    if len(password) != 32:
-        callBackDict['code'] = '0'
-        callBackDict['msg'] = '新的密码错误'
-        return callBackDict
     try:
         # 更新密码
         signObj = sign.objects.get(token=token)
         obj = user.objects.get(id=signObj.userId)
-        if obj.password == oldPassword:
-            obj.password = password
-            obj.save()
-            callBackDict['code'] = '1'
-            callBackDict['msg'] = '设置成功'
-        else:
-            callBackDict['code'] = '0'
-            callBackDict['msg'] = '老的密码错误'
+        obj.password = None
+        obj.save()
+        callBackDict['code'] = '1'
+        callBackDict['msg'] = '设置成功'
     except BaseException as e:
         callBackDict['code'] = '0'
-        callBackDict['msg'] = '系统异常'
+        callBackDict['msg'] = '重置成功'
         logger = logging.getLogger("django")
         logger.info(str(e))
     return callBackDict

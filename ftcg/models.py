@@ -26,14 +26,14 @@ class roomNumber(models.Model):
 
 # 小区
 class village(models.Model):
-    name = models.CharField(max_length=255, db_index=True, unique=True)
+    name = models.CharField(max_length=255)
     # 默认0是普通小区，1是学校，2是政府机关
     type = models.IntegerField(default=0)
 
 
 # 街道
 class street(models.Model):
-    name = models.CharField(max_length=255, db_index=True, unique=True)
+    name = models.CharField(max_length=255)
 
 
 # 小区和街道的关系

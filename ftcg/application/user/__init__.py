@@ -8,12 +8,14 @@ import userAdmin
 def index(request,route):
     if route == 'sign':
         callBackDict = signAdmin.signIn(request)
+    elif route == 'autoSign':
+        callBackDict = signAdmin.autoSign(request)
     elif route == 'signOut':
         callBackDict = signAdmin.signOut(request)
     elif route == 'register':
         callBackDict = userAdmin.registerUser(request)
-    elif route == 'changePassword':
-        callBackDict = userAdmin.changePassword(request)
+    elif route == 'adminResetPassword':
+        callBackDict = userAdmin.adminResetPassword(request)
     elif route == 'firstPassword':
         callBackDict = userAdmin.firstPassword(request)
     elif route == 'info':
