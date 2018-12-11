@@ -165,7 +165,12 @@ def firstPassword(request):
 # 重置成功
 def adminResetPassword(request):
     token = request.GET['token'];
+    userId = request.GET['userId'];
     callBackDict = {}
+    if len(userId) == 0 :
+        callBackDict['code'] = '0'
+        callBackDict['msg'] = '用户的id为空'
+        return callBackDict
     if len(token) != 32:
         callBackDict['code'] = '0'
         callBackDict['msg'] = 'token错误'
