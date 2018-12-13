@@ -187,7 +187,7 @@ def adminResetPassword(request):
     try:
         # 更新密码
         signObj = sign.objects.get(token=token)
-        obj = user.objects.get(id=signObj.userId)
+        obj = user.objects.get(id=userId)
         if obj.role == 0:
             callBackDict['code'] = '0'
             callBackDict['msg'] = '管理员账户无法重置'
