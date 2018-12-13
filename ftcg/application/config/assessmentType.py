@@ -13,19 +13,6 @@ import configAdmin
 
 
 
-/**
- * @api {get} config/baseConfigAssessment  [ok]添加考核分类
- * @apiVersion 0.1.0
- * @apiName baseConfigAssessment
- * @apiGroup BaseConfig
- *
- * @apiParam  {String}  token 管理员的token
- * @apiParam  {String}  {"levelTitle":"一级指标","fraction":"分数","levelList":[{"levelTitle":"二级指标","fraction":"分数","info":"具体要求","evaluationCriterionList":[{"criterionTitle":"评价标准1","fraction":"分数"},{"criterionTitle":"评价标准2","fraction":"分数"}]},{"levelTitle":"二级指标","fraction":"分数","info":"具体要求","evaluationCriterionList":[{"criterionTitle":"评价标准1","fraction":"分数"},{"criterionTitle":"评价标准2","fraction":"分数"}]}]}
- * @apiParam  {String}  subordinateType 0是小区的考核，1是学校，2是政府机关的考核
- * @apiParam  {String}  assessmentType  0是基本指标（默认的，是减分项目），1是鼓励指标（加分项）
-
-
-
 # 创建问题
 def baseConfigAssessment(request):
     callBackDict = {}
