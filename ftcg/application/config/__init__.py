@@ -21,9 +21,9 @@ def index(request,route):
         callBackDict = configAdmin.deleteStreet(request)
     elif route == 'deleteVillage':
         callBackDict = configAdmin.deleteVillage(request)
-    elif route == 'deleteConfigQuestion':
+    elif route == 'deleteConfigAssessment':
         callBackDict = assessmentType.deleteConfigAssessment(request)
-    elif route == 'getConfigQuestion':
+    elif route == 'getConfigAssessment':
         callBackDict = assessmentType.getConfigAssessment(request)
     elif route == 'addRoomNum':
         callBackDict = roomAdmin.addRoomNum(request)
