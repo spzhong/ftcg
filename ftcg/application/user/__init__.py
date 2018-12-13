@@ -22,6 +22,8 @@ def index(request,route):
         callBackDict = userAdmin.info(request)
     elif route == 'getAllUserList':
         callBackDict = userAdmin.getAllUserList(request)
+    elif route == 'adminDeleteUser':
+        callBackDict = userAdmin.adminDeleteUser(request)
     else:
          return HttpResponse("no found !!!")
     return HttpResponse(json.dumps(callBackDict))

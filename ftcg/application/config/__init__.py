@@ -1,14 +1,14 @@
 # -*- coding: utf-8 -*-
 import json
 import configAdmin
-import questionAdmin
+import assessmentType
 import roomAdmin
 
 from django.http import HttpResponse
 
 def index(request,route):
-    if route == 'baseConfigQuestion':
-        callBackDict = questionAdmin.baseConfigQuestion(request)
+    if route == 'baseConfigAssessment':
+        callBackDict = assessmentType.baseConfigAssessment(request)
     elif route == 'baseConfigStreet':
         callBackDict = configAdmin.baseConfigStreet(request)
     elif route == 'baseConfigVillage':
@@ -22,9 +22,9 @@ def index(request,route):
     elif route == 'deleteVillage':
         callBackDict = configAdmin.deleteVillage(request)
     elif route == 'deleteConfigQuestion':
-        callBackDict = questionAdmin.deleteConfigQuestion(request)
+        callBackDict = assessmentType.deleteConfigAssessment(request)
     elif route == 'getConfigQuestion':
-        callBackDict = questionAdmin.getConfigQuestion(request)
+        callBackDict = assessmentType.getConfigAssessment(request)
     elif route == 'addRoomNum':
         callBackDict = roomAdmin.addRoomNum(request)
     elif route == 'deleteRoomNum':

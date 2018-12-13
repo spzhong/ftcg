@@ -138,8 +138,8 @@ def getVillages(request):
             if rsvillage.villageId :
                 onevillage = village.objects.get(id=rsvillage.villageId)
                 # 查询出来存在的小区
-                #if onevillage :
-                    #list.append({'id': onevillage.id, 'name': onevillage.name,'type': onevillage.type})
+                if onevillage :
+                    list.append({'id': onevillage.id, 'name': onevillage.name,'type': onevillage.type})
         callBackDict['code'] = '1'
         callBackDict['data'] = list
     except BaseException as e:

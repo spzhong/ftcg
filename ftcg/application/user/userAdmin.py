@@ -237,3 +237,34 @@ def getAllUserList(request):
     return callBackDict
 
 
+
+# 管理员删除用户
+def adminDeleteUser(request):
+    token = request.GET['token'];
+    userId = request.GET['userId'];
+    callBackDict = {}
+    if len(token) != 32:
+        callBackDict['code'] = '0'
+        callBackDict['msg'] = 'token错误'
+        return callBackDict
+    if len(userId) == 32:
+        callBackDict['code'] = '0'
+        callBackDict['msg'] = 'userId为空'
+        return callBackDict
+    # 验证token
+    if signAdmin.verificationToken(token) == False:
+        callBackDict['code'] = '0'
+        callBackDict['msg'] = 'token异常'
+        return callBackDict
+    try:
+        user.objects.get(id=userId).delete()
+        callBackDict['code'] = '1'
+        callBackDict['msg'] = '删除用户成功'
+    except BaseException as e:
+        callBackDict['code'] = '0'
+        callBackDict['msg'] = '系统异常'
+        logger = logging.getLogger("django")
+        logger.info(str(e))
+    return callBackDict
+
+

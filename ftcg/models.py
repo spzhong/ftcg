@@ -85,8 +85,12 @@ class assessment(models.Model):
 
 # 考核及相关的问题的关系
 class assessmentQuestion(models.Model):
-    assessmentId = models.IntegerField(default=0,db_index=True)
-    questionId = models.IntegerField(default=0,db_index=True)
+    # 考核类型的id
+    assessmentTypeId = models.IntegerField(default=0,db_index=True)
+    # 一级索引
+    levelOneIndex = models.IntegerField(default=0, db_index=True)
+    # 二级索引
+    levelTwoIndex = models.IntegerField(default=0, db_index=True)
     remarks = models.CharField(max_length=2024,null=True)
     imgs = models.CharField(max_length=2024,null=True)
     createTime = models.BigIntegerField(default=0)
@@ -101,3 +105,13 @@ class question(models.Model):
     minusFraction = models.IntegerField(default=0)
     # 默认0是普通小区，1是学校，2是政府机关
     type = models.IntegerField(default=0)
+
+
+# 考核
+class assessmentType(models.Model):
+    # 0是小区的考核，1是学校考核，2是机关的考核
+    subordinateType = models.IntegerField(default=0, db_index=True)
+    # 0是基本指标（默认的，是减分项目），1是鼓励指标（加分项）
+    assessmentType = models.IntegerField(default=0, db_index=True)
+    # 存放的json数据
+    levelJsonString = models.CharField(max_length=20240)
