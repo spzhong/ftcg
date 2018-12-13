@@ -16,15 +16,14 @@ import configAdmin
 # 创建问题
 def baseConfigAssessment(request):
     callBackDict = {}
-    title = request.GET['title']
-    subordinateType = int(request.GET['subordinateType'])
-    assessmentType = int(request.GET['assessmentType'])
+    subordinateTypeInt = int(request.GET['subordinateType'])
+    assessmentTypeInt = int(request.GET['assessmentType'])
     levelJsonString = request.GET['levelJsonString']
-    if subordinateType < 0 or subordinateType > 2:
+    if subordinateTypeInt < 0 or subordinateTypeInt > 2:
         callBackDict['code'] = '0'
         callBackDict['msg'] = '请输入小区或学校或机关的考核类型'
         return callBackDict
-    if assessmentType < 0 or assessmentType > 1:
+    if assessmentTypeInt < 0 or assessmentTypeInt > 1:
         callBackDict['code'] = '0'
         callBackDict['msg'] = '请输入基本指标或鼓励指标'
         return callBackDict
@@ -60,7 +59,7 @@ def baseConfigAssessment(request):
             leveOneIndex = leveOneIndex+1;
         if int(levelJson['fraction']) == leveToalfraction :
             newlevelJsonString = json.dumps(levelJson)
-            obj = assessmentType.objects.create(subordinateType=subordinateType, assessmentType=assessmentType,levelJsonString=newlevelJsonString)
+            obj = assessmentType.objects.create(subordinateType=subordinateTypeInt, assessmentType=assessmentTypeInt,levelJsonString=newlevelJsonString)
             obj.save()
             callBackDict['code'] = '1'
             callBackDict['data'] = obj.id
