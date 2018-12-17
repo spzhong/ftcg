@@ -194,18 +194,12 @@ def adminResetPassword(request):
             return callBackDict
         # 默认密码就是他的手机号
         hash = hashlib.md5()
-        logger = logging.getLogger("django")
-        logger.info(str(obj.phone))
-
         hash.update(str(obj.phone).encode("utf-8"))
         md = hash.hexdigest()
-        logger.info(str(md))
-
-        hash.update(str(md).encode("utf-8"))
-        password = str(hash.hexdigest())
-        logger.info(str(password))
-
-
+        # 两次加密
+        hash2 = hashlib.md5()
+        hash2.update(md.encode("utf-8"))
+        password = str(hash2.hexdigest())
         obj.password = password
         obj.save()
         callBackDict['code'] = '1'
