@@ -194,7 +194,7 @@ def adminResetPassword(request):
             return callBackDict
         # 默认密码就是他的手机号
         hash = hashlib.md5()
-        hash.update(str(signObj.phone).encode("utf-8"))
+        hash.update(str(obj.phone).encode("utf-8"))
         md = hash.hexdigest()
         logger = logging.getLogger("django")
         logger.info(str(md))
@@ -206,7 +206,7 @@ def adminResetPassword(request):
         callBackDict['msg'] = '已重置为手机号为登录密码'
     except BaseException as e:
         callBackDict['code'] = '0'
-        callBackDict['msg'] = '重置成功'
+        callBackDict['msg'] = '重置失败'
         logger = logging.getLogger("django")
         logger.info(str(e))
     return callBackDict
