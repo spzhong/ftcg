@@ -13,6 +13,8 @@ def index(request,route):
         callBackDict = assessmentAdmin.deleteAssessment(request)
     elif route == 'getIsHaveAssessment':
         callBackDict = assessmentAdmin.getIsHaveAssessment(request)
+    elif route == 'getAssessmentQuestion':
+        callBackDict = assessmentAdmin.getAssessmentQuestion(request)
     else:
          return HttpResponse("no found !!!")
     return HttpResponse(json.dumps(callBackDict))

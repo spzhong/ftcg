@@ -178,7 +178,7 @@ def deleteAssessment(request):
 
 
 
-# 判断是否拥有正在考核的数据
+# 判断是否拥有正在考核的数据(部分数据)
 def getIsHaveAssessment(request):
     token = request.GET['token'];
     callBackDict = {}
@@ -215,8 +215,7 @@ def getIsHaveAssessment(request):
                     levelList = json.loads(oneassessment.levelJsonString)
                 if len(oneassessment.imgs) > 0:
                     imgsList = json.loads(oneassessment.imgs)
-                list.append({'id': oneassessment.id, 'isAnswer':isAnswer, 'info': oneassessment.info,
-                             'imgs': imgsList, 'assessmentLevelList': levelList,'totalFraction':oneassessment.totalFraction,'createTime':str(oneassessment.createTime)})
+                list.append({'id': oneassessment.id, 'isAnswer':isAnswer,'totalFraction':oneassessment.totalFraction,'createTime':str(oneassessment.createTime)})
                 callBackDict['data'] = list
     except BaseException as e:
         callBackDict['code'] = '0'
@@ -225,3 +224,39 @@ def getIsHaveAssessment(request):
         logger.info(str(e))
     return callBackDict
 
+
+
+# 获取考核的问题
+def getAssessmentQuestion(request):
+    token = request.GET['token'];
+    callBackDict = {}
+    assessmentQuestionId = request.GET['id'];
+    if len(assessmentQuestionId) == 0:
+        callBackDict['code'] = '0'
+        callBackDict['msg'] = '考核的问题id为空'
+        return callBackDict
+    # 验证token
+    if signAdmin.verificationAppToken(token) == False:
+        callBackDict['code'] = '0'
+        callBackDict['msg'] = 'token异常'
+        return callBackDict
+    try:
+        assessmentObj = assessment.objects.get(id=assessmentQuestionId)
+        isAnswer = 0
+        levelList = None
+        imgsList = None
+        # 说明了用户已答完题目了
+        if assessmentObj.createTime == 0:
+            isAnswer = 1
+            levelList = json.loads(assessmentObj.levelJsonString)
+        if len(assessmentObj.imgs) > 0:
+            imgsList = json.loads(assessmentObj.imgs)
+        callBackDict['data'] = {'id': assessmentObj.id, 'isAnswer': isAnswer, 'totalFraction': assessmentObj.totalFraction,
+                         'createTime': str(assessmentObj.createTime),'levelList':levelList,'imgsList':imgsList,'info':assessmentObj.info}
+        callBackDict['code'] = '1'
+    except BaseException as e:
+        callBackDict['code'] = '0'
+        callBackDict['msg'] = '系统异常'
+        logger = logging.getLogger("django")
+        logger.info(str(e))
+    return callBackDict
