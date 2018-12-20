@@ -99,7 +99,7 @@ def baseConfigVillage(request):
 def getStreets(request):
     callBackDict = {}
     # 验证token
-    if verificationToken(request) == False:
+    if signAdmin.verificationAppToken(request.GET['token']) == False:
         callBackDict['code'] = '0'
         callBackDict['msg'] = 'token异常'
         return callBackDict
@@ -127,12 +127,12 @@ def getVillages(request):
         callBackDict['msg'] = '所属街道ID为空'
         return callBackDict
     # 验证token
-    if verificationToken(request) == False:
+    if signAdmin.verificationAppToken(request.GET['token']) == False:
         callBackDict['code'] = '0'
         callBackDict['msg'] = 'token异常'
         return callBackDict
     try:
-        rsStreetVillageList = rsStreetVillage.objects.filter(streetId=streetId)
+        rsStreetVillageList = rsStreetVillage.objects.filter(streetId=streetId,isOpen=0)
         list = []
         for rsvillage in rsStreetVillageList:
             if rsvillage.villageId :

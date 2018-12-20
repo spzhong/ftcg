@@ -29,7 +29,8 @@ class village(models.Model):
     name = models.CharField(max_length=255)
     # 默认0是普通小区，1是学校，2是政府机关
     type = models.IntegerField(default=0)
-
+    # 是否启用（0是开始，1是关闭）
+    isOpen = models.IntegerField(default=0)
 
 # 街道
 class street(models.Model):
@@ -107,7 +108,7 @@ class question(models.Model):
     type = models.IntegerField(default=0)
 
 
-# 考核
+# 考核的问题
 class assessmentType(models.Model):
     # 0是小区的考核，1是学校考核，2是机关的考核
     subordinateType = models.IntegerField(default=0, db_index=True)
@@ -115,3 +116,37 @@ class assessmentType(models.Model):
     assessmentType = models.IntegerField(default=0, db_index=True)
     # 存放的json数据
     levelJsonString = models.CharField(max_length=20240)
+
+
+# 考核的问题聚合
+class assessment(models.Model):
+    # 此次考核的id
+    assessmentId  = models.IntegerField(default=0, db_index=True)
+    assessmentTypeId = models.IntegerField(default=0, db_index=True)
+    # 存放的json数据--考核的index及填写的分数
+    levelJsonString = models.CharField(max_length=20240)
+    # 描述
+    info = models.CharField(max_length=2024,null=True)
+    # 图片
+    imgs = models.CharField(max_length=2024, null=True)
+    # 当前问题的总分
+    totalFraction = models.IntegerField(default=0)
+    # 创建的时间
+    createTime = models.BigIntegerField(default=0)
+
+
+# 分拣员考核的问题
+class userAssessment(models.Model):
+    # 考核的问题id
+    assessmentId = models.IntegerField(default=0, db_index=True)
+    userId = models.IntegerField(default=0, db_index=True)
+    # 街道和小区
+    streetId = models.IntegerField(default=0)
+    villageId = models.IntegerField(default=0)
+    # 总积分
+    totalFraction = models.IntegerField(default=0)
+    # 是否是考核结束(0是进行中，1是已结束，2是已经删除)
+    type = models.IntegerField(default=0)
+    # 创建时间
+    createTime = models.BigIntegerField(default=0)
+

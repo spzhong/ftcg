@@ -147,3 +147,21 @@ def verificationToken(token):
         logger = logging.getLogger("django")
         logger.info('token->异常')
         return False
+
+
+
+# 验证token
+def verificationAppToken(token):
+    if len(token) != 32 :
+        return False
+    nowTime = int(time.time() * 1000)
+    try:
+        signObj = sign.objects.get(token=token)
+        if signObj:
+            # 管理元的角色才算有效
+            userObj = user.objects.get(id=signObj.userId)
+            if nowTime - signObj.signTime < 7 * 24 * 3600 * 1000:
+                return True
+        return False
+    except BaseException as e:
+        return False

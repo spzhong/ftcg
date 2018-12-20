@@ -10,6 +10,7 @@ from ftcg.models import user
 from ftcg.models import roomNumber
 import django.utils.log
 import configAdmin
+from ..user import signAdmin
 
 
 # 关联小区和房间号
@@ -78,7 +79,7 @@ def getRoomNumList(request):
         callBackDict['msg'] = '请输入小区的id'
         return callBackDict
     # 验证token
-    if configAdmin.verificationToken(request) == False:
+    if signAdmin.verificationAppToken(request.GET['token']) == False:
         callBackDict['code'] = '0'
         callBackDict['msg'] = 'token异常'
         return callBackDict

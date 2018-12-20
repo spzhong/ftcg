@@ -104,7 +104,7 @@ def deleteConfigAssessment(request):
 def getConfigAssessment(request):
     callBackDict = {}
     subordinateTypeInt = int(request.GET['subordinateType']) # 0是小区的考核，1是学校考核，2是机关的考核
-    assessmentTypeInt = int(request.GET['subordinateType']) # 0是基本指标（默认的，是减分项目），1是鼓励指标（加分项）
+    assessmentTypeInt = int(request.GET['subordinateType']) # 0是所有指标，1是减分项目 ,2是鼓励指标（加分项）
     if subordinateTypeInt < 0 or subordinateTypeInt > 2:
         callBackDict['code'] = '0'
         callBackDict['msg'] = '请输入小区或学校或机关的考核类型'
@@ -119,7 +119,13 @@ def getConfigAssessment(request):
         callBackDict['msg'] = 'token异常'
         return callBackDict
     try:
-        assessmentTypeList = assessmentType.objects.filter(subordinateType=subordinateTypeInt,assessmentType=assessmentTypeInt)
+        assessmentTypeList = None
+        # 判断是否获取所有的指标项目
+        if assessmentTypeInt==0:
+            assessmentTypeList = assessmentType.objects.filter(subordinateType=subordinateTypeInt)
+        else:
+            assessmentTypeList = assessmentType.objects.filter(subordinateType=subordinateTypeInt,
+                                                               assessmentType=assessmentTypeInt)
         list = []
         for oneassessmentType in assessmentTypeList:
             levelJsonString = oneassessmentType.levelJsonString
