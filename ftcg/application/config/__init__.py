@@ -39,8 +39,3 @@ def index(request,route):
          return HttpResponse("no found !!!")
     return HttpResponse(json.dumps(callBackDict))
 
-
-
-
-
-openVillage

@@ -39,7 +39,7 @@ class village(models.Model):
     # 默认0是普通小区，1是学校，2是政府机关,3是收储运公司
     type = models.IntegerField(default=0)
     # 编号
-    number = models.CharField(null=True)
+    number = models.CharField(null=True,max_length=100)
     address = models.CharField(max_length=1024,null=True)
     # 负责人
     personCharge = models.CharField(max_length=100,null=True)
@@ -47,7 +47,7 @@ class village(models.Model):
     # 备注
     remarks = models.CharField(max_length=1024,null=True)
     # 管理子目录数（管理多少户）
-    managementSubsetNum = models.CharField(null=True)
+    managementSubsetNum = models.CharField(null=True,max_length=100)
     # 是否启用（0是开始，1是关闭）
     isOpen = models.IntegerField(default=0)
 
@@ -57,7 +57,7 @@ class community(models.Model):
     streetId = models.IntegerField(default=0,db_index=True)
     name = models.CharField(max_length=255)
     # 编号
-    number = models.CharField(null=True)
+    number = models.CharField(null=True,max_length=100)
     address = models.CharField(max_length=1024,null=True)
     # 负责人
     personCharge = models.CharField(max_length=100,null=True)
@@ -65,14 +65,14 @@ class community(models.Model):
     # 备注
     remarks = models.CharField(max_length=1024,null=True)
     # 管理子目录数（管理多少户）
-    managementSubsetNum = models.CharField(null=True)
+    managementSubsetNum = models.CharField(null=True,max_length=100)
 
 
 # 街道
 class street(models.Model):
     name = models.CharField(max_length=255)
     # 编号
-    number = models.CharField(null=True)
+    number = models.CharField(null=True,max_length=100)
     address = models.CharField(max_length=1024,null=True)
     # 负责人
     personCharge = models.CharField(max_length=100,null=True)
@@ -80,7 +80,7 @@ class street(models.Model):
     # 备注
     remarks = models.CharField(max_length=1024,null=True)
     # 管理子目录数（管理多少户）
-    managementSubsetNum = models.CharField(null=True)
+    managementSubsetNum = models.CharField(null=True,max_length=100)
 
 
 
