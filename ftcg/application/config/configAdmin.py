@@ -29,7 +29,10 @@ def verificationToken(request):
 # 验证为空的Parm信息
 def verificationNullParm(request,parm):
     try:
-        return request.GET[parm]
+        parms = request.GET[parm]
+        if len(parms) == 0:
+            return None
+        return parms
     except BaseException as e:
         return None
 
