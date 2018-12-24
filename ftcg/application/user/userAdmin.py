@@ -141,7 +141,7 @@ def info(request):
         logger = logging.getLogger("django")
         logger.info(str(e))
         callBackDict['code'] = '0'
-        callBackDict['msg'] = '系统异常'
+        callBackDict['msg'] = 'token异常'
     return callBackDict
 
 
