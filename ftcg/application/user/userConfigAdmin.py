@@ -53,13 +53,13 @@ def createUserAndStreetRS(userId,villageId):
 
 
 # 查询用户所在的街道和小区的关系
-def selectUserAndStreetRS(villageId):
+def selectUserAndStreetRS(userId):
     try:
         # 查询小区-和用户的
-        rsUserVillageObj = rsUserVillage.objects.get(rsStreetVillageId=villageId)
+        rsUserVillageObj = rsUserVillage.objects.get(userId=userId)
 
         # 获取用户的城市的ID
-        villageId = rsUserVillageObj.villageId
+        villageId = rsUserVillageObj.rsStreetVillageId
 
         # 查询小区
         villageObj = village.objects.get(id=villageId)
