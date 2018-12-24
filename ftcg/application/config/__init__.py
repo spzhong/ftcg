@@ -2,7 +2,7 @@
 import json
 import configAdmin
 import assessmentType
-import roomAdmin
+
 
 from django.http import HttpResponse
 
@@ -25,12 +25,16 @@ def index(request,route):
         callBackDict = assessmentType.deleteConfigAssessment(request)
     elif route == 'getConfigAssessment':
         callBackDict = assessmentType.getConfigAssessment(request)
-    elif route == 'addRoomNum':
-        callBackDict = roomAdmin.addRoomNum(request)
-    elif route == 'deleteRoomNum':
-        callBackDict = roomAdmin.deleteRoomNum(request)
-    elif route == 'getRoomNumList':
-        callBackDict = roomAdmin.getRoomNumList(request)
+    elif route == 'baseConfigCommunity':
+        callBackDict = configAdmin.baseConfigCommunity(request)
+    elif route == 'deleteCommunity':
+        callBackDict = configAdmin.deleteCommunity(request)
+    elif route == 'getCommunitys':
+        callBackDict = configAdmin.getCommunitys(request)
+    elif route == 'openVillage':
+        callBackDict = configAdmin.openVillage(request)
+    elif route == 'closeVillage':
+        callBackDict = configAdmin.closeVillage(request)
     else:
          return HttpResponse("no found !!!")
     return HttpResponse(json.dumps(callBackDict))
@@ -39,3 +43,4 @@ def index(request,route):
 
 
 
+openVillage

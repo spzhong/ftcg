@@ -13,7 +13,7 @@ import hashlib
 sys.path.append('...')
 from ftcg.models import village
 from ftcg.models import street
-from ftcg.models import rsStreetVillage
+from ftcg.models import community
 from ftcg.models import rsUserVillage
 
 
@@ -23,17 +23,28 @@ def createUserAndStreetRS(userId,villageId):
         # 查询小区
         villageObj = village.objects.get(id=villageId)
 
-        # 查询小区-和街道的关系
-        rsStreetVillageObj = rsStreetVillage.objects.get(villageId=villageId)
-        streetId = rsStreetVillageObj.streetId
-
         # 查询街道的名称
-        streetObj = street.objects.get(id=streetId)
+        streetObj = street.objects.get(id=villageObj.streetId)
+
+        # 查查询社区的名称
+        communityObj = community.objects.get(id=villageObj.communityId)
 
         # 创建一条用户和小区的关系
         obj = rsUserVillage.objects.create(userId=userId, villageId=villageId)
         obj.save()
-        regionDict = {'villageInfo':{'villageId':villageId,'villageName':villageObj.name,'type':villageObj.type},'streetInfo':{'streetId':streetId,'streetName':streetObj.name}}
+        regionDict = {'villageInfo': {'id': villageId, 'name': villageObj.name, 'type': villageObj.type,
+                                      'number': villageObj.number, 'address': villageObj.address,
+                                      'personCharge': villageObj.personCharge, 'phone': villageObj.phone,
+                                      'remarks': villageObj.remarks,
+                                      'managementSubsetNum': villageObj.managementSubsetNum},
+                      'communityInfo': {'id': communityObj.id, 'name': communityObj.name, 'number': villageObj.number,
+                                        'address': villageObj.address, 'personCharge': villageObj.personCharge,
+                                        'phone': villageObj.phone, 'remarks': villageObj.remarks,
+                                        'managementSubsetNum': villageObj.managementSubsetNum},
+                      'streetInfo': {'id': streetObj.id, 'name': streetObj.name, 'number': villageObj.number,
+                                     'address': villageObj.address, 'personCharge': villageObj.personCharge,
+                                     'phone': villageObj.phone, 'remarks': villageObj.remarks,
+                                     'managementSubsetNum': villageObj.managementSubsetNum}}
         return regionDict
     except BaseException as e:
         logger = logging.getLogger("django")
@@ -44,21 +55,37 @@ def createUserAndStreetRS(userId,villageId):
 # 查询用户所在的街道和小区的关系
 def selectUserAndStreetRS(villageId):
     try:
-        # 查询小区-和街道的关系
-        rsStreetVillageObj = rsStreetVillage.objects.get(villageId=villageId)
-        streetId = rsStreetVillageObj.streetId
-        villageId = rsStreetVillageObj.villageId
+        # 查询小区-和用户的
+        rsUserVillageObj = rsUserVillage.objects.get(villageId=villageId)
 
-        # 查询街道和小区的名字
-        streetObj = street.objects.get(id=streetId)
+        # 获取用户的城市的ID
+        villageId = rsUserVillageObj.villageId
+
+        # 查询小区
         villageObj = village.objects.get(id=villageId)
 
+        # 查询街道的名称
+        streetObj = street.objects.get(id=villageObj.streetId)
+
+        # 查询社区的名称
+        communityObj = community.objects.get(id=villageObj.communityId)
+
+        regionDict = {'villageInfo': {'id': villageId, 'name': villageObj.name, 'type': villageObj.type,
+                                      'number': villageObj.number, 'address': villageObj.address,
+                                      'personCharge': villageObj.personCharge, 'phone': villageObj.phone,
+                                      'remarks': villageObj.remarks,
+                                      'managementSubsetNum': villageObj.managementSubsetNum},
+                      'communityInfo': {'id': communityObj.id, 'name': communityObj.name, 'number': villageObj.number,
+                                        'address': villageObj.address, 'personCharge': villageObj.personCharge,
+                                        'phone': villageObj.phone, 'remarks': villageObj.remarks,
+                                        'managementSubsetNum': villageObj.managementSubsetNum},
+                      'streetInfo': {'id': streetObj.id, 'name': streetObj.name, 'number': villageObj.number,
+                                     'address': villageObj.address, 'personCharge': villageObj.personCharge,
+                                     'phone': villageObj.phone, 'remarks': villageObj.remarks,
+                                     'managementSubsetNum': villageObj.managementSubsetNum}}
         # 返回用户和小区及街道的关系
-        return {'villageInfo':{'villageId':villageId,'villageName':villageObj.name,'type':villageObj.type},'streetInfo':{'streetId':streetId,'streetName':streetObj.name}}
+        return regionDict
     except BaseException as e:
         logger = logging.getLogger("django")
         logger.info(str(e))
         return None
-
-
-

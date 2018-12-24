@@ -15,6 +15,7 @@ import userConfigAdmin
 import re
 import hashlib
 
+
 # 查询用户信息
 def selectUser(name):
     if name :
@@ -127,8 +128,15 @@ def info(request):
     try:
         signObj = sign.objects.get(token=token)
         userObj = user.objects.get(id=signObj.userId)
-        callBackDict['code'] = '1'
-        callBackDict['data'] = {"id": userObj.id,"name":userObj.name,"phone":userObj.phone,"role": userObj.role}
+        # 判断获取用户的信息
+        if userObj.role == 2 or userObj.role == 3:
+            callBackDict['code'] = '1'
+            region = userConfigAdmin.selectUserAndStreetRS(signObj.userId)
+            callBackDict['data'] = {"id": signObj.userId, "token": signObj.token, "name": userObj.name,
+                                    "phone": userObj.phone, "role": userObj.role, "region": region}
+        else:
+            callBackDict['data'] = {"id": signObj.userId, "token": signObj.token, "name": userObj.name,
+                                    "phone": userObj.phone, "role": userObj.role}
     except BaseException as e:
         callBackDict['code'] = '0'
         callBackDict['msg'] = '系统异常'
@@ -185,8 +193,12 @@ def adminResetPassword(request):
         callBackDict['msg'] = 'token错误'
         return callBackDict
     try:
-        # 更新密码
-        signObj = sign.objects.get(token=token)
+        # 查看管理员登录的token
+        if signAdmin.verificationToken(token) == False:
+            callBackDict['code'] = '0'
+            callBackDict['msg'] = 'token异常'
+            return callBackDict
+        # 查询出用户的信息
         obj = user.objects.get(id=userId)
         if obj.role == 0:
             callBackDict['code'] = '0'
@@ -222,6 +234,10 @@ def getAllUserList(request):
         callBackDict['msg'] = 'token错误'
         return callBackDict
     # 验证token
+    if signAdmin.verificationToken(token) == False:
+        callBackDict['code'] = '0'
+        callBackDict['msg'] = 'token异常'
+        return callBackDict
     try:
         userList = user.objects.all()
         list = []

@@ -9,11 +9,12 @@ sys.path.append('...')
 from ftcg.models import user
 from ftcg.models import userAssessment
 from ftcg.models import assessment
-from ftcg.models import assessmentType
+from ftcg.models import assessmentQuestion
 from ftcg.models import village
 
 
 from ..user import signAdmin
+
 
 # 创建考核
 def createAssessment(request):

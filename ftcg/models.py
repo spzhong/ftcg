@@ -22,32 +22,73 @@ class sign(models.Model):
 class roomNumber(models.Model):
     numberText = models.CharField(max_length=1024)
     villageId = models.IntegerField(default=0,db_index=True)
+    # 负责人（就是住户的信息）
+    personCharge = models.CharField(max_length=100, null=True)
+    phone = models.CharField(max_length=20, null=True)
+    # 备注
+    remarks = models.CharField(max_length=1024, null=True)
 
 
 # 小区
 class village(models.Model):
+    # 街道的id
+    streetId = models.IntegerField(default=0, db_index=True)
+    # 社区的id
+    communityId = models.IntegerField(default=0, db_index=True)
     name = models.CharField(max_length=255)
-    # 默认0是普通小区，1是学校，2是政府机关
+    # 默认0是普通小区，1是学校，2是政府机关,3是收储运公司
     type = models.IntegerField(default=0)
+    # 编号
+    number = models.CharField(null=True)
+    address = models.CharField(max_length=1024,null=True)
+    # 负责人
+    personCharge = models.CharField(max_length=100,null=True)
+    phone  = models.CharField(max_length=20,null=True)
+    # 备注
+    remarks = models.CharField(max_length=1024,null=True)
+    # 管理子目录数（管理多少户）
+    managementSubsetNum = models.CharField(null=True)
     # 是否启用（0是开始，1是关闭）
     isOpen = models.IntegerField(default=0)
+
+
+# 社区
+class community(models.Model):
+    streetId = models.IntegerField(default=0,db_index=True)
+    name = models.CharField(max_length=255)
+    # 编号
+    number = models.CharField(null=True)
+    address = models.CharField(max_length=1024,null=True)
+    # 负责人
+    personCharge = models.CharField(max_length=100,null=True)
+    phone  = models.CharField(max_length=20,null=True)
+    # 备注
+    remarks = models.CharField(max_length=1024,null=True)
+    # 管理子目录数（管理多少户）
+    managementSubsetNum = models.CharField(null=True)
+
 
 # 街道
 class street(models.Model):
     name = models.CharField(max_length=255)
+    # 编号
+    number = models.CharField(null=True)
+    address = models.CharField(max_length=1024,null=True)
+    # 负责人
+    personCharge = models.CharField(max_length=100,null=True)
+    phone  = models.CharField(max_length=20,null=True)
+    # 备注
+    remarks = models.CharField(max_length=1024,null=True)
+    # 管理子目录数（管理多少户）
+    managementSubsetNum = models.CharField(null=True)
 
-
-# 小区和街道的关系
-class rsStreetVillage(models.Model):
-    streetId = models.IntegerField(db_index=True)
-    villageId = models.IntegerField(db_index=True)
 
 
 # 用户和小区的关系
 class rsUserVillage(models.Model):
     userId = models.IntegerField(db_index=True)
-    villageId = models.IntegerField(db_index=True)
-
+    # 小区和用户的对应关系
+    rsStreetVillageId = models.IntegerField(db_index=True)
 
 # 二维码的袋子
 class qrCode(models.Model):
@@ -56,11 +97,8 @@ class qrCode(models.Model):
     codeId = models.BigIntegerField(default=0,null=True)
     # 领取用户的id，前期暂时没有
     userId = models.IntegerField(db_index=True,null=True)
-    # 用户的房间号
-    roomNumber = models.IntegerField(db_index=True,null=True)
     # 袋子领取的时间
     createTime = models.BigIntegerField(default=0)
-
 
 # 分拣
 class sorting(models.Model):
@@ -73,76 +111,49 @@ class sorting(models.Model):
     createTime = models.BigIntegerField(default=0)
 
 
-# 考核
-class assessment(models.Model):
-    villageId = models.IntegerField(default=0,db_index=True)
-    streetId = models.IntegerField(default=0,db_index=True)
-    createTime = models.BigIntegerField(default=0)
-    # 考核的状态 0是默认开始，1是结束，2是中断没有提交的
-    state = models.IntegerField(default=0)
-    # 总积分
-    totalIntegral = models.IntegerField(default=0)
-
-
-# 考核及相关的问题的关系
+# 考核配置的问题
 class assessmentQuestion(models.Model):
-    # 考核类型的id
-    assessmentTypeId = models.IntegerField(default=0,db_index=True)
-    # 一级索引
-    levelOneIndex = models.IntegerField(default=0, db_index=True)
-    # 二级索引
-    levelTwoIndex = models.IntegerField(default=0, db_index=True)
-    remarks = models.CharField(max_length=2024,null=True)
-    imgs = models.CharField(max_length=2024,null=True)
-    createTime = models.BigIntegerField(default=0)
-    # 选中的是加分还是减分（1是加分，2是减分）
-    isplusormin = models.IntegerField(default=0)
-
-
-# 考核的问题
-class question(models.Model):
-    title = models.CharField(max_length=2024)
-    plusFraction = models.IntegerField(default=0)
-    minusFraction = models.IntegerField(default=0)
-    # 默认0是普通小区，1是学校，2是政府机关
-    type = models.IntegerField(default=0)
-
-
-# 考核的问题
-class assessmentType(models.Model):
-    # 0是小区的考核，1是学校考核，2是机关的考核
-    subordinateType = models.IntegerField(default=0, db_index=True)
+    # 一级指标的名称
+    oneLevelName = models.CharField(max_length=30,db_index=True)
+    # 简称
+    shortName = models.CharField(max_length=512)
+    # 描述
+    info  = models.CharField(max_length=2024,null=True)
+    # 分数
+    fraction = models.IntegerField(default=0)
+    # 答案-jsonListString
+    answerJson = models.CharField(max_length=20240,null=True)
+    # 默认0是普通小区，1是学校，2是政府机关，3是收储运公司
+    subordinateType = models.IntegerField(default=0)
     # 0是基本指标（默认的，是减分项目），1是鼓励指标（加分项）
-    assessmentType = models.IntegerField(default=0, db_index=True)
-    # 存放的json数据
-    levelJsonString = models.CharField(max_length=20240)
+    assessmentType = models.IntegerField(default=0)
 
 
-# 考核的问题聚合
+# 当前考核的问题聚合
 class assessment(models.Model):
-    # 此次考核的id
-    assessmentId  = models.IntegerField(default=0, db_index=True)
-    assessmentTypeId = models.IntegerField(default=0, db_index=True)
-    # 存放的json数据--考核的index及填写的分数
-    levelJsonString = models.CharField(max_length=20240)
+    # 此次考核所选的问题ID
+    assessmentQuestionId = models.IntegerField(default=0, db_index=True)
     # 描述
     info = models.CharField(max_length=2024,null=True)
     # 图片
     imgs = models.CharField(max_length=2024, null=True)
-    # 当前问题的总分
-    totalFraction = models.IntegerField(default=0)
+    # 当前问题分数
+    fraction = models.IntegerField(default=0)
     # 创建的时间
     createTime = models.BigIntegerField(default=0)
 
 
-# 分拣员考核的问题
+# 分拣员考核问题
 class userAssessment(models.Model):
     # 考核的问题id
     assessmentId = models.IntegerField(default=0, db_index=True)
     userId = models.IntegerField(default=0, db_index=True)
-    # 街道和小区
-    streetId = models.IntegerField(default=0)
-    villageId = models.IntegerField(default=0)
+    # 街道，社区，小区
+    streetId = models.IntegerField(default=0,db_index=True)
+    community = models.IntegerField(default=0,db_index=True)
+    villageId = models.IntegerField(default=0,db_index=True)
+    # 默认0是普通小区，1是学校，2是政府机关，3是收储运公司
+    type = models.IntegerField(default=0)
     # 总积分
     totalFraction = models.IntegerField(default=0)
     # 是否是考核结束(0是进行中，1是已结束，2是已经删除)
