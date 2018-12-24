@@ -161,3 +161,4 @@ class userAssessment(models.Model):
     # 创建时间
     createTime = models.BigIntegerField(default=0)
 
+#INSERT INTO ftcg_user(name, password,phone,createTime) VALUES('10000','14e1b600b1fd579f47433b88e8d85291','18520883027',0);

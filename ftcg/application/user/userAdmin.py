@@ -138,6 +138,8 @@ def info(request):
             callBackDict['data'] = {"id": signObj.userId, "token": signObj.token, "name": userObj.name,
                                     "phone": userObj.phone, "role": userObj.role}
     except BaseException as e:
+        logger = logging.getLogger("django")
+        logger.info(str(e))
         callBackDict['code'] = '0'
         callBackDict['msg'] = '系统异常'
     return callBackDict
@@ -244,7 +246,7 @@ def getAllUserList(request):
         for oneUser in userList:
             list.append({'id': oneUser.id, 'name': oneUser.name, 'role': oneUser.role, 'phone':oneUser.phone})
         callBackDict['code'] = '1'
-        callBackDict['msg'] = list
+        callBackDict['data'] = list
     except BaseException as e:
         callBackDict['code'] = '0'
         callBackDict['msg'] = '系统异常'
