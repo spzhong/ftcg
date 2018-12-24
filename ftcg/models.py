@@ -104,8 +104,8 @@ class qrCode(models.Model):
 class sorting(models.Model):
     villageId = models.IntegerField(default=0)
     streetId = models.IntegerField(default=0)
-    remarks = models.CharField(max_length=2024,null=True)
-    imgs = models.CharField(max_length=2024,null=True)
+    remarks = models.CharField(max_length=1024,null=True)
+    imgs = models.CharField(max_length=1024,null=True)
     # 二维码的id，允许为空
     qrCodeId = models.UUIDField(null=True)
     createTime = models.BigIntegerField(default=0)
@@ -118,11 +118,11 @@ class assessmentQuestion(models.Model):
     # 简称
     shortName = models.CharField(max_length=512)
     # 描述
-    info  = models.CharField(max_length=2024,null=True)
+    info  = models.CharField(max_length=1024,null=True)
     # 分数
     fraction = models.IntegerField(default=0)
     # 答案-jsonListString
-    answerJson = models.CharField(max_length=20240,null=True)
+    answerJson = models.CharField(max_length=1024,null=True)
     # 默认0是普通小区，1是学校，2是政府机关，3是收储运公司
     subordinateType = models.IntegerField(default=0)
     # 0是基本指标（默认的，是减分项目），1是鼓励指标（加分项）
@@ -134,9 +134,9 @@ class assessment(models.Model):
     # 此次考核所选的问题ID
     assessmentQuestionId = models.IntegerField(default=0, db_index=True)
     # 描述
-    info = models.CharField(max_length=2024,null=True)
+    info = models.CharField(max_length=1024,null=True)
     # 图片
-    imgs = models.CharField(max_length=2024, null=True)
+    imgs = models.CharField(max_length=1024, null=True)
     # 当前问题分数
     fraction = models.IntegerField(default=0)
     # 创建的时间
