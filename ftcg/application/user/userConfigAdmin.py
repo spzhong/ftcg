@@ -30,7 +30,7 @@ def createUserAndStreetRS(userId,villageId):
         communityObj = community.objects.get(id=villageObj.communityId)
 
         # 创建一条用户和小区的关系
-        obj = rsUserVillage.objects.create(userId=userId, villageId=villageId)
+        obj = rsUserVillage.objects.create(userId=userId, rsStreetVillageId=villageId)
         obj.save()
         regionDict = {'villageInfo': {'id': villageId, 'name': villageObj.name, 'type': villageObj.type,
                                       'number': villageObj.number, 'address': villageObj.address,
@@ -56,7 +56,7 @@ def createUserAndStreetRS(userId,villageId):
 def selectUserAndStreetRS(villageId):
     try:
         # 查询小区-和用户的
-        rsUserVillageObj = rsUserVillage.objects.get(villageId=villageId)
+        rsUserVillageObj = rsUserVillage.objects.get(rsStreetVillageId=villageId)
 
         # 获取用户的城市的ID
         villageId = rsUserVillageObj.villageId
