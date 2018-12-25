@@ -35,6 +35,8 @@ def index(request,route):
         callBackDict = configAdmin.openVillage(request)
     elif route == 'closeVillage':
         callBackDict = configAdmin.closeVillage(request)
+    elif route == 'editConfigAssessment':
+        callBackDict = assessmentType.editConfigAssessment(request)
     else:
          return HttpResponse("no found !!!")
     return HttpResponse(json.dumps(callBackDict))
