@@ -75,8 +75,8 @@ def baseConfigAssessment(request):
         # 给问题附加索引
         leveOneIndex = 0
         for oneAnswer in answerJsonList:
-            oneAnswer['index'] = str(leveTwoIndex)
-            leveTwoIndex = leveOneIndex + 1;
+            oneAnswer['index'] = str(leveOneIndex)
+            leveOneIndex = leveOneIndex + 1;
         newAnswerJsonList = json.dumps(answerJsonList)
         obj = assessmentQuestion.objects.create(fraction=fraction_parm,info=info_parm,shortName=shortName_parm,oneLevelName=oneLevelName_parm,subordinateType=subordinateTypeInt, assessmentType=assessmentTypeInt,
                                                 answerJson=newAnswerJsonList)
