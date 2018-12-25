@@ -215,12 +215,13 @@ def addAssessmentQuestion(request):
         # 查询数据
         assessmentQuestionobj = assessmentQuestion.objects.get(id=assessmentQuestionId)
         answerJsonList = json.loads(assessmentQuestionobj.answerJson)
-        desJson_parm['index'] = str(len(answerJsonList))
+        desJson_parmJson = json.loads(desJson_parm)
+        desJson_parmJson['index'] = str(len(answerJsonList))
         answerJsonIndexList = []
         for oneanser in answerJsonList:
             answerJsonIndexList.append(oneanser)
         # 添加问题的答案
-        answerJsonIndexList.append(desJson_parm)
+        answerJsonIndexList.append(desJson_parmJson)
         # 重新保存数据
         newAnswerJsonStr = json.dumps(answerJsonIndexList)
         assessmentQuestionobj.answerJson = newAnswerJsonStr
