@@ -32,6 +32,7 @@ def baseConfigAssessment(request):
     info_parm = request.GET['info']
     fraction_parm = int(request.GET['fraction'])
     answerJson_parm = request.GET['answerJson']
+    req_parm = int(request.GET['req'])
     if subordinateTypeInt < 0 or subordinateTypeInt > 3:
         callBackDict['code'] = '0'
         callBackDict['msg'] = '请输入小区或学校或机关的考核类型'
@@ -60,6 +61,11 @@ def baseConfigAssessment(request):
         callBackDict['code'] = '0'
         callBackDict['msg'] = '请输入考核问题的答案'
         return callBackDict
+    if req_parm < 0:
+        callBackDict['code'] = '0'
+        callBackDict['msg'] = '考核问题req错误'
+        return callBackDict
+
     try:
         answerJsonList = json.loads(answerJson_parm)
     except BaseException as e:
@@ -78,7 +84,7 @@ def baseConfigAssessment(request):
             oneAnswer['index'] = str(leveOneIndex)
             leveOneIndex = leveOneIndex + 1;
         newAnswerJsonList = json.dumps(answerJsonList)
-        obj = assessmentQuestion.objects.create(fraction=fraction_parm,info=info_parm,shortName=shortName_parm,oneLevelName=oneLevelName_parm,subordinateType=subordinateTypeInt, assessmentType=assessmentTypeInt,
+        obj = assessmentQuestion.objects.create(req=req_parm,fraction=fraction_parm,info=info_parm,shortName=shortName_parm,oneLevelName=oneLevelName_parm,subordinateType=subordinateTypeInt, assessmentType=assessmentTypeInt,
                                                 answerJson=newAnswerJsonList)
         obj.save()
         callBackDict['code'] = '1'
@@ -105,6 +111,7 @@ def editConfigAssessment(request):
     fraction_parm = verificationNullParm(request, 'fraction')
     answerIndex_parm = verificationNullParm(request, 'answerIndex')
     answerDes_parm = verificationNullParm(request, 'answerDes')
+    req_parm = verificationNullParm(request, 'req')
     # 验证token
     if configAdmin.verificationToken(request) == False:
         callBackDict['code'] = '0'
@@ -120,6 +127,8 @@ def editConfigAssessment(request):
             assessmentQuestionobj.info = info_parm
         if fraction_parm:
             assessmentQuestionobj.fraction = fraction_parm
+        if req_parm:
+            assessmentQuestionobj.req = int(req_parm)
         if answerIndex_parm:
             answerJsonList = json.loads(assessmentQuestionobj.answerJson)
             dicOneAnser = answerJsonList[int(answerIndex_parm)]
@@ -172,7 +181,7 @@ def getConfigAssessment(request):
         callBackDict['msg'] = '请输入小区或学校或机关的考核类型'
         return callBackDict
     try:
-        assessmentTypeList = assessmentQuestion.objects.filter(subordinateType=subordinateTypeInt)
+        assessmentTypeList = assessmentQuestion.objects.filter(subordinateType=subordinateTypeInt).order_by('req')
         list = []
         for oneassessmentType in assessmentTypeList:
             levelJsonString = oneassessmentType.answerJson
@@ -180,6 +189,79 @@ def getConfigAssessment(request):
             list.append({'id': oneassessmentType.id, 'subordinateType': oneassessmentType.subordinateType, 'assessmentType':oneassessmentType.assessmentType,'fraction':oneassessmentType.fraction,'info':oneassessmentType.info,'shortName':oneassessmentType.shortName,'oneLevelName':oneassessmentType.oneLevelName,'answerJson':anserList})
         callBackDict['code'] = '1'
         callBackDict['data'] = list
+    except BaseException as e:
+        callBackDict['code'] = '0'
+        callBackDict['msg'] = '系统异常'
+        logger = logging.getLogger("django")
+        logger.info(str(e))
+    return callBackDict
+
+
+
+# 添加问题的答案
+def addAssessmentQuestion(request):
+    callBackDict = {}
+    assessmentQuestionId = request.GET['id']
+    desJson_parm = request.GET['desJson']
+    if len(assessmentQuestionId) == 0:
+        callBackDict['code'] = '0'
+        callBackDict['msg'] = '请输入考核的问题id'
+        return callBackDict
+    if len(desJson_parm) == 0:
+        callBackDict['code'] = '0'
+        callBackDict['msg'] = '问题描述为空'
+        return callBackDict
+    try:
+        # 查询数据
+        assessmentQuestionobj = assessmentQuestion.objects.get(id=assessmentQuestionId)
+        answerJsonList = json.loads(assessmentQuestionobj.answerJson)
+        desJson_parm['index'] = str(len(answerJsonList))
+        answerJsonIndexList = []
+        for oneanser in answerJsonList:
+            answerJsonIndexList.append(oneanser)
+        # 添加问题的答案
+        answerJsonIndexList.append(desJson_parm)
+        # 重新保存数据
+        newAnswerJsonStr = json.dumps(answerJsonIndexList)
+        assessmentQuestionobj.answerJson = newAnswerJsonStr
+        assessmentQuestionobj.save()
+        callBackDict['code'] = '1'
+        callBackDict['msg'] = '添加答案成功'
+    except BaseException as e:
+        callBackDict['code'] = '0'
+        callBackDict['msg'] = '系统异常'
+        logger = logging.getLogger("django")
+        logger.info(str(e))
+    return callBackDict
+
+
+
+# 删除问题的答案
+def delAssessmentQuestion(request):
+    callBackDict = {}
+    assessmentQuestionId = request.GET['id']
+    if len(assessmentQuestionId) == 0:
+        callBackDict['code'] = '0'
+        callBackDict['msg'] = '请输入考核的问题id'
+        return callBackDict
+    index_parm = request.GET['index']
+    try:
+        assessmentQuestionobj = assessmentQuestion.objects.get(id=assessmentQuestionId)
+        answerJsonList = json.loads(assessmentQuestionobj.answerJson)
+        newIndex = 0
+        answerJsonIndexList = []
+        for oneanser in answerJsonList:
+            if oneanser['index'] == index_parm:
+                continue
+            oneanser['index'] = str(newIndex)
+            answerJsonIndexList.append(oneanser)
+            newIndex = newIndex + 1
+        # 重新保存数据
+        newAnswerJsonStr = json.dumps(answerJsonIndexList)
+        assessmentQuestionobj.answerJson = newAnswerJsonStr
+        assessmentQuestionobj.save()
+        callBackDict['code'] = '1'
+        callBackDict['msg'] = '删除成功'
     except BaseException as e:
         callBackDict['code'] = '0'
         callBackDict['msg'] = '系统异常'

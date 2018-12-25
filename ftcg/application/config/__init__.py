@@ -37,6 +37,16 @@ def index(request,route):
         callBackDict = configAdmin.closeVillage(request)
     elif route == 'editConfigAssessment':
         callBackDict = assessmentType.editConfigAssessment(request)
+    elif route == 'editBaseConfigVillage':
+        callBackDict = configAdmin.editBaseConfigVillage(request)
+    elif route == 'editBaseConfigCommunity':
+        callBackDict = configAdmin.editBaseConfigCommunity(request)
+    elif route == 'editBaseConfigStreet':
+        callBackDict = configAdmin.editBaseConfigStreet(request)
+    elif route == 'addAssessmentQuestion':
+        callBackDict = assessmentType.addAssessmentQuestion(request)
+    elif route == 'delAssessmentQuestion':
+        callBackDict = assessmentType.delAssessmentQuestion(request)
     else:
          return HttpResponse("no found !!!")
     return HttpResponse(json.dumps(callBackDict))

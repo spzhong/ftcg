@@ -382,7 +382,148 @@ def deleteVillage(request):
 
 
 
+# 编辑小区的数据
+# 0是普通小区，1是学校，2是政府机关，3是收储运公司
+def editBaseConfigVillage(request):
+    villageId_parm = request.GET['villageId'];
+    callBackDict = {}
+    # 验证token
+    if verificationToken(request) == False:
+        callBackDict['code'] = '0'
+        callBackDict['msg'] = 'token异常'
+        return callBackDict
+    if len(villageId_parm) == 0:
+        callBackDict['code'] = '0'
+        callBackDict['msg'] = '小区的ID为空'
+        return callBackDict
+    # 获取其它参数
+    name_parm = verificationNullParm(request, 'name')
+    number_parm = verificationNullParm(request, 'number')
+    address_parm = verificationNullParm(request, 'address')
+    personCharge_parm = verificationNullParm(request, 'personCharge')
+    phone_parm = verificationNullParm(request, 'phone')
+    remarks_parm = verificationNullParm(request, 'remarks')
+    managementSubsetNum_parm = verificationNullParm(request, 'managementSubsetNum')
+    try:
+        obj = village.objects.get(id=villageId_parm)
+        if name_parm :
+            obj.name = name_parm
+        if number_parm :
+            obj.number = number_parm
+        if address_parm :
+            obj.address = address_parm
+        if personCharge_parm :
+            obj.personCharge = personCharge_parm
+        if phone_parm :
+            obj.phone = phone_parm
+        if remarks_parm :
+            obj.remarks = remarks_parm
+        if managementSubsetNum_parm :
+            obj.managementSubsetNum = managementSubsetNum_parm
+        obj.save()
+        callBackDict['code'] = '1'
+        callBackDict['msg'] = '编辑成功'
+    except BaseException as e:
+        callBackDict['code'] = '0'
+        callBackDict['msg'] = '系统异常'
+        logger = logging.getLogger("django")
+        logger.info(str(e))
+    return callBackDict
+
+
+# 编辑社区的数据
+def editBaseConfigCommunity(request):
+    communityId_parm = request.GET['communityId'];
+    callBackDict = {}
+    # 验证token
+    if verificationToken(request) == False:
+        callBackDict['code'] = '0'
+        callBackDict['msg'] = 'token异常'
+        return callBackDict
+    if len(communityId_parm) == 0:
+        callBackDict['code'] = '0'
+        callBackDict['msg'] = '社区的ID为空'
+        return callBackDict
+    # 获取其它参数
+    name_parm = verificationNullParm(request, 'name')
+    number_parm = verificationNullParm(request, 'number')
+    address_parm = verificationNullParm(request, 'address')
+    personCharge_parm = verificationNullParm(request, 'personCharge')
+    phone_parm = verificationNullParm(request, 'phone')
+    remarks_parm = verificationNullParm(request, 'remarks')
+    managementSubsetNum_parm = verificationNullParm(request, 'managementSubsetNum')
+    try:
+        obj = community.objects.get(id=communityId_parm)
+        if name_parm:
+            obj.name = name_parm
+        if number_parm:
+            obj.number = number_parm
+        if address_parm:
+            obj.address = address_parm
+        if personCharge_parm:
+            obj.personCharge = personCharge_parm
+        if phone_parm:
+            obj.phone = phone_parm
+        if remarks_parm:
+            obj.remarks = remarks_parm
+        if managementSubsetNum_parm:
+            obj.managementSubsetNum = managementSubsetNum_parm
+        obj.save()
+        callBackDict['code'] = '1'
+        callBackDict['msg'] = '编辑成功'
+    except BaseException as e:
+        callBackDict['code'] = '0'
+        callBackDict['msg'] = '系统异常'
+        logger = logging.getLogger("django")
+        logger.info(str(e))
+    return callBackDict
 
 
 
 
+# 编辑街道的数据
+def editBaseConfigStreet(request):
+    streetId_parm = request.GET['streetId'];
+    callBackDict = {}
+    # 验证token
+    if verificationToken(request) == False:
+        callBackDict['code'] = '0'
+        callBackDict['msg'] = 'token异常'
+        return callBackDict
+    if len(streetId_parm) == 0:
+        callBackDict['code'] = '0'
+        callBackDict['msg'] = '街道的ID为空'
+        return callBackDict
+    # 获取其它参数
+    name_parm = verificationNullParm(request, 'name')
+    number_parm = verificationNullParm(request, 'number')
+    address_parm = verificationNullParm(request, 'address')
+    personCharge_parm = verificationNullParm(request, 'personCharge')
+    phone_parm = verificationNullParm(request, 'phone')
+    remarks_parm = verificationNullParm(request, 'remarks')
+    managementSubsetNum_parm = verificationNullParm(request, 'managementSubsetNum')
+    try:
+        obj = street.objects.get(id=streetId_parm)
+        if name_parm:
+            obj.name = name_parm
+        if number_parm:
+            obj.number = number_parm
+        if address_parm:
+            obj.address = address_parm
+        if personCharge_parm:
+            obj.personCharge = personCharge_parm
+        if phone_parm:
+            obj.phone = phone_parm
+        if remarks_parm:
+            obj.remarks = remarks_parm
+        if managementSubsetNum_parm:
+            obj.managementSubsetNum = managementSubsetNum_parm
+        obj.save()
+        callBackDict['code'] = '1'
+        callBackDict['msg'] = '编辑成功'
+    except BaseException as e:
+        callBackDict['code'] = '0'
+        callBackDict['msg'] = '系统异常'
+        logger = logging.getLogger("django")
+        logger.info(str(e))
+    return callBackDict

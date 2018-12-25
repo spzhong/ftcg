@@ -113,6 +113,8 @@ class sorting(models.Model):
 
 # 考核配置的问题
 class assessmentQuestion(models.Model):
+    # 问题的序列编号
+    req = models.IntegerField(default=0)
     # 一级指标的名称
     oneLevelName = models.CharField(max_length=30,db_index=True)
     # 简称
