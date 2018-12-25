@@ -122,8 +122,10 @@ def editConfigAssessment(request):
             assessmentQuestionobj.fraction = fraction_parm
         if answerIndex_parm:
             answerJsonList = json.loads(assessmentQuestionobj.answerJson)
-            dicOneAnser = answerJsonList[answerIndex_parm]
-            dicOneAnser.des = answerDes_parm
+            dicOneAnser = answerJsonList[int(answerIndex_parm)]
+            dicOneAnser['des'] = answerDes_parm
+            newAnswerJsonStr = json.dumps(answerJsonList)
+            assessmentQuestionobj.answerJson = newAnswerJsonStr
         assessmentQuestionobj.save()
         callBackDict['code'] = '1'
         callBackDict['msg'] = '更新成功'
