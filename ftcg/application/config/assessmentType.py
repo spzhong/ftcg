@@ -186,7 +186,7 @@ def getConfigAssessment(request):
         for oneassessmentType in assessmentTypeList:
             levelJsonString = oneassessmentType.answerJson
             anserList = json.loads(levelJsonString)
-            list.append({'id': oneassessmentType.id, 'subordinateType': oneassessmentType.subordinateType, 'assessmentType':oneassessmentType.assessmentType,'fraction':oneassessmentType.fraction,'info':oneassessmentType.info,'shortName':oneassessmentType.shortName,'oneLevelName':oneassessmentType.oneLevelName,'answerJson':anserList})
+            list.append({'id': oneassessmentType.id,'req':oneassessmentType.req,'subordinateType': oneassessmentType.subordinateType, 'assessmentType':oneassessmentType.assessmentType,'fraction':oneassessmentType.fraction,'info':oneassessmentType.info,'shortName':oneassessmentType.shortName,'oneLevelName':oneassessmentType.oneLevelName,'answerJson':anserList})
         callBackDict['code'] = '1'
         callBackDict['data'] = list
     except BaseException as e:
