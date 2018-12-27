@@ -48,7 +48,7 @@ def index(request,route):
     elif route == 'delAssessmentQuestion':
         callBackDict = assessmentType.delAssessmentQuestion(request)
     elif route == 'adminGetVillages':
-        callBackDict = assessmentType.adminGetVillages(request)
+        callBackDict = configAdmin.adminGetVillages(request)
     else:
          return HttpResponse("no found !!!")
     return HttpResponse(json.dumps(callBackDict))
