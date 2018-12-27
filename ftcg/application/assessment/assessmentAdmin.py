@@ -261,3 +261,19 @@ def getAssessmentQuestion(request):
         logger = logging.getLogger("django")
         logger.info(str(e))
     return callBackDict
+
+
+
+def finshAssessment(request):
+    callBackDict = {}
+    return callBackDict
+
+def getAssessmentList(request):
+    callBackDict = {}
+    return callBackDict
+
+def getAssessmentDetails(request):
+    callBackDict = {}
+    return callBackDict
+
+
