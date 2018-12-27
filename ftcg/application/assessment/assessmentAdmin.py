@@ -64,7 +64,7 @@ def createAssessment(request):
 
 
 # 提交问题
-def upAssessment(request):
+def upAssessmentQuestion(request):
     token = request.GET['token'];
     callBackDict = {}
     getassessment = request.GET['assessment'];

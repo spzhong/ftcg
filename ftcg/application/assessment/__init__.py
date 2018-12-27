@@ -7,8 +7,8 @@ from django.http import HttpResponse
 def index(request,route):
     if route == 'createAssessment':
         callBackDict = assessmentAdmin.createAssessment(request)
-    elif route == 'upAssessment':
-        callBackDict = assessmentAdmin.upAssessment(request)
+    elif route == 'upAssessmentQuestion':
+        callBackDict = assessmentAdmin.upAssessmentQuestion(request)
     elif route == 'deleteAssessment':
         callBackDict = assessmentAdmin.deleteAssessment(request)
     elif route == 'getIsHaveAssessment':
@@ -18,3 +18,8 @@ def index(request,route):
     else:
          return HttpResponse("no found !!!")
     return HttpResponse(json.dumps(callBackDict))
+
+
+finshAssessment
+getAssessmentList
+getAssessmentDetails

@@ -146,7 +146,7 @@ def baseConfigVillage(request):
     remarks_parm = verificationNullParm(request, 'remarks')
     managementSubsetNum_parm = verificationNullParm(request, 'managementSubsetNum')
     try:
-        obj = village.objects.create(communityId=communityId_parm,streetId=streetId_parm, name=name_parm, number=number_parm, address=address_parm,
+        obj = village.objects.create(type = type_parm,communityId=communityId_parm,streetId=streetId_parm, name=name_parm, number=number_parm, address=address_parm,
                                        personCharge=personCharge_parm, phone=phone_parm, remarks=remarks_parm,
                                        managementSubsetNum=managementSubsetNum_parm)
         obj.save()

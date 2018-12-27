@@ -158,7 +158,7 @@ class userAssessment(models.Model):
     type = models.IntegerField(default=0)
     # 总积分
     totalFraction = models.IntegerField(default=0)
-    # 是否是考核结束(0是进行中，1是已结束，2是已经删除)
+    # 是否是考核结束(0是进行中，1是审核中，2是审核打回，3是审核通过，-1是删除)
     type = models.IntegerField(default=0)
     # 创建时间
     createTime = models.BigIntegerField(default=0)
