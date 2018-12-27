@@ -241,6 +241,38 @@ def getVillages(request):
     return callBackDict
 
 
+
+# 管理员-获取指定街道的小区数据
+def adminGetVillages(request):
+    callBackDict = {}
+    streetId_parm = request.GET['streetId']
+    if len(streetId_parm) == 0:
+        callBackDict['code'] = '0'
+        callBackDict['msg'] = '所属街道ID为空'
+        return callBackDict
+    communityId_parm = verificationNullParm(request,'communityId')
+    try:
+        if communityId_parm == None:
+            villageList = village.objects.filter(streetId=streetId_parm)
+        else:
+            villageList = village.objects.filter(streetId=streetId_parm, communityId=communityId_parm)
+        list = []
+        for oneVillage in villageList:
+             list.append({'id': oneVillage.id, 'isOpen': oneVillage.isOpen,'name': oneVillage.name,'type': oneVillage.type,'number': oneVillage.number,
+                                        'address': oneVillage.address, 'personCharge': oneVillage.personCharge,
+                                        'phone': oneVillage.phone, 'remarks': oneVillage.remarks,
+                                        'managementSubsetNum': oneVillage.managementSubsetNum})
+        callBackDict['code'] = '1'
+        callBackDict['data'] = list
+    except BaseException as e:
+        callBackDict['code'] = '0'
+        callBackDict['msg'] = '系统异常'
+        logger = logging.getLogger("django")
+        logger.info(str(e))
+    return callBackDict
+
+
+
 # 开启小区
 def openVillage(request):
     villageId_parm = request.GET['villageId']
