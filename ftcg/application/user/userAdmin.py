@@ -80,7 +80,7 @@ def registerUser(request):
     try:
         # 查看登录的token
         if signAdmin.verificationToken(token) == False:
-            callBackDict['code'] = '0'
+            callBackDict['code'] = '9999'
             callBackDict['msg'] = 'token异常，无法注册'
             return callBackDict
         # 查询用户信息
@@ -196,7 +196,7 @@ def adminResetPassword(request):
     try:
         # 查看管理员登录的token
         if signAdmin.verificationToken(token) == False:
-            callBackDict['code'] = '0'
+            callBackDict['code'] = '9999'
             callBackDict['msg'] = 'token异常'
             return callBackDict
         # 查询出用户的信息
@@ -236,7 +236,7 @@ def getAllUserList(request):
         return callBackDict
     # 验证token
     if signAdmin.verificationToken(token) == False:
-        callBackDict['code'] = '0'
+        callBackDict['code'] = '9999'
         callBackDict['msg'] = 'token异常'
         return callBackDict
     try:
@@ -270,7 +270,7 @@ def adminDeleteUser(request):
         return callBackDict
     # 验证token
     if signAdmin.verificationToken(token) == False:
-        callBackDict['code'] = '0'
+        callBackDict['code'] = '9999'
         callBackDict['msg'] = 'token异常'
         return callBackDict
     try:

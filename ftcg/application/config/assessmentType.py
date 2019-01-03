@@ -114,7 +114,7 @@ def editConfigAssessment(request):
     req_parm = verificationNullParm(request, 'req')
     # 验证token
     if configAdmin.verificationToken(request) == False:
-        callBackDict['code'] = '0'
+        callBackDict['code'] = '9999'
         callBackDict['msg'] = 'token异常'
         return callBackDict
     try:
@@ -156,7 +156,7 @@ def deleteConfigAssessment(request):
         return callBackDict
     # 验证token
     if configAdmin.verificationToken(request) == False:
-        callBackDict['code'] = '0'
+        callBackDict['code'] = '9999'
         callBackDict['msg'] = 'token异常'
         return callBackDict
     try:

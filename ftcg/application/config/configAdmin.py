@@ -43,7 +43,7 @@ def baseConfigStreet(request):
     callBackDict = {}
     # 验证token
     if verificationToken(request) == False:
-        callBackDict['code'] = '0'
+        callBackDict['code'] = '9999'
         callBackDict['msg'] = 'token异常'
         return callBackDict
     if len(name_parm) == 0:
@@ -84,7 +84,7 @@ def baseConfigCommunity(request):
         return callBackDict
     # 验证token
     if verificationToken(request) == False:
-        callBackDict['code'] = '0'
+        callBackDict['code'] = '9999'
         callBackDict['msg'] = 'token异常'
         return callBackDict
     # 获取其它参数
@@ -119,7 +119,7 @@ def baseConfigVillage(request):
     callBackDict = {}
     # 验证token
     if verificationToken(request) == False:
-        callBackDict['code'] = '0'
+        callBackDict['code'] = '9999'
         callBackDict['msg'] = 'token异常'
         return callBackDict
     if len(streetId_parm) == 0:
@@ -283,7 +283,7 @@ def openVillage(request):
         return callBackDict
     # 验证token
     if verificationToken(request) == False:
-        callBackDict['code'] = '0'
+        callBackDict['code'] = '9999'
         callBackDict['msg'] = 'token异常'
         return callBackDict
     try:
@@ -312,7 +312,7 @@ def closeVillage(request):
         return callBackDict
     # 验证token
     if verificationToken(request) == False:
-        callBackDict['code'] = '0'
+        callBackDict['code'] = '9999'
         callBackDict['msg'] = 'token异常'
         return callBackDict
     try:
@@ -370,7 +370,7 @@ def deleteStreet(request):
         return callBackDict
     # 验证token
     if verificationToken(request) == False:
-        callBackDict['code'] = '0'
+        callBackDict['code'] = '9999'
         callBackDict['msg'] = 'token异常'
         return callBackDict
     try:
@@ -397,7 +397,7 @@ def deleteCommunity(request):
         return callBackDict
     # 验证token
     if verificationToken(request) == False:
-        callBackDict['code'] = '0'
+        callBackDict['code'] = '9999'
         callBackDict['msg'] = 'token异常'
         return callBackDict
     try:
@@ -425,7 +425,7 @@ def deleteVillage(request):
         return callBackDict
     # 验证token
     if verificationToken(request) == False:
-        callBackDict['code'] = '0'
+        callBackDict['code'] = '9999'
         callBackDict['msg'] = 'token异常'
         return callBackDict
     try:
@@ -450,7 +450,7 @@ def editBaseConfigVillage(request):
     callBackDict = {}
     # 验证token
     if verificationToken(request) == False:
-        callBackDict['code'] = '0'
+        callBackDict['code'] = '9999'
         callBackDict['msg'] = 'token异常'
         return callBackDict
     if len(villageId_parm) == 0:
@@ -498,7 +498,7 @@ def editBaseConfigCommunity(request):
     callBackDict = {}
     # 验证token
     if verificationToken(request) == False:
-        callBackDict['code'] = '0'
+        callBackDict['code'] = '9999'
         callBackDict['msg'] = 'token异常'
         return callBackDict
     if len(communityId_parm) == 0:
@@ -548,7 +548,7 @@ def editBaseConfigStreet(request):
     callBackDict = {}
     # 验证token
     if verificationToken(request) == False:
-        callBackDict['code'] = '0'
+        callBackDict['code'] = '9999'
         callBackDict['msg'] = 'token异常'
         return callBackDict
     if len(streetId_parm) == 0:

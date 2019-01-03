@@ -64,7 +64,7 @@ def autoSign(request):
         callBackDict['msg'] = 'token错误'
         return callBackDict
     if verificationToken(token) == False:
-        callBackDict['code'] = '0'
+        callBackDict['code'] = '9999'
         callBackDict['msg'] = 'token失效，请重新登录'
         return callBackDict
     try:
@@ -97,7 +97,7 @@ def signOut(request):
         callBackDict['msg'] = 'token错误'
         return callBackDict
     if verificationToken(token) == False:
-        callBackDict['code'] = '0'
+        callBackDict['code'] = '9999'
         callBackDict['msg'] = 'token异常'
         return callBackDict
     try:
