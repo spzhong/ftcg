@@ -20,7 +20,7 @@ def signIn(request):
     name = request.GET['name'];
     password = request.GET['password']
     callBackDict = {}
-    if len(name) < 5:
+    if len(name) < 3:
         callBackDict['code'] = '0'
         callBackDict['msg'] = '账号太短了'
         return callBackDict
