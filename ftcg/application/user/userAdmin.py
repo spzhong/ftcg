@@ -42,7 +42,7 @@ def registerUser(request):
     phone = request.GET['phone'];
     role = int(roles)
     callBackDict = {}
-    if len(name) < 5:
+    if len(name) < 3:
         callBackDict['code'] = '0'
         callBackDict['msg'] = '账号太短了'
         return callBackDict
@@ -68,10 +68,9 @@ def registerUser(request):
     hash = hashlib.md5()
     hash.update(str(phone).encode("utf-8"))
     md = hash.hexdigest()
-    logger = logging.getLogger("django")
-    logger.info(str(md))
-    hash.update(str(md).encode("utf-8"))
-    password = str(hash.hexdigest())
+    hash2 = hashlib.md5()
+    hash2.update(str(md).encode("utf-8"))
+    password = str(hash2.hexdigest())
     if role == 2 or role == 3:
         villageId = request.GET['villageId']
         if len(villageId) == 0:

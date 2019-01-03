@@ -331,6 +331,35 @@ def closeVillage(request):
 
 
 
+
+# 搜索小区
+def searchVillage(request):
+    callBackDict = {}
+    name_parm = request.GET['name']
+    if len(name_parm) == 0:
+        callBackDict['code'] = '0'
+        callBackDict['msg'] = '输入的搜索小区名称为空'
+        return callBackDict
+    try:
+        villageList = village.objects.filter(isOpen=0,name__icontains=name_parm)
+        list = []
+        for oneVillage in villageList:
+             list.append({'id': oneVillage.id, 'isOpen': oneVillage.isOpen,'name': oneVillage.name,'type': oneVillage.type,'number': oneVillage.number,
+                                        'address': oneVillage.address, 'personCharge': oneVillage.personCharge,
+                                        'phone': oneVillage.phone, 'remarks': oneVillage.remarks,
+                                        'managementSubsetNum': oneVillage.managementSubsetNum})
+        callBackDict['code'] = '1'
+        callBackDict['data'] = list
+    except BaseException as e:
+        callBackDict['code'] = '0'
+        callBackDict['msg'] = '系统异常'
+        logger = logging.getLogger("django")
+        logger.info(str(e))
+    return callBackDict
+
+
+
+
 # 删除街道
 def deleteStreet(request):
     callBackDict = {}

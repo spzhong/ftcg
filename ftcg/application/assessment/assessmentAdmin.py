@@ -20,6 +20,7 @@ from ..user import signAdmin
 def createAssessment(request):
     token = request.GET['token'];
     getstreetId = request.GET['streetId'];
+    getcommunityId = request.GET['communityId'];
     getvillageId = request.GET['villageId'];
     getuserId = request.GET['userId'];
     callBackDict = {}
@@ -34,6 +35,10 @@ def createAssessment(request):
     if len(getvillageId) == 0:
         callBackDict['code'] = '0'
         callBackDict['msg'] = '小区id为空'
+        return callBackDict
+    if len(getcommunityId) == 0:
+        callBackDict['code'] = '0'
+        callBackDict['msg'] = '社区id为空'
         return callBackDict
     if signAdmin.verificationAppToken(token) == False:
         callBackDict['code'] = '0'
