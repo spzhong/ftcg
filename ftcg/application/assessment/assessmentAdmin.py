@@ -412,12 +412,15 @@ def correctTotalFraction(request):
     token = request.GET['token'];
     callBackDict = {}
     getUserAssessmentId = request.GET['userAssessmentId'];
-    getcorrectTotalFraction = int(request.GET['correctTotalFraction'])
+    try:
+        getcorrectTotalFraction = int(request.GET['correctTotalFraction'])
+    except BaseException as e:
+        getcorrectTotalFraction = -1
     if len(getUserAssessmentId) == 0:
         callBackDict['code'] = '0'
         callBackDict['msg'] = '考核的ID为空'
         return callBackDict
-    if getUserAssessmentId < 0 or getUserAssessmentId > 100:
+    if getcorrectTotalFraction < 0 or getcorrectTotalFraction > 100:
         callBackDict['code'] = '0'
         callBackDict['msg'] = '考核的分数异常'
         return callBackDict
@@ -428,7 +431,9 @@ def correctTotalFraction(request):
         return callBackDict
     try:
         assessmentObj = userAssessment.objects.get(id=getUserAssessmentId)
-        assessmentObj.correctTotalFraction = getcorrectTotalFraction
+        if getcorrectTotalFraction >= 0 :
+            assessmentObj.correctTotalFraction = getcorrectTotalFraction
+        assessmentObj.state = 3 #审核通过
         assessmentObj.save()
         callBackDict['code'] = '1'
         callBackDict['msg'] = '修改最终的考核分数成功'
