@@ -92,22 +92,28 @@ def upAssessmentQuestion(request):
         callBackDict['msg'] = 'token异常，请重新登录'
         return callBackDict
     try:
-        assessmentIsHave = assessment.objects.filter(assessmentQuestionId=getquestionId,userAssessmentId=getuserAssessmentId)
-        if assessmentIsHave :
+        assessmentQuestionObj = assessmentQuestion.objects.get(id=getquestionId)
+        if getfraction > assessmentQuestionObj.fraction :
+            callBackDict['code'] = '0'
+            callBackDict['msg'] = '考核的分数大于总分'
+            return callBackDict
+            assessmentOne = assessment.objects.filter(assessmentQuestionId=getquestionId,userAssessmentId=getuserAssessmentId)
+        if assessmentOne :
             # 更新操作
             assessmentIsHave.fraction = getfraction
             assessmentIsHave.info = getinfo
             assessmentIsHave.imgs = getimgs
-            assessmentIsHave.save()
-            callBackDict['code'] = '1'
-            callBackDict['msg'] = '考核问题提交成功'
         else:
             # 创建一条新的数据
             getcreateTime = int(time.time() * 1000)
             assessmentOne = assessment.objects.get(fraction=getfraction,assessmentQuestionId=getquestionId,userAssessmentId=getuserAssessmentId,info=getinfo,imgs=getimgs,createTime=getcreateTime)
-            assessmentOne.save()
-            callBackDict['code'] = '1'
-            callBackDict['msg'] = '考核问题提交成功'
+        assessmentOne.save()
+        # 重新计算一下总分数
+        userAssessmentObj = userAssessment.objects.get(id=getuserAssessmentId)
+        userAssessmentObj.totalFraction = userAssessmentObj.totalFraction + getfraction
+        userAssessmentObj.save()
+        callBackDict['code'] = '1'
+        callBackDict['msg'] = '考核问题提交成功'
     except BaseException as e:
         callBackDict['code'] = '0'
         callBackDict['msg'] = '提交考核问题失败'
