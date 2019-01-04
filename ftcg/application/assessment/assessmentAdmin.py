@@ -97,7 +97,7 @@ def upAssessmentQuestion(request):
             callBackDict['code'] = '0'
             callBackDict['msg'] = '考核的分数大于总分'
             return callBackDict
-        assessmentOne = assessment.objects.filter(assessmentQuestionId=getquestionId,userAssessmentId=getuserAssessmentId)
+        assessmentOne = assessment.objects.get(assessmentQuestionId=getquestionId,userAssessmentId=getuserAssessmentId)
         if assessmentOne :
             # 更新操作
             assessmentOne.fraction = getfraction
