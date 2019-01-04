@@ -97,12 +97,12 @@ def upAssessmentQuestion(request):
             callBackDict['code'] = '0'
             callBackDict['msg'] = '考核的分数大于总分'
             return callBackDict
-            assessmentOne = assessment.objects.filter(assessmentQuestionId=getquestionId,userAssessmentId=getuserAssessmentId)
+        assessmentOne = assessment.objects.filter(assessmentQuestionId=getquestionId,userAssessmentId=getuserAssessmentId)
         if assessmentOne :
             # 更新操作
-            assessmentIsHave.fraction = getfraction
-            assessmentIsHave.info = getinfo
-            assessmentIsHave.imgs = getimgs
+            assessmentOne.fraction = getfraction
+            assessmentOne.info = getinfo
+            assessmentOne.imgs = getimgs
         else:
             # 创建一条新的数据
             getcreateTime = int(time.time() * 1000)
