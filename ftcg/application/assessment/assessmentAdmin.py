@@ -309,30 +309,34 @@ def getAssessmentList(request):
         logger = logging.getLogger("django")
         logger.info(str(e))
     assessmentUserList = None
-    if getcommunityId:
-        if getvillageId:
-            assessmentUserList = userAssessment.objects.filter(streetId=getstreetId, villageId = getvillageId, communityId = getcommunityId,createTime__lte=gettimeStamp).order_by("-createTime")[:getpageSize]
+    try:
+        if getcommunityId:
+            if getvillageId:
+                assessmentUserList = userAssessment.objects.filter(streetId=getstreetId, villageId = getvillageId, communityId = getcommunityId,createTime__lte=gettimeStamp).order_by("-createTime")[:getpageSize]
+            else :
+                assessmentUserList = userAssessment.objects.filter(streetId=getstreetId, communityId = getcommunityId,createTime__lte=gettimeStamp).order_by("-createTime")[:getpageSize]
         else :
-            assessmentUserList = userAssessment.objects.filter(streetId=getstreetId, communityId = getcommunityId,createTime__lte=gettimeStamp).order_by("-createTime")[:getpageSize]
-    else :
-        if getvillageId:
-            assessmentUserList = userAssessment.objects.filter(streetId=getstreetId, villageId = getvillageId, createTime__lte=gettimeStamp).order_by("-createTime")[:getpageSize]
-        else :
-            assessmentUserList = userAssessment.objects.filter(streetId=getstreetId, createTime__lte=gettimeStamp).order_by("-createTime")[:getpageSize]
-    if len(assessmentUserList) > 0:
-        list = []
-        for userAssessmentObj in assessmentUserList:
-            # 查询出来审核员
-            userObj = user.objects.get(userId=userAssessmentObj.userId)
-            list.append({"id":userAssessmentObj.id,"state":userAssessmentObj.state,"totalFraction":userAssessmentObj.totalFraction,"createTime":userAssessmentObj.createTime,"correctTotalFraction":userAssessmentObj.correctTotalFraction,"type":userAssessmentObj.type,"userInfo":{"id":userObj.id,"name":userObj.name,"phone":userObj.phone,"role":userObj.role}})
-        callBackDict['code'] = '1'
-        callBackDict['data'] = list
-    else:
+            if getvillageId:
+                assessmentUserList = userAssessment.objects.filter(streetId=getstreetId, villageId = getvillageId, createTime__lte=gettimeStamp).order_by("-createTime")[:getpageSize]
+            else :
+                assessmentUserList = userAssessment.objects.filter(streetId=getstreetId, createTime__lte=gettimeStamp).order_by("-createTime")[:getpageSize]
+        if len(assessmentUserList) > 0:
+            list = []
+            for userAssessmentObj in assessmentUserList:
+                # 查询出来审核员
+                userObj = user.objects.get(userId=userAssessmentObj.userId)
+                list.append({"id":userAssessmentObj.id,"state":userAssessmentObj.state,"totalFraction":userAssessmentObj.totalFraction,"createTime":userAssessmentObj.createTime,"correctTotalFraction":userAssessmentObj.correctTotalFraction,"type":userAssessmentObj.type,"userInfo":{"id":userObj.id,"name":userObj.name,"phone":userObj.phone,"role":userObj.role}})
+            callBackDict['code'] = '1'
+            callBackDict['data'] = list
+        else:
+            callBackDict['code'] = '0'
+            callBackDict['msg'] = '暂无数据'
+    except BaseException as e:
         callBackDict['code'] = '0'
-        callBackDict['msg'] = '暂无数据'
+        callBackDict['msg'] = '系统异常'
+        logger = logging.getLogger("django")
+        logger.info(str(e))
     return callBackDict
-
-
 
 
 
