@@ -302,10 +302,6 @@ def getAssessmentList(request):
         callBackDict['code'] = '0'
         callBackDict['msg'] = '街道的ID为空'
         return callBackDict
-    if getpage == 0:
-        callBackDict['code'] = '0'
-        callBackDict['msg'] = '页码为空'
-        return callBackDict
     if getpageSize == 0 :
         getpageSize = 20;
     # 社区的ID和小区的ID
