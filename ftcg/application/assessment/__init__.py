@@ -21,6 +21,8 @@ def index(request,route):
         callBackDict = assessmentAdmin.getAssessmentList(request)
     elif route == 'getAssessmentDetails':
         callBackDict = assessmentAdmin.getAssessmentDetails(request)
+    elif route == 'correctTotalFraction':
+        callBackDict = assessmentAdmin.correctTotalFraction(request)
     else:
          return HttpResponse("no found !!!")
     return HttpResponse(json.dumps(callBackDict))

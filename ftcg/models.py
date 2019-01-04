@@ -133,6 +133,8 @@ class assessmentQuestion(models.Model):
 
 # 当前考核的问题聚合
 class assessment(models.Model):
+    # 此次考核的ID
+    userAssessmentId = models.IntegerField(default=0, db_index=True)
     # 此次考核所选的问题ID
     assessmentQuestionId = models.IntegerField(default=0, db_index=True)
     # 描述
@@ -145,10 +147,8 @@ class assessment(models.Model):
     createTime = models.BigIntegerField(default=0)
 
 
-# 分拣员考核问题
+# 分拣员考核
 class userAssessment(models.Model):
-    # 考核的问题id
-    assessmentId = models.IntegerField(default=0, db_index=True)
     userId = models.IntegerField(default=0, db_index=True)
     # 街道，社区，小区
     streetId = models.IntegerField(default=0,db_index=True)
@@ -158,8 +158,10 @@ class userAssessment(models.Model):
     type = models.IntegerField(default=0)
     # 总积分
     totalFraction = models.IntegerField(default=0)
+    # 修正后的分数
+    correctTotalFraction = models.IntegerField(default=0)
     # 是否是考核结束(0是进行中，1是审核中，2是审核打回，3是审核通过，-1是删除)
-    type = models.IntegerField(default=0)
+    state = models.IntegerField(default=0)
     # 创建时间
     createTime = models.BigIntegerField(default=0)
 
