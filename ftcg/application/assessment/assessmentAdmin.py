@@ -324,7 +324,7 @@ def getAssessmentList(request):
             list = []
             for userAssessmentObj in assessmentUserList:
                 # 查询出来审核员
-                userObj = user.objects.get(userId=userAssessmentObj.userId)
+                userObj = user.objects.get(id=userAssessmentObj.userId)
                 list.append({"id":userAssessmentObj.id,"state":userAssessmentObj.state,"totalFraction":userAssessmentObj.totalFraction,"createTime":userAssessmentObj.createTime,"correctTotalFraction":userAssessmentObj.correctTotalFraction,"type":userAssessmentObj.type,"userInfo":{"id":userObj.id,"name":userObj.name,"phone":userObj.phone,"role":userObj.role}})
             callBackDict['code'] = '1'
             callBackDict['data'] = list
@@ -360,7 +360,7 @@ def getAssessmentDetails(request):
         # 查找此次考核的数据
         userAssessmentObj = userAssessment.objects.get(id=getUserAssessmentId)
         # 查询出来审核员
-        userObj = user.objects.get(userId=userAssessmentObj.userId)
+        userObj = user.objects.get(id=userAssessmentObj.userId)
         # 查询对应的小区类型
         oneVillage = village.objects.get(id=userAssessmentObj.villageId)
         # 查询小区对应的问题
