@@ -127,14 +127,14 @@ def deleteAssessment(request):
         callBackDict['msg'] = '考核id为空'
         return callBackDict
     # 验证token
-    if signAdmin.verificationToken(token) == False:
+    if signAdmin.verificationAppToken(token) == False:
         callBackDict['code'] = '9999'
         callBackDict['msg'] = 'token异常，请重新登录'
         return callBackDict
     try:
         userAssessmentObj = userAssessment.objects.get(id=getassessmentId)
         if userAssessmentObj:
-            userAssessmentObj.type = -1;
+            userAssessmentObj.state = -1;
             userAssessmentObj.save()
             callBackDict['msg'] = '删除成功'
             callBackDict['code'] = '1'
@@ -233,7 +233,7 @@ def getAssessmentQuestion(request):
             except BaseException as e:
                 list.append(dict)
         callBackDict['code'] = '1'
-        callBackDict['data'] = {"totalFraction": userAssessmentObj.totalFraction, "state": "0", "id": userAssessmentObj.id,
+        callBackDict['data'] = {"totalFraction": userAssessmentObj.totalFraction,"correctTotalFraction":userAssessmentObj.correctTotalFraction,"state": userAssessmentObj.state, "id": userAssessmentObj.id,
                      "createTime": userAssessmentObj.createTime,"questionList":list,
                      "village": {'id': oneVillage.id, 'name': oneVillage.name, 'type': oneVillage.type,
                                  'number': oneVillage.number,
@@ -380,7 +380,7 @@ def getAssessmentDetails(request):
             except BaseException as e:
                 list.append(dict)
         callBackDict['code'] = '1'
-        callBackDict['data'] = {"totalFraction": userAssessmentObj.totalFraction, "state": "0", "id": userAssessmentObj.id,
+        callBackDict['data'] = {"totalFraction": userAssessmentObj.totalFraction,"correctTotalFraction":userAssessmentObj.correctTotalFraction,"state": userAssessmentObj.state, "id": userAssessmentObj.id,
                      "createTime": userAssessmentObj.createTime,"questionList":list,
                                 "userInfo":{"id":userObj.id,"name":userObj.name,"phone":userObj.phone,"role":userObj.role},
                      "village": {'id': oneVillage.id, 'name': oneVillage.name, 'type': oneVillage.type,
