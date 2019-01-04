@@ -352,7 +352,7 @@ def getAssessmentDetails(request):
         callBackDict['msg'] = '考核的ID为空'
         return callBackDict
     # 验证token
-    if signAdmin.verificationToken(token) == False:
+    if signAdmin.verificationAppToken(token) == False:
         callBackDict['code'] = '9999'
         callBackDict['msg'] = 'token异常'
         return callBackDict
