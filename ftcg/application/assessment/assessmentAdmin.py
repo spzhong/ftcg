@@ -296,15 +296,15 @@ def getAssessmentList(request):
     token = request.GET['token'];
     callBackDict = {}
     getstreetId = request.GET['streetId']
-    gettimeStamp = int(request.GET['timeStamp'])
+    getpage = int(request.GET['page'])
     getpageSize  = int(request.GET['pageSize'])
     if len(getstreetId) == 0:
         callBackDict['code'] = '0'
         callBackDict['msg'] = '街道的ID为空'
         return callBackDict
-    if gettimeStamp == 0:
+    if getpage == 0:
         callBackDict['code'] = '0'
-        callBackDict['msg'] = '时间戳为空'
+        callBackDict['msg'] = '页码为空'
         return callBackDict
     if getpageSize == 0 :
         getpageSize = 20;
@@ -321,14 +321,18 @@ def getAssessmentList(request):
     try:
         if getcommunityId:
             if getvillageId:
-                assessmentUserList = userAssessment.objects.filter(streetId=getstreetId, villageId = getvillageId, communityId = getcommunityId,createTime__lte=gettimeStamp).order_by("-createTime")[:getpageSize]
+                assessmentUserList = userAssessment.objects.filter(streetId=getstreetId, villageId = getvillageId, communityId = getcommunityId).order_by("-createTime")[getpage:getpageSize]
+                allPage = userAssessment.objects.filter(streetId=getstreetId, villageId = getvillageId, communityId = getcommunityId).count()
             else :
-                assessmentUserList = userAssessment.objects.filter(streetId=getstreetId, communityId = getcommunityId,createTime__lte=gettimeStamp).order_by("-createTime")[:getpageSize]
+                assessmentUserList = userAssessment.objects.filter(streetId=getstreetId, communityId = getcommunityId).order_by("-createTime")[getpage:getpageSize]
+                allPage = userAssessment.objects.filter(streetId=getstreetId, communityId = getcommunityId).count()
         else :
             if getvillageId:
-                assessmentUserList = userAssessment.objects.filter(streetId=getstreetId, villageId = getvillageId, createTime__lte=gettimeStamp).order_by("-createTime")[:getpageSize]
+                assessmentUserList = userAssessment.objects.filter(streetId=getstreetId, villageId = getvillageId).order_by("-createTime")[getpage:getpageSize]
+                allPage = userAssessment.objects.filter(streetId=getstreetId, villageId = getvillageId).count()
             else :
-                assessmentUserList = userAssessment.objects.filter(streetId=getstreetId, createTime__lte=gettimeStamp).order_by("-createTime")[:getpageSize]
+                assessmentUserList = userAssessment.objects.filter(streetId=getstreetId).order_by("-createTime")[getpage:getpageSize]
+                allPage = userAssessment.objects.filter(streetId=getstreetId).count()
         if len(assessmentUserList) > 0:
             list = []
             for userAssessmentObj in assessmentUserList:
@@ -336,6 +340,7 @@ def getAssessmentList(request):
                 userObj = user.objects.get(id=userAssessmentObj.userId)
                 list.append({"id":userAssessmentObj.id,"state":userAssessmentObj.state,"totalFraction":userAssessmentObj.totalFraction,"createTime":userAssessmentObj.createTime,"correctTotalFraction":userAssessmentObj.correctTotalFraction,"type":userAssessmentObj.type,"userInfo":{"id":userObj.id,"name":userObj.name,"phone":userObj.phone,"role":userObj.role}})
             callBackDict['code'] = '1'
+            callBackDict['allPage'] = allPage
             callBackDict['data'] = list
         else:
             callBackDict['code'] = '0'
@@ -349,9 +354,7 @@ def getAssessmentList(request):
 
 
 
-
-
-
+# 查询考核的详情
 def getAssessmentDetails(request):
     token = request.GET['token'];
     callBackDict = {}
