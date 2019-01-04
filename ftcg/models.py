@@ -152,7 +152,7 @@ class userAssessment(models.Model):
     userId = models.IntegerField(default=0, db_index=True)
     # 街道，社区，小区
     streetId = models.IntegerField(default=0,db_index=True)
-    community = models.IntegerField(default=0,db_index=True)
+    communityId = models.IntegerField(default=0,db_index=True)
     villageId = models.IntegerField(default=0,db_index=True)
     # 默认0是普通小区，1是学校，2是政府机关，3是收储运公司
     type = models.IntegerField(default=0)

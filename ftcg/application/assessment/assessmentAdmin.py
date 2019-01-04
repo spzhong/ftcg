@@ -44,7 +44,7 @@ def createAssessment(request):
     try:
         createTime = int(time.time() * 1000)
         villageobj = village.objects.get(id=getvillageId)
-        obj = userAssessment.objects.create(userId=getuserId, streetId=getstreetId,community = getcommunityId,villageId=getvillageId, type=villageobj.type,state=0, createTime=createTime)
+        obj = userAssessment.objects.create(userId=getuserId, streetId=getstreetId,communityId = getcommunityId,villageId=getvillageId, type=villageobj.type,state=0, createTime=createTime)
         # 查询出小区的类型
         obj.save()
         callBackDict['data'] = obj.id
@@ -293,7 +293,7 @@ def getAssessmentList(request):
         callBackDict['code'] = '0'
         callBackDict['msg'] = '街道的ID为空'
         return callBackDict
-    if len(gettimeStamp) == 0:
+    if gettimeStamp == 0:
         callBackDict['code'] = '0'
         callBackDict['msg'] = '时间戳为空'
         return callBackDict
