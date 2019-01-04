@@ -97,10 +97,12 @@ def upAssessmentQuestion(request):
             callBackDict['code'] = '0'
             callBackDict['msg'] = '考核的分数大于总分'
             return callBackDict
+        oldfraction = 0
         assessmentOneList = assessment.objects.filter(assessmentQuestionId=getquestionId,userAssessmentId=getuserAssessmentId)
         if len(assessmentOneList) > 0 :
             assessmentOne = assessmentOneList[0]
             # 更新操作
+            oldfraction = assessmentOne.fraction
             assessmentOne.fraction = getfraction
             assessmentOne.info = getinfo
             assessmentOne.imgs = getimgs
@@ -111,7 +113,7 @@ def upAssessmentQuestion(request):
         assessmentOne.save()
         # 重新计算一下总分数
         userAssessmentObj = userAssessment.objects.get(id=getuserAssessmentId)
-        userAssessmentObj.totalFraction = userAssessmentObj.totalFraction + getfraction
+        userAssessmentObj.totalFraction = userAssessmentObj.totalFraction + getfraction - oldfraction
         userAssessmentObj.save()
         callBackDict['code'] = '1'
         callBackDict['msg'] = '考核问题提交成功'
