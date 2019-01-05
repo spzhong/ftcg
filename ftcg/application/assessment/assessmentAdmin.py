@@ -229,7 +229,7 @@ def getAssessmentQuestion(request):
         questionList = assessmentQuestion.objects.filter(subordinateType=userAssessmentObj.type)
         list = []
         for onequestion in questionList:
-            dict = {"id": onequestion.id, "req": onequestion.req, "oneLevelName": onequestion.oneLevelName,
+            dict = {"id": onequestion.id, "assessmentType":onequestion.assessmentType,"req": onequestion.req, "oneLevelName": onequestion.oneLevelName,
                     "shortName": onequestion.shortName, "info": onequestion.info,
                     "assessmentType": onequestion.assessmentType,
                     "answerJson": json.loads(onequestion.answerJson)}
@@ -375,7 +375,7 @@ def getAssessmentDetails(request):
         questionList = assessmentQuestion.objects.filter(subordinateType=userAssessmentObj.type)
         list = []
         for onequestion in questionList:
-            dict = {"id": onequestion.id, "req": onequestion.req, "oneLevelName": onequestion.oneLevelName,
+            dict = {"id": onequestion.id,"assessmentType":onequestion.assessmentType,"req": onequestion.req, "oneLevelName": onequestion.oneLevelName,
                     "shortName": onequestion.shortName, "info": onequestion.info,
                     "assessmentType": onequestion.assessmentType,
                     "answerJson": json.loads(onequestion.answerJson)}
