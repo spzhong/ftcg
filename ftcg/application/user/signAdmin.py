@@ -72,8 +72,9 @@ def autoSign(request):
         if len(oldeSignObjList) > 0 :
             oldeSignObj = oldeSignObjList[0]
             signObj = createSignRecord(oldeSignObj.userId)
+            userObj = user.objects.get(id = oldeSignObj.userId)
             callBackDict['code'] = '1'
-            callBackDict['data'] = {"id": signObj.userId, "token": signObj.token}
+            callBackDict['data'] = {"id": signObj.userId, "token": signObj.token, "name":userObj.name,"role":userObj.role,"phone":userObj.phone}
         else:
             callBackDict['code'] = '0'
             callBackDict['msg'] = 'token异常，请重新登录'
