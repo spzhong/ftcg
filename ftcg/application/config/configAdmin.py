@@ -341,10 +341,10 @@ def searchVillage(request):
         callBackDict['msg'] = '输入的搜索小区名称为空'
         return callBackDict
     try:
-        villageList = village.objects.filter(isOpen=0,name__icontains=name_parm)
+        villageList = village.objects.filter(isOpen=0,name__icontains=name_parm)[:20]
         list = []
         for oneVillage in villageList:
-             list.append({'id': oneVillage.id, 'isOpen': oneVillage.isOpen,'name': oneVillage.name,'type': oneVillage.type,'number': oneVillage.number,
+            list.append({'id': oneVillage.id, 'streetId':oneVillage.streetId, 'communityId':oneVillage.communityId,'isOpen': oneVillage.isOpen,'name': oneVillage.name,'type': oneVillage.type,'number': oneVillage.number,
                                         'address': oneVillage.address, 'personCharge': oneVillage.personCharge,
                                         'phone': oneVillage.phone, 'remarks': oneVillage.remarks,
                                         'managementSubsetNum': oneVillage.managementSubsetNum})
