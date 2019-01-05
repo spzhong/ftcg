@@ -302,6 +302,11 @@ def getAssessmentList(request):
         callBackDict['code'] = '0'
         callBackDict['msg'] = '街道的ID为空'
         return callBackDict
+    # 验证token
+    if signAdmin.verificationToken(token) == False:
+        callBackDict['code'] = '9999'
+        callBackDict['msg'] = 'token异常，请重新登录'
+        return callBackDict
     if getpageSize == 0 :
         getpageSize = 20;
     # 社区的ID和小区的ID
