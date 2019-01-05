@@ -68,25 +68,21 @@ def autoSign(request):
         callBackDict['msg'] = 'token失效，请重新登录'
         return callBackDict
     try:
-        oldeSignObj = sign.objects.get(token=gettoken)
-        if oldeSignObj:
+        oldeSignObjList = sign.objects.filter(token=gettoken)
+        if len(oldeSignObjList) > 0 :
+            oldeSignObj = oldeSignObjList[0]
             signObj = createSignRecord(oldeSignObj.userId)
             callBackDict['code'] = '1'
-            userObj = user.objects.get(id=signObj.userId)
-            # 物业管理员和小区的用户，需要锁定其管理的区域
-            if userObj.role == 2 or userObj.role == 3:
-                region = userConfigAdmin.selectUserAndStreetRS(userObj.villageId)
-                callBackDict['data'] = {"id": signObj.userId, "token": signObj.token, "name": userObj.name,
-                                        "phone": userObj.phone, "role": userObj.role, "region": region}
-            else:
-                callBackDict['data'] = {"id": signObj.userId, "token": signObj.token, "name": userObj.name,
-                                        "phone": userObj.phone, "role": userObj.role}
-
-            return callBackDict
+            callBackDict['data'] = {"id": signObj.userId, "token": signObj.token}
+        else:
+            callBackDict['code'] = '0'
+            callBackDict['msg'] = 'token异常，请重新登录'
     except BaseException as e:
         callBackDict['code'] = '0'
         callBackDict['msg'] = '自动登录异常，请重新登录'
-        return callBackDict
+        logger = logging.getLogger("django")
+        logger.info(str(e))
+    return callBackDict
 
 # 登出操作
 def signOut(request):
