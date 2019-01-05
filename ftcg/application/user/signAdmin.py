@@ -58,17 +58,17 @@ def signIn(request):
 # 自动登录
 def autoSign(request):
     callBackDict = {}
-    token = request.GET['token'];
-    if len(token) != 32:
+    gettoken = request.GET['token'];
+    if len(gettoken) != 32:
         callBackDict['code'] = '0'
         callBackDict['msg'] = 'token错误'
         return callBackDict
-    if verificationAppToken(token) == False:
+    if verificationAppToken(gettoken) == False:
         callBackDict['code'] = '9999'
         callBackDict['msg'] = 'token失效，请重新登录'
         return callBackDict
     try:
-        oldeSignObj = sign.objects.get(token=token)
+        oldeSignObj = sign.objects.get(token=gettoken)
         if oldeSignObj:
             signObj = createSignRecord(oldeSignObj.userId)
             callBackDict['code'] = '1'
