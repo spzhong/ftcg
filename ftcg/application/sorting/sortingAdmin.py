@@ -109,7 +109,7 @@ def makeSortingInfoData(sortingList):
                 householdInfo['id'] = roomNumberObj.id
                 householdInfo['numberText'] = roomNumberObj.numberText
                 householdInfo['personCharge'] = roomNumberObj.personCharge
-        list.append({"householdInfo":householdInfo,"userInfo":villageIdDict[userIdDict.userId],{"villageInfo":villageIdDict[oneSorting.villageId],{"communityInfo":communityIdDict[oneSorting.communityId],"streetInfo":streetIdDict[oneSorting.streetId],"id":oneSorting.id,"remarks":oneSorting.remarks,"qrCodeId":oneSorting.qrCodeId,"createTime":oneSorting.createTime,"imgs":json.loads(oneSorting.imgs)})
+        list.append({"householdInfo":householdInfo,"userInfo":villageIdDict[userIdDict.userId],"villageInfo":villageIdDict[oneSorting.villageId],"communityInfo":communityIdDict[oneSorting.communityId],"streetInfo":streetIdDict[oneSorting.streetId],"id":oneSorting.id,"remarks":oneSorting.remarks,"qrCodeId":oneSorting.qrCodeId,"createTime":oneSorting.createTime,"imgs":json.loads(oneSorting.imgs)})
     return list
 
 
