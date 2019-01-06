@@ -88,18 +88,18 @@ def makeSortingInfoData(sortingList):
     userIdDict = {}
     try:
         for oneSorting in sortingList:
-            if streetIdDict[oneSorting.streetId]== None:
+            if streetIdDict[str(oneSorting.streetId)]== None:
                 streetObj = street.objects.get(id=oneSorting.streetId)
-                streetIdDict[oneSorting.streetId] = {"id":streetObj.id,"name":streetObj.name}
-            if communityIdDict[oneSorting.communityId]== None:
+                streetIdDict[str(oneSorting.streetId)] = {"id":streetObj.id,"name":streetObj.name}
+            if communityIdDict[str(oneSorting.communityId)]== None:
                 communityObj = community.objects.get(id=oneSorting.communityId)
-                communityIdDict[oneSorting.communityId] = {"id":communityObj.id,"name":communityObj.name}
-            if villageIdDict[oneSorting.villageId] == None:
+                communityIdDict[str(oneSorting.communityId)] = {"id":communityObj.id,"name":communityObj.name}
+            if villageIdDict[str(oneSorting.villageId)] == None:
                 villageObj = village.objects.get(id=oneSorting.villageId)
-                villageIdDict[oneSorting.villageId] = {"id": villageObj.id, "name": villageObj.name}
-            if userIdDict[oneSorting.userId] == None:
+                villageIdDict[str(oneSorting.villageId)] = {"id": villageObj.id, "name": villageObj.name}
+            if userIdDict[str(oneSorting.userId)] == None:
                 userObj = user.objects.get(id=oneSorting.userId)
-                villageIdDict[oneSorting.userId] = {"id": userObj.id, "name": userObj.name}
+                villageIdDict[str(oneSorting.userId)] = {"id": userObj.id, "name": userObj.name}
             # householdInfo 查询住户的信息，判断是否有二维码信息，以及判断二维码是否已经关联了用户的信息
             householdInfo = {}
             if oneSorting.qrCodeId:
