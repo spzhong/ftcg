@@ -100,15 +100,15 @@ def makeSortingInfoData(sortingList):
             if streetIdDict.has_key(str(oneSorting.streetId)) == False:
                 streetObj = street.objects.get(id=oneSorting.streetId)
                 streetIdDict[str(oneSorting.streetId)] = {"id": streetObj.id, "name": streetObj.name}
-            if communityIdDict.has_key(str(oneSorting.communityId)) == False:
-                communityObj = community.objects.get(id=oneSorting.communityId)
-                communityIdDict[str(oneSorting.communityId)] = {"id":communityObj.id,"name":communityObj.name}
-            if villageIdDict.has_key(str(oneSorting.villageId)) == False:
-                villageObj = village.objects.get(id=oneSorting.villageId)
-                villageIdDict[str(oneSorting.villageId)] = {"id": villageObj.id, "name": villageObj.name}
-            if userIdDict.has_key(str(oneSorting.userId)) == False:
-                userObj = user.objects.get(id=oneSorting.userId)
-                userIdDict[str(oneSorting.userId)] = {"id": userObj.id, "name": userObj.name}
+            #if communityIdDict.has_key(str(oneSorting.communityId)) == False:
+            #    communityObj = community.objects.get(id=oneSorting.communityId)
+            #    communityIdDict[str(oneSorting.communityId)] = {"id":communityObj.id,"name":communityObj.name}
+            #if villageIdDict.has_key(str(oneSorting.villageId)) == False:
+            #    villageObj = village.objects.get(id=oneSorting.villageId)
+            #    villageIdDict[str(oneSorting.villageId)] = {"id": villageObj.id, "name": villageObj.name}
+            #if userIdDict.has_key(str(oneSorting.userId)) == False:
+            #    userObj = user.objects.get(id=oneSorting.userId)
+            #    userIdDict[str(oneSorting.userId)] = {"id": userObj.id, "name": userObj.name}
             # householdInfo 查询住户的信息，判断是否有二维码信息，以及判断二维码是否已经关联了用户的信息
             householdInfo = {}
             if oneSorting.qrCodeId:
