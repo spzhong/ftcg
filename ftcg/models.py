@@ -96,7 +96,7 @@ class rsUserVillage(models.Model):
 class qrCode(models.Model):
     id = models.UUIDField(primary_key=True)
     # 袋子的信息
-    qrCodeId = models.CharField(max_length=1024,null=True,db_index=True)
+    qrCodeId = models.CharField(max_length=512,null=True,db_index=True)
     # 二维码的备注信息
     remarks = models.CharField(max_length=1024, null=True)
     # 分发人
