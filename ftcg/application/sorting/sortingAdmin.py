@@ -76,6 +76,8 @@ def upSorting(request):
                     sortingObj.state = 1  #提交给审核的数据
                 else:
                     sortingObj.state = -2 #异常考核的数据
+            else:
+                sortingObj.state = -2  # 异常考核的数据
         sortingObj.save()
         callBackDict['code'] = '1'
         callBackDict['data'] = sortingObj.id
