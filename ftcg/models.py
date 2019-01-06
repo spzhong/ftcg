@@ -90,25 +90,37 @@ class rsUserVillage(models.Model):
     # 小区和用户的对应关系
     rsStreetVillageId = models.IntegerField(db_index=True)
 
+
+
 # 二维码的袋子
 class qrCode(models.Model):
     id = models.UUIDField(primary_key=True)
-    code = models.CharField(max_length=1024,null=True)
-    codeId = models.BigIntegerField(default=0,null=True)
-    # 领取用户的id，前期暂时没有
-    userId = models.IntegerField(db_index=True,null=True)
-    # 袋子领取的时间
+    # 袋子的信息
+    qrCodeId = models.CharField(max_length=1024,null=True,db_index=True)
+    # 二维码的备注信息
+    remarks = models.CharField(max_length=1024, null=True)
+    # 分发人
+    userId = models.IntegerField(db_index=True)
+    # 袋子发放时间
     createTime = models.BigIntegerField(default=0)
+    # 住户的信息
+    roomNumberId = models.IntegerField(default=0,db_index=True)
+
+
 
 # 分拣
 class sorting(models.Model):
-    villageId = models.IntegerField(default=0)
-    streetId = models.IntegerField(default=0)
+    villageId = models.IntegerField(default=0,db_index=True)
+    communityId = models.IntegerField(default=0,db_index=True)
+    streetId = models.IntegerField(default=0,db_index=True)
+    userId = models.IntegerField(default=0,db_index=True)
     remarks = models.CharField(max_length=1024,null=True)
     imgs = models.CharField(max_length=1024,null=True)
     # 二维码的id，允许为空
     qrCodeId = models.UUIDField(null=True)
     createTime = models.BigIntegerField(default=0)
+    # 是否是考核结束(0是进行中，1是审核中，2是审核打回，3是审核通过，-1是删除)
+    state = models.IntegerField(default=0)
 
 
 # 考核配置的问题
