@@ -119,7 +119,7 @@ class sorting(models.Model):
     # 二维码的id，允许为空
     qrCodeId = models.UUIDField(null=True)
     createTime = models.BigIntegerField(default=0)
-    # 是否是考核结束(0是进行中，1是审核中，2是审核打回，3是审核通过，-1是删除，-2异常的数据)
+    # 是否是考核结束(0是进行中，1是审核中，2是审核打回，3是审核通过，-1是异常的数据，-2删除)
     state = models.IntegerField(default=0)
 
 

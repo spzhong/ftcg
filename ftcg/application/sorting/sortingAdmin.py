@@ -75,9 +75,9 @@ def upSorting(request):
                 if roomNumberObj.villageId == getvillageId:
                     sortingObj.state = 1  #提交给审核的数据
                 else:
-                    sortingObj.state = -2 #异常考核的数据
+                    sortingObj.state = -1 #异常考核的数据
             else:
-                sortingObj.state = -2  # 异常考核的数据
+                sortingObj.state = -1  # 异常考核的数据
         sortingObj.save()
         callBackDict['code'] = '1'
         callBackDict['data'] = sortingObj.id
@@ -168,9 +168,9 @@ def getSortingVillage(request):
         callBackDict['msg'] = 'token异常，请重新登录'
         return callBackDict
     try:
-        sortingList = sorting.objects.filter(villageId=getvillageId).order_by("-createTime")[getpage * getpageSize:getpageSize]
+        sortingList = sorting.objects.filter(villageId=getvillageId,state__gte=-1).order_by("-createTime")[getpage * getpageSize:getpageSize]
         callBackDict['code'] = '1'
-        callBackDict['allPage'] = sorting.objects.filter(villageId=getvillageId).count()
+        callBackDict['allPage'] = sorting.objects.filter(villageId=getvillageId,state__gte=-1).count()
         callBackDict['data'] = makeSortingInfoData(sortingList)
     except BaseException as e:
         callBackDict['code'] = '0'
@@ -193,10 +193,10 @@ def getSortingcommunity(request):
         callBackDict['msg'] = 'token异常，请重新登录'
         return callBackDict
     try:
-        sortingList = sorting.objects.filter(communityId=getcommunityId).order_by("-createTime")[
+        sortingList = sorting.objects.filter(communityId=getcommunityId,state__gte=-1).order_by("-createTime")[
                       getpage * getpageSize:getpageSize]
         callBackDict['code'] = '1'
-        callBackDict['allPage'] = sorting.objects.filter(communityId=getcommunityId).count()
+        callBackDict['allPage'] = sorting.objects.filter(communityId=getcommunityId,state__gte=-1).count()
         callBackDict['data'] = makeSortingInfoData(sortingList)
     except BaseException as e:
         callBackDict['code'] = '0'
@@ -219,14 +219,39 @@ def getSortingStreet(request):
         callBackDict['msg'] = 'token异常，请重新登录'
         return callBackDict
     try:
-        sortingList = sorting.objects.filter(streetId=getstreetId).order_by("-createTime")[
+        sortingList = sorting.objects.filter(streetId=getstreetId,state__gte=-1).order_by("-createTime")[
                       getpage * getpageSize:getpageSize]
         callBackDict['code'] = '1'
-        callBackDict['allPage'] = sorting.objects.filter(streetId=getstreetId).count()
+        callBackDict['allPage'] = sorting.objects.filter(streetId=getstreetId,state__gte=-1).count()
         callBackDict['data'] = makeSortingInfoData(sortingList)
     except BaseException as e:
         callBackDict['code'] = '0'
         callBackDict['msg'] = '分拣数据异常'
+        logger = logging.getLogger("django")
+        logger.info(str(e))
+    return callBackDict
+
+
+
+
+# 获取街道的分拣数据
+def deleteSortingInfo(request):
+    callBackDict = {}
+    getSortingId = request.GET['sortingId']
+    token = request.GET['token'];
+    if signAdmin.verificationToken(token) == False:
+        callBackDict['code'] = '9999'
+        callBackDict['msg'] = 'token异常，请重新登录'
+        return callBackDict
+    try:
+        sortingObj = sorting.objects.get(id=getSortingId)
+        sortingObj.state = -2;
+        sortingObj.save()
+        callBackDict['code'] = '1'
+        callBackDict['msg'] = "删除成功"
+    except BaseException as e:
+        callBackDict['code'] = '0'
+        callBackDict['msg'] = '数据异常'
         logger = logging.getLogger("django")
         logger.info(str(e))
     return callBackDict
