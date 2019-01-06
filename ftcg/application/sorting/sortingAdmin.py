@@ -62,11 +62,20 @@ def upSorting(request):
         return callBackDict
     try:
         createTime = int(time.time() * 1000)
-        sortingObj = sorting.objects.create(userId=getuserId, streetId=getstreetId,communityId = getcommunityId,villageId=getvillageId, state=1, createTime=createTime)
+        sortingObj = sorting.objects.create(userId=getuserId, streetId=getstreetId,communityId = getcommunityId,villageId=getvillageId, createTime=createTime)
         sortingObj.imgs = getimgs
         sortingObj.remarks = getremarks
         if getqrCodeId:
             sorting.qrCodeId = getqrCodeId
+            # 校验state的数据是否正确的
+            qrCodeList = qrCode.objects.filter(qrCodeId=getqrCodeId)
+            if len(qrCodeList) > 0:
+                oneQrCode = qrCodeList[0]
+                roomNumberObj = roomNumber.objects.get(id=oneQrCode.roomNumberId)
+                if roomNumberObj.villageId == getvillageId:
+                    sortingObj.state = 1  #提交给审核的数据
+                else:
+                    sortingObj.state = -2 #异常考核的数据
         sortingObj.save()
         callBackDict['code'] = '1'
         callBackDict['data'] = sortingObj.id
@@ -99,7 +108,7 @@ def makeSortingInfoData(sortingList):
                 villageIdDict[str(oneSorting.villageId)] = {"id": villageObj.id, "name": villageObj.name}
             if userIdDict.has_key(str(oneSorting.userId)) == False:
                 userObj = user.objects.get(id=oneSorting.userId)
-                villageIdDict[str(oneSorting.userId)] = {"id": userObj.id, "name": userObj.name}
+                userIdDict[str(oneSorting.userId)] = {"id": userObj.id, "name": userObj.name}
             # householdInfo 查询住户的信息，判断是否有二维码信息，以及判断二维码是否已经关联了用户的信息
             householdInfo = {}
             if oneSorting.qrCodeId:
@@ -110,7 +119,7 @@ def makeSortingInfoData(sortingList):
                     householdInfo['id'] = roomNumberObj.id
                     householdInfo['numberText'] = roomNumberObj.numberText
                     householdInfo['personCharge'] = roomNumberObj.personCharge
-            list.append({"householdInfo":householdInfo,"userInfo":villageIdDict[userIdDict.userId],"villageInfo":villageIdDict[oneSorting.villageId],"communityInfo":communityIdDict[oneSorting.communityId],"streetInfo":streetIdDict[oneSorting.streetId],"id":oneSorting.id,"remarks":oneSorting.remarks,"qrCodeId":oneSorting.qrCodeId,"createTime":oneSorting.createTime,"imgs":json.loads(oneSorting.imgs)})
+            list.append({"householdInfo":householdInfo,"userInfo":userIdDict[oneSorting.userId],"villageInfo":villageIdDict[oneSorting.villageId],"communityInfo":communityIdDict[oneSorting.communityId],"streetInfo":streetIdDict[oneSorting.streetId],"id":oneSorting.id,"remarks":oneSorting.remarks,"qrCodeId":oneSorting.qrCodeId,"createTime":oneSorting.createTime,"imgs":json.loads(oneSorting.imgs)})
     except BaseException as e:
         logger = logging.getLogger("django")
         logger.info(str(e))
