@@ -6,6 +6,7 @@ import json
 import time
 import sys
 sys.path.append('...')
+
 from ftcg.models import sorting
 from ftcg.models import village
 from ftcg.models import user
@@ -13,7 +14,6 @@ from ftcg.models import street
 from ftcg.models import community
 from ftcg.models import qrCode
 from ftcg.models import roomNumber
-
 
 
 from ..user import signAdmin
@@ -120,6 +120,11 @@ def getAllSortingInfo(request):
     callBackDict = {}
     getpage = int(request.GET['page'])
     getpageSize = int(request.GET['pageSize'])
+    token = request.GET['token'];
+    if signAdmin.verificationToken(token) == False:
+        callBackDict['code'] = '9999'
+        callBackDict['msg'] = 'token异常，请重新登录'
+        return callBackDict
     try:
         sortingList = sorting.objects.all().order_by("-createTime")[getpage*getpageSize:getpageSize]
         callBackDict['code'] = '1'
@@ -141,6 +146,11 @@ def getSortingVillage(request):
     getpage = int(request.GET['page'])
     getpageSize = int(request.GET['pageSize'])
     getvillageId = request.GET['villageId']
+    token = request.GET['token'];
+    if signAdmin.verificationToken(token) == False:
+        callBackDict['code'] = '9999'
+        callBackDict['msg'] = 'token异常，请重新登录'
+        return callBackDict
     try:
         sortingList = sorting.objects.filter(villageId=getvillageId).order_by("-createTime")[getpage * getpageSize:getpageSize]
         callBackDict['code'] = '1'
@@ -161,6 +171,11 @@ def getSortingcommunity(request):
     getpage = int(request.GET['page'])
     getpageSize = int(request.GET['pageSize'])
     getcommunityId = request.GET['communityId']
+    token = request.GET['token'];
+    if signAdmin.verificationToken(token) == False:
+        callBackDict['code'] = '9999'
+        callBackDict['msg'] = 'token异常，请重新登录'
+        return callBackDict
     try:
         sortingList = sorting.objects.filter(communityId=getcommunityId).order_by("-createTime")[
                       getpage * getpageSize:getpageSize]
@@ -182,6 +197,11 @@ def getSortingStreet(request):
     getpage = int(request.GET['page'])
     getpageSize = int(request.GET['pageSize'])
     getstreetId = request.GET['streetId']
+    token = request.GET['token'];
+    if signAdmin.verificationToken(token) == False:
+        callBackDict['code'] = '9999'
+        callBackDict['msg'] = 'token异常，请重新登录'
+        return callBackDict
     try:
         sortingList = sorting.objects.filter(streetId=getstreetId).order_by("-createTime")[
                       getpage * getpageSize:getpageSize]
