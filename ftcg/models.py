@@ -14,7 +14,7 @@ class user(models.Model):
 class sign(models.Model):
     id = models.UUIDField(primary_key=True)
     token = models.CharField(max_length=32,db_index=True)
-    userId = models.IntegerField(db_index =True)
+    userId = models.IntegerField(default=0,db_index =True)
     signTime = models.BigIntegerField(default=0)
 
 
@@ -86,7 +86,7 @@ class street(models.Model):
 
 # 用户和小区的关系
 class rsUserVillage(models.Model):
-    userId = models.IntegerField(db_index=True)
+    userId = models.IntegerField(default=0,db_index=True)
     # 小区和用户的对应关系
     rsStreetVillageId = models.IntegerField(db_index=True)
 
@@ -100,7 +100,7 @@ class qrCode(models.Model):
     # 二维码的备注信息
     remarks = models.CharField(max_length=1024, null=True)
     # 分发人
-    userId = models.IntegerField(db_index=True)
+    userId = models.IntegerField(default=0,db_index=True)
     # 袋子发放时间
     createTime = models.BigIntegerField(default=0)
     # 住户的信息
