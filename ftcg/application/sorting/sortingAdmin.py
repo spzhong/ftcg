@@ -110,16 +110,17 @@ def makeSortingInfoData(sortingList):
                userObj = user.objects.get(id=oneSorting.userId)
                userIdDict[str(oneSorting.userId)] = {"id": userObj.id, "name": userObj.name}
             # householdInfo 查询住户的信息，判断是否有二维码信息，以及判断二维码是否已经关联了用户的信息
-            householdInfo = {}
+            householdInfo = None
             if oneSorting.qrCodeId:
                 qrCodeList = qrCode.objects.filter(qrCodeId=oneSorting.qrCodeId)
                 if len(qrCodeList) > 0:
                    oneQrCode = qrCodeList[0]
+                   householdInfo = {}
                    roomNumberObj = roomNumber.objects.get(id=oneQrCode.roomNumberId)
                    householdInfo['id'] = roomNumberObj.id
                    householdInfo['numberText'] = roomNumberObj.numberText
                    householdInfo['personCharge'] = roomNumberObj.personCharge
-            #list.append({"householdInfo":householdInfo,"userInfo":userIdDict[str(oneSorting.userId)],"villageInfo":villageIdDict[str(oneSorting.villageId)],"communityInfo":communityIdDict[str(oneSorting.communityId)],"streetInfo":streetIdDict[oneSorting.streetId],"id":oneSorting.id,"remarks":oneSorting.remarks,"qrCodeId":oneSorting.qrCodeId,"createTime":oneSorting.createTime,"imgs":json.loads(oneSorting.imgs)})
+            list.append({"householdInfo":householdInfo,"userInfo":userIdDict[str(oneSorting.userId)],"villageInfo":villageIdDict[str(oneSorting.villageId)],"communityInfo":communityIdDict[str(oneSorting.communityId)],"streetInfo":streetIdDict[str(oneSorting.streetId)],"id":oneSorting.id,"remarks":oneSorting.remarks,"state":oneSorting.state,"qrCodeId":oneSorting.qrCodeId,"createTime":oneSorting.createTime,"imgs":json.loads(oneSorting.imgs)})
     except BaseException as e:
         logger = logging.getLogger("django")
         logger.info(str(e))
