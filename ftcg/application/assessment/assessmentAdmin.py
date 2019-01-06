@@ -230,7 +230,7 @@ def getAssessmentQuestion(request):
         list = []
         for onequestion in questionList:
             dict = {"id": onequestion.id, "assessmentType":onequestion.assessmentType,"req": onequestion.req, "oneLevelName": onequestion.oneLevelName,
-                    "shortName": onequestion.shortName, "info": onequestion.info,
+                    "shortName": onequestion.shortName,"fraction":onequestion.fraction, "info": onequestion.info,
                     "assessmentType": onequestion.assessmentType,
                     "answerJson": json.loads(onequestion.answerJson)}
             try:
@@ -381,7 +381,7 @@ def getAssessmentDetails(request):
         list = []
         for onequestion in questionList:
             dict = {"id": onequestion.id,"assessmentType":onequestion.assessmentType,"req": onequestion.req, "oneLevelName": onequestion.oneLevelName,
-                    "shortName": onequestion.shortName, "info": onequestion.info,
+                    "shortName": onequestion.shortName, "info": onequestion.info,"fraction":onequestion.fraction,
                     "assessmentType": onequestion.assessmentType,
                     "answerJson": json.loads(onequestion.answerJson)}
             try:
