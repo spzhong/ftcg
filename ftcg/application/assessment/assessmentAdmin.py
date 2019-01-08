@@ -103,6 +103,8 @@ def upAssessmentQuestion(request):
         isHaveCurQuestionId = 0
         for assess in assessmentOneList:
             if assess.assessmentQuestionId == int(getquestionId):
+                logger = logging.getLogger("django")
+                logger.info('------------')
                 isHaveCurQuestionId = 1
                 # 更新操作
                 assess.fraction = getfraction  #扣分项
@@ -121,11 +123,13 @@ def upAssessmentQuestion(request):
             getcreateTime = int(time.time() * 1000)
             assessmentOne = assessment.objects.create(fraction=getfraction,assessmentQuestionId=getquestionId,userAssessmentId=getuserAssessmentId,info=getinfo,imgs=getimgs,createTime=getcreateTime)
             assessmentOne.save()
+            allfraction = allfraction - getfraction
         # 重新计算一下总分数
         userAssessmentObj = userAssessment.objects.get(id=getuserAssessmentId)
         userAssessmentObj.totalFraction = allfraction
         userAssessmentObj.save()
         callBackDict['code'] = '1'
+        callBackDict['data'] = str(allfraction)
         callBackDict['msg'] = '考核问题提交成功'
     except BaseException as e:
         callBackDict['code'] = '0'
