@@ -159,8 +159,18 @@ def getAllSortingInfo(request):
 # 获取小区的分拣数据
 def getSortingVillage(request):
     callBackDict = {}
-    getpage = int(request.GET['page'])
-    getpageSize = int(request.GET['pageSize'])
+    try:
+        getpage = int(request.GET['page'])
+    except BaseException as e:
+        callBackDict['msg'] = '页码为空，默认从0开始'
+        callBackDict['code'] = '0'
+        return callBackDict
+    try:
+        getpageSize = int(request.GET['pageSize'])
+    except BaseException as e:
+        callBackDict['msg'] = 'pageSize为空，默认20页'
+        callBackDict['code'] = '0'
+        return callBackDict
     getvillageId = request.GET['villageId']
     token = request.GET['token'];
     if signAdmin.verificationToken(token) == False:
@@ -184,8 +194,18 @@ def getSortingVillage(request):
 # 获取社区的分拣数据
 def getSortingcommunity(request):
     callBackDict = {}
-    getpage = int(request.GET['page'])
-    getpageSize = int(request.GET['pageSize'])
+    try:
+        getpage = int(request.GET['page'])
+    except BaseException as e:
+        callBackDict['msg'] = '页码为空，默认从0开始'
+        callBackDict['code'] = '0'
+        return callBackDict
+    try:
+        getpageSize = int(request.GET['pageSize'])
+    except BaseException as e:
+        callBackDict['msg'] = 'pageSize为空，默认20页'
+        callBackDict['code'] = '0'
+        return callBackDict
     getcommunityId = request.GET['communityId']
     token = request.GET['token'];
     if signAdmin.verificationToken(token) == False:
@@ -210,8 +230,18 @@ def getSortingcommunity(request):
 # 获取街道的分拣数据
 def getSortingStreet(request):
     callBackDict = {}
-    getpage = int(request.GET['page'])
-    getpageSize = int(request.GET['pageSize'])
+    try:
+        getpage = int(request.GET['page'])
+    except BaseException as e:
+        callBackDict['msg'] = '页码为空，默认从0开始'
+        callBackDict['code'] = '0'
+        return callBackDict
+    try:
+        getpageSize = int(request.GET['pageSize'])
+    except BaseException as e:
+        callBackDict['msg'] = 'pageSize为空，默认20页'
+        callBackDict['code'] = '0'
+        return callBackDict
     getstreetId = request.GET['streetId']
     token = request.GET['token'];
     if signAdmin.verificationToken(token) == False:
