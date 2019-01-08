@@ -93,8 +93,8 @@ def upAssessmentQuestion(request):
         callBackDict['msg'] = 'token异常，请重新登录'
         return callBackDict
     try:
-        assessmentQuestionObj = assessmentQuestion.objects.get(id=getquestionId)
-        if getfraction > assessmentQuestionObj.fraction :
+        firstAssessmentQuestionObj = assessmentQuestion.objects.get(id=getquestionId)
+        if getfraction > firstAssessmentQuestionObj.fraction :
             callBackDict['code'] = '0'
             callBackDict['msg'] = '考核的分数大于总分'
             return callBackDict
@@ -120,7 +120,11 @@ def upAssessmentQuestion(request):
             getcreateTime = int(time.time() * 1000)
             assessmentOne = assessment.objects.create(fraction=getfraction,assessmentQuestionId=getquestionId,userAssessmentId=getuserAssessmentId,info=getinfo,imgs=getimgs,createTime=getcreateTime)
             assessmentOne.save()
-            allfraction = allfraction - getfraction
+            # 判断是否是加分项
+            if firstAssessmentQuestionObj.assessmentType == 1:
+                allfraction = allfraction + assess.fraction
+            else:
+                allfraction = allfraction - assess.fraction
         # 重新计算一下总分数
         userAssessmentObj = userAssessment.objects.get(id=getuserAssessmentId)
         userAssessmentObj.totalFraction = allfraction
