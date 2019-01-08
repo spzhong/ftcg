@@ -98,21 +98,27 @@ def upAssessmentQuestion(request):
             callBackDict['msg'] = '考核的分数大于总分'
             return callBackDict
         assessmentOneList = assessment.objects.filter(userAssessmentId=getuserAssessmentId)
-        allfraction = 0
+        allfraction = 100
         isHaveCurQuestionId = 0
         logger = logging.getLogger("django")
         logger.info('考核数据的长度------' + len(assessmentOneList))
         for assess in assessmentOneList:
             if assess.assessmentQuestionId == getquestionId:
+                logger = logging.getLogger("django")
+                logger.info('找到当前的问题了------')
                 isHaveCurQuestionId = 1
                 # 更新操作
-                assess.fraction = getfraction
+                assess.fraction = getfraction  #扣分项
                 assess.info = getinfo
                 assess.imgs = getimgs
                 assess.save()
-            allfraction = allfraction + assess.fraction
-            logger = logging.getLogger("django")
-            logger.info('每次累加的分数 ------' + allfraction)
+                # 判断是否是加分项
+                if assessmentQuestionObj.assessmentType == 1:
+                    allfraction = allfraction + assess.fraction
+                else:
+                    allfraction = allfraction - assess.fraction
+            else:
+                allfraction = allfraction - assess.fraction
         # 创建一条新的数据
         if isHaveCurQuestionId == 0:
             getcreateTime = int(time.time() * 1000)
