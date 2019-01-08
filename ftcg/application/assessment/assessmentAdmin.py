@@ -293,14 +293,30 @@ def finshAssessment(request):
 
 # 获取考核
 def getAssessmentList(request):
-    token = request.GET['token'];
     callBackDict = {}
-    getstreetId = request.GET['streetId']
-    getpage = int(request.GET['page'])
-    getpageSize  = int(request.GET['pageSize'])
-    if len(getstreetId) == 0:
+    try:
+        token = request.GET['token'];
+    except BaseException as e:
         callBackDict['code'] = '0'
-        callBackDict['msg'] = '街道的ID为空'
+        callBackDict['msg'] = 'token为空'
+        return callBackDict
+    try:
+        getstreetId = request.GET['streetId']
+    except BaseException as e:
+        callBackDict['code'] = '0'
+        callBackDict['msg'] = '街道Id为空'
+        return callBackDict
+    try:
+        getpage = int(request.GET['page'])
+    except BaseException as e:
+        callBackDict['code'] = '0'
+        callBackDict['msg'] = '页码数据为空'
+        return callBackDict
+    try:
+        getpageSize = int(request.GET['pageSize'])
+    except BaseException as e:
+        callBackDict['code'] = '0'
+        callBackDict['msg'] = 'pageSize为空'
         return callBackDict
     # 验证token
     if signAdmin.verificationToken(token) == False:
@@ -357,10 +373,20 @@ def getAssessmentList(request):
 
 # 查询考核的详情
 def getAssessmentDetails(request):
-    token = request.GET['token'];
     callBackDict = {}
-    getUserAssessmentId = request.GET['userAssessmentId'];
-    if len(getUserAssessmentId) == 0:
+    try:
+        token = request.GET['token'];
+    except BaseException as e:
+        callBackDict['code'] = '0'
+        callBackDict['msg'] = 'token为空'
+        return callBackDict
+    try:
+        getUserAssessmentId = request.GET['userAssessmentId'];
+        if len(getUserAssessmentId) == 0:
+            callBackDict['code'] = '0'
+            callBackDict['msg'] = '考核的ID为空'
+            return callBackDict
+    except BaseException as e:
         callBackDict['code'] = '0'
         callBackDict['msg'] = '考核的ID为空'
         return callBackDict
@@ -407,8 +433,6 @@ def getAssessmentDetails(request):
         logger = logging.getLogger("django")
         logger.info(str(e))
     return callBackDict
-
-
 
 
 
