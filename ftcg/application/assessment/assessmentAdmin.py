@@ -45,6 +45,7 @@ def createAssessment(request):
         createTime = int(time.time() * 1000)
         villageobj = village.objects.get(id=getvillageId)
         obj = userAssessment.objects.create(userId=getuserId, streetId=getstreetId,communityId = getcommunityId,villageId=getvillageId, type=villageobj.type,state=0, createTime=createTime)
+        obj.totalFraction = 100
         # 查询出小区的类型
         obj.save()
         callBackDict['data'] = obj.id

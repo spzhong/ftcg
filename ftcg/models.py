@@ -169,7 +169,7 @@ class userAssessment(models.Model):
     # 默认0是普通小区，1是学校，2是政府机关，3是收储运公司
     type = models.IntegerField(default=0)
     # 总积分
-    totalFraction = models.IntegerField(default=0)
+    totalFraction = models.IntegerField(default=100)
     # 修正后的分数
     correctTotalFraction = models.IntegerField(default=0)
     # 是否是考核结束(0是进行中，1是审核中，2是审核打回，3是审核通过，-1是删除)
