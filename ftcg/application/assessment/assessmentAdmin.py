@@ -103,7 +103,9 @@ def upAssessmentQuestion(request):
         logger = logging.getLogger("django")
         logger.info('考核数据的长度------' + str(len(assessmentOneList)))
         for assess in assessmentOneList:
-            if assess.assessmentQuestionId == getquestionId:
+            logger = logging.getLogger("django")
+            logger.info('------'+str(assess.assessmentQuestionId))
+            if assess.assessmentQuestionId == int(getquestionId):
                 logger = logging.getLogger("django")
                 logger.info('找到当前的问题了------')
                 isHaveCurQuestionId = 1
