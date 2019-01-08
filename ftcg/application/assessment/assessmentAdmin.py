@@ -104,6 +104,7 @@ def upAssessmentQuestion(request):
         for assess in assessmentOneList:
             if assess.assessmentQuestionId == getquestionId:
                 isHaveCurQuestionId = 1
+                assessmentOne = assess
                 # 更新操作
                 assessmentOne.fraction = getfraction
                 assessmentOne.info = getinfo
