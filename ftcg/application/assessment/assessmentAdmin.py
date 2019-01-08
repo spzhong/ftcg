@@ -98,19 +98,17 @@ def upAssessmentQuestion(request):
             callBackDict['msg'] = '考核的分数大于总分'
             return callBackDict
         assessmentOneList = assessment.objects.filter(userAssessmentId=getuserAssessmentId)
-        assessmentOne = None
         allfraction = 0
         isHaveCurQuestionId = 0
         for assess in assessmentOneList:
             if assess.assessmentQuestionId == getquestionId:
                 isHaveCurQuestionId = 1
-                assessmentOne = assess
                 # 更新操作
-                assessmentOne.fraction = getfraction
-                assessmentOne.info = getinfo
-                assessmentOne.imgs = getimgs
-                assessmentOne.save()
-            allfraction = allfraction + assessmentOne.fraction
+                assess.fraction = getfraction
+                assess.info = getinfo
+                assess.imgs = getimgs
+                assess.save()
+            allfraction = allfraction + assess.fraction
         # 创建一条新的数据
         if isHaveCurQuestionId == 0:
             getcreateTime = int(time.time() * 1000)
