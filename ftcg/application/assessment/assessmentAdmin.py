@@ -103,19 +103,16 @@ def upAssessmentQuestion(request):
         isHaveCurQuestionId = 0
         for assess in assessmentOneList:
             if assess.assessmentQuestionId == int(getquestionId):
-                logger = logging.getLogger("django")
-                logger.info('------------')
                 isHaveCurQuestionId = 1
                 # 更新操作
                 assess.fraction = getfraction  #扣分项
                 assess.info = getinfo
                 assess.imgs = getimgs
                 assess.save()
-                # 判断是否是加分项
-                if assessmentQuestionObj.assessmentType == 1:
-                    allfraction = allfraction + assess.fraction
-                else:
-                    allfraction = allfraction - assess.fraction
+            assessmentQuestionObj = assessmentQuestion.objects.get(id=assess.assessmentQuestionId)
+            # 判断是否是加分项
+            if assessmentQuestionObj.assessmentType == 1:
+                allfraction = allfraction + assess.fraction
             else:
                 allfraction = allfraction - assess.fraction
         # 创建一条新的数据
