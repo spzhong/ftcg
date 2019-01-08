@@ -100,14 +100,8 @@ def upAssessmentQuestion(request):
         assessmentOneList = assessment.objects.filter(userAssessmentId=getuserAssessmentId)
         allfraction = 100
         isHaveCurQuestionId = 0
-        logger = logging.getLogger("django")
-        logger.info('考核数据的长度------' + str(len(assessmentOneList)))
         for assess in assessmentOneList:
-            logger = logging.getLogger("django")
-            logger.info('------'+str(assess.assessmentQuestionId))
             if assess.assessmentQuestionId == int(getquestionId):
-                logger = logging.getLogger("django")
-                logger.info('找到当前的问题了------')
                 isHaveCurQuestionId = 1
                 # 更新操作
                 assess.fraction = getfraction  #扣分项
@@ -126,8 +120,6 @@ def upAssessmentQuestion(request):
             getcreateTime = int(time.time() * 1000)
             assessmentOne = assessment.objects.create(fraction=getfraction,assessmentQuestionId=getquestionId,userAssessmentId=getuserAssessmentId,info=getinfo,imgs=getimgs,createTime=getcreateTime)
             assessmentOne.save()
-        logger = logging.getLogger("django")
-        logger.info('最终得分------'+str(allfraction))
         # 重新计算一下总分数
         userAssessmentObj = userAssessment.objects.get(id=getuserAssessmentId)
         userAssessmentObj.totalFraction = allfraction
