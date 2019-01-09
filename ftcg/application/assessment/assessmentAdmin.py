@@ -431,7 +431,13 @@ def getAssessmentDetails(request):
             try:
                 assessmentObj = assessment.objects.get(userAssessmentId=getUserAssessmentId,assessmentQuestionId=onequestion.id)
                 if assessmentObj:
-                    dict["answerInfo"] = {"info": assessmentObj.info, "fraction": assessmentObj.fraction,
+                    # 判断分数的有效性
+                    theOnefraction = 0
+                    if int(onequestion.assessmentType) == 0:
+                        theOnefraction = onequestion.fraction - assessmentObj.fraction
+                    else:
+                        theOnefraction = assessmentObj.fraction
+                    dict["answerInfo"] = {"info": assessmentObj.info, "fraction": theOnefraction,
                                       "createTime": assessmentObj.createTime, "imgs": json.loads(assessmentObj.imgs)}
                     list.append(dict)
             except BaseException as e:
