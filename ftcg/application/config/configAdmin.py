@@ -736,7 +736,7 @@ def getPropertySendList(request):
         list = []
         for oneCode in qrCodeList:
             bagTypeString = getErCodeType(oneCode.qrCodeId)
-            list.append({"bagTypeString":bagTypeString,"id":oneCode.id,"qrCodeId":oneCode.qrCodeId,"roomNumberText":oneCode.roomNumberText,"createTime":oneCode.createTime,"bagNumber":oneCode.bagNumber})
+            list.append({"bagTypeString":bagTypeString,"id":str(oneCode.id),"qrCodeId":oneCode.qrCodeId,"roomNumberText":oneCode.roomNumberText,"createTime":oneCode.createTime,"bagNumber":oneCode.bagNumber})
         callBackDict['code'] = '1'
         callBackDict['data'] = list
     except BaseException as e:
@@ -768,7 +768,6 @@ def getErCodeType(code):
             return "厨余垃圾"
         elif mystr == '007':
             return "有害垃圾"
-        elif mystr == '008':
-            return "其它垃圾"
+        return "其它垃圾"
     except BaseException as e:
         return ''
