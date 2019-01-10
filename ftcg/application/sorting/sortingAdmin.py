@@ -25,6 +25,7 @@ def isCheckErCode(code):
             return False
         mystr = code[0:27]
         index = 0
+        checkCode = ''
         for x in mystr:
             if index % 3 == 0:
                 checkCode = checkCode + str(x)
@@ -34,7 +35,6 @@ def isCheckErCode(code):
     except BaseException as e:
         return False
     return False
-
 
 
 def upSorting(request):
