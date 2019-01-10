@@ -51,6 +51,8 @@ def index(request,route):
         callBackDict = configAdmin.adminGetVillages(request)
     elif route == 'searchVillage':
         callBackDict = configAdmin.searchVillage(request)
+    elif route == 'createErCodeInfo':
+        callBackDict = configAdmin.createErCodeInfo(request)
     else:
          return HttpResponse("no found !!!")
     return HttpResponse(json.dumps(callBackDict))

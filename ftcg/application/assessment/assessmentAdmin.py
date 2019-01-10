@@ -251,10 +251,12 @@ def getAssessmentQuestion(request):
             try:
                 assessmentObj = assessment.objects.get(userAssessmentId=getserAssessmentId,assessmentQuestionId=onequestion.id)
                 if assessmentObj:
+                    dict["isAnswer"] = True
                     dict["answerInfo"] = {"info": assessmentObj.info, "fraction": assessmentObj.fraction,
                                       "createTime": assessmentObj.createTime, "imgs": json.loads(assessmentObj.imgs)}
                     list.append(dict)
             except BaseException as e:
+                dict["isAnswer"] = False
                 list.append(dict)
         callBackDict['code'] = '1'
         callBackDict['data'] = {"totalFraction": userAssessmentObj.totalFraction,"correctTotalFraction":userAssessmentObj.correctTotalFraction,"state": userAssessmentObj.state, "id": userAssessmentObj.id,

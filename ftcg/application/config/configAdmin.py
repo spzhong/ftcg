@@ -5,6 +5,8 @@ import logging.handlers
 import json
 import time
 import sys
+import uuid
+import hashlib
 sys.path.append('...')
 from ftcg.models import street
 from ftcg.models import community
@@ -588,3 +590,60 @@ def editBaseConfigStreet(request):
         logger = logging.getLogger("django")
         logger.info(str(e))
     return callBackDict
+
+
+
+# 二维码开头
+# RS
+# GS
+# 1.生产批号:S+随机字符(固定长度16位)
+# GS
+# 2.品种属性:袋子分类(001:玻璃,002:金属,003:纸皮,004:塑料,005:有害垃圾,006:厨余垃圾,007:有害垃圾,008:其它垃圾)，固定长度3位
+# GS
+# 3.生产日期:20181102(固定长度8位)
+# GS
+# 4.校验码:固定长度9位(有平台按照以上信息加密)
+# GS
+# EOT
+# 二维码结尾
+#
+# 源码：0001SDA656891E98F416001181102100436B135A
+def createErCodeInfo(request):
+    callBackDict = {}
+    try:
+        bagType_parm = request.GET['bagType']
+        num_parm = request.GET['num']
+        if len(bagType_parm) != 3:
+            callBackDict['code'] = '0'
+            callBackDict['msg'] = '袋子类型错误'
+            return callBackDict
+        if len(num_parm) == 0:
+            callBackDict['code'] = '0'
+            callBackDict['msg'] = '袋子数量为空'
+            return callBackDict
+        if int(num_parm) < 0 or int(num_parm) > 100000:
+            callBackDict['code'] = '0'
+            callBackDict['msg'] = '袋子数量异常'
+            return callBackDict
+    except BaseException as e:
+        callBackDict['code'] = '0'
+        callBackDict['msg'] = '系统异常'
+        logger = logging.getLogger("django")
+        logger.info(str(e))
+    list = []
+    for num in range(0, int(num_parm)):
+        batchNumber = hashlib.md5(str(uuid.uuid1())).hexdigest()[8:-8]
+        bagType = str(bagType_parm)
+        year = time.datetime.now().year
+        month = time.datetime.now().month
+        day = time.datetime.now().day
+        createDay = str(year) + str(month) + str(day)
+        str = batchNumber + bagType + createDay
+        checkCode = ''
+        index = 0
+        for x in str:
+            if index % 3 == 0:
+                checkCode = checkCode + str(index)
+            index = index + 1
+        list.append(str+checkCode)
+    return list
