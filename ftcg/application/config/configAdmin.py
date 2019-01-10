@@ -634,16 +634,13 @@ def createErCodeInfo(request):
     for num in range(0, int(num_parm)):
         batchNumber = hashlib.md5(str(uuid.uuid1())).hexdigest()[8:-8]
         bagType = str(bagType_parm)
-        year = time.datetime.now().year
-        month = time.datetime.now().month
-        day = time.datetime.now().day
-        createDay = str(year) + str(month) + str(day)
-        str = batchNumber + bagType + createDay
+        createDay = time.strftime("%Y%m%d", time.localtime())
+        mystr = batchNumber + bagType + createDay
         checkCode = ''
         index = 0
-        for x in str:
+        for x in mystr:
             if index % 3 == 0:
-                checkCode = checkCode + str(index)
+                checkCode = checkCode + str(x)
             index = index + 1
-        list.append(str+checkCode)
+        list.append(mystr + checkCode)
     return list
