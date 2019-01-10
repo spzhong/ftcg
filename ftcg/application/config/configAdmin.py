@@ -699,7 +699,7 @@ def propertySendBags(request):
         return callBackDict
     try:
         getcreateTime = int(time.time() * 1000)
-        obj = qrCode.objects.create(id=str(uuid.uuid1()),createTime=getcreateTime,qrCodeId=qrCodeId_parm,userId=userId_parm,bagNumber=bagNumber_parm,roomNumberText=roomNumberText_parm)
+        obj = qrCode.objects.create(id=str(uuid.uuid4().hex),createTime=getcreateTime,qrCodeId=qrCodeId_parm,userId=userId_parm,bagNumber=bagNumber_parm,roomNumberText=roomNumberText_parm)
         obj.save()
         callBackDict['code'] = '1'
         callBackDict['msg'] = '分发成功'
