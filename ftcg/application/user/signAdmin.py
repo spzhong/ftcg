@@ -73,8 +73,16 @@ def autoSign(request):
             oldeSignObj = oldeSignObjList[0]
             signObj = createSignRecord(oldeSignObj.userId)
             userObj = user.objects.get(id = oldeSignObj.userId)
-            callBackDict['code'] = '1'
-            callBackDict['data'] = {"id": signObj.userId, "token": signObj.token, "name":userObj.name,"role":userObj.role,"phone":userObj.phone}
+            # 物业管理员和小区的用户，需要锁定其管理的区域
+            if userObj.role == 2 or userObj.role == 3:
+                callBackDict['code'] = '1'
+                region = userConfigAdmin.selectUserAndStreetRS(signObj.userId)
+                callBackDict['data'] = {"id": signObj.userId, "token": signObj.token, "name": userObj.name,
+                                        "phone": userObj.phone, "role": userObj.role, "region": region}
+            else:
+                callBackDict['code'] = '1'
+                callBackDict['data'] = {"id": signObj.userId, "token": signObj.token, "name": userObj.name,
+                                        "phone": userObj.phone, "role": userObj.role}
         else:
             callBackDict['code'] = '0'
             callBackDict['msg'] = 'token异常，请重新登录'
@@ -84,6 +92,7 @@ def autoSign(request):
         logger = logging.getLogger("django")
         logger.info(str(e))
     return callBackDict
+
 
 # 登出操作
 def signOut(request):
