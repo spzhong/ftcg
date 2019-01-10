@@ -140,12 +140,7 @@ def makeSortingInfoData(sortingList):
                 qrCodeList = qrCode.objects.filter(qrCodeId=oneSorting.qrCodeId)
                 if len(qrCodeList) > 0:
                    oneQrCode = qrCodeList[0]
-                   householdInfo = {}
-                   roomNumberObj = roomNumber.objects.get(id=oneQrCode.roomNumberId)
-                   householdInfo['id'] = roomNumberObj.id
-                   householdInfo['numberText'] = roomNumberObj.numberText
-                   householdInfo['personCharge'] = roomNumberObj.personCharge
-            list.append({"householdInfo":householdInfo,"userInfo":userIdDict[str(oneSorting.userId)],"villageInfo":villageIdDict[str(oneSorting.villageId)],"communityInfo":communityIdDict[str(oneSorting.communityId)],"streetInfo":streetIdDict[str(oneSorting.streetId)],"id":oneSorting.id,"remarks":oneSorting.remarks,"state":oneSorting.state,"qrCodeId":oneSorting.qrCodeId,"createTime":oneSorting.createTime,"imgs":json.loads(oneSorting.imgs)})
+            list.append({"householdInfo":oneQrCode.roomNumberText,"userInfo":userIdDict[str(oneSorting.userId)],"villageInfo":villageIdDict[str(oneSorting.villageId)],"communityInfo":communityIdDict[str(oneSorting.communityId)],"streetInfo":streetIdDict[str(oneSorting.streetId)],"id":oneSorting.id,"remarks":oneSorting.remarks,"state":oneSorting.state,"qrCodeId":oneSorting.qrCodeId,"createTime":oneSorting.createTime,"imgs":json.loads(oneSorting.imgs)})
     except BaseException as e:
         logger = logging.getLogger("django")
         logger.info(str(e))
