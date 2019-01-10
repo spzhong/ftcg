@@ -53,6 +53,10 @@ def index(request,route):
         callBackDict = configAdmin.searchVillage(request)
     elif route == 'createErCodeInfo':
         callBackDict = configAdmin.createErCodeInfo(request)
+    elif route == 'propertySendBags':
+        callBackDict = configAdmin.propertySendBags(request)
+    elif route == 'getPropertySendList':
+        callBackDict = configAdmin.getPropertySendList(request)
     else:
          return HttpResponse("no found !!!")
     return HttpResponse(json.dumps(callBackDict))

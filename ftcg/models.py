@@ -103,9 +103,10 @@ class qrCode(models.Model):
     userId = models.IntegerField(default=0,db_index=True)
     # 袋子发放时间
     createTime = models.BigIntegerField(default=0)
+    # 领取袋子数量
+    bagNumber = models.BigIntegerField(default=0)
     # 住户的信息
-    roomNumberId = models.IntegerField(default=0,db_index=True)
-
+    roomNumberText = models.CharField(max_length=1024, null=True)
 
 
 # 分拣

@@ -11,6 +11,8 @@ sys.path.append('...')
 from ftcg.models import street
 from ftcg.models import community
 from ftcg.models import village
+from ftcg.models import qrCode
+
 
 
 from ..user import signAdmin
@@ -646,15 +648,127 @@ def createErCodeInfo(request):
     return list
 
 # ff24513bc9756889 001 20190110 f43969111
+# 检查一下生成的二维码的袋子的结构
 def isCheckErCode(code):
-    if len(code) != 36:
+    try:
+        if len(code) != 36:
+            return False
+        mystr = code[0:27]
+        index = 0
+        checkCode = ''
+        for x in mystr:
+            if index % 3 == 0:
+                checkCode = checkCode + str(x)
+            index = index + 1
+        if checkCode == code[27:]:
+            return True
+    except BaseException as e:
         return False
-    mystr = code[0:27]
-    index = 0
-    for x in mystr:
-        if index % 3 == 0:
-            checkCode = checkCode + str(x)
-        index = index + 1
-    if checkCode == code[27:]:
-        return True
     return False
+
+
+
+
+# 发放袋子
+def propertySendBags(request):
+    userId_parm = request.GET['userId'];
+    qrCodeId_parm = request.GET['qrCodeId'];
+    roomNumberText_parm = request.GET['roomNumberText'];
+    bagNumber_parm = request.GET['bagNumber'];
+    callBackDict = {}
+    # 验证token
+    if verificationToken(request) == False:
+        callBackDict['code'] = '9999'
+        callBackDict['msg'] = 'token异常'
+        return callBackDict
+    if len(userId_parm) == 0:
+        callBackDict['code'] = '0'
+        callBackDict['msg'] = '用户的ID为空'
+        return callBackDict
+    if isCheckErCode(qrCodeId_parm) == False:
+        callBackDict['code'] = '0'
+        callBackDict['msg'] = '袋子二维码数据校验失败'
+        return callBackDict
+    if len(roomNumberText_parm) == 0:
+        callBackDict['code'] = '0'
+        callBackDict['msg'] = '房屋号为空'
+        return callBackDict
+    if len(bagNumber_parm) == 0:
+        callBackDict['code'] = '0'
+        callBackDict['msg'] = '请输出领取的袋子数量'
+        return callBackDict
+    try:
+        getcreateTime = int(time.time() * 1000)
+        obj = qrCode.objects.create(id=str(uuid.uuid1()),createTime=getcreateTime,qrCodeId=qrCodeId_parm,userId=userId_parm,bagNumber=bagNumber_parm,roomNumberText=roomNumberText_parm)
+        obj.save()
+        callBackDict['code'] = '1'
+        callBackDict['msg'] = '分发成功'
+    except BaseException as e:
+        callBackDict['code'] = '0'
+        callBackDict['msg'] = '系统异常'
+        logger = logging.getLogger("django")
+        logger.info(str(e))
+    return callBackDict
+
+
+
+
+# 获取发放的记录
+def getPropertySendList(request):
+    userId_parm = request.GET['userId'];
+    timeStamp_parm = request.GET['timeStamp'];
+    callBackDict = {}
+    if len(timeStamp_parm) == 0:
+        callBackDict['code'] = '0'
+        callBackDict['msg'] = '时间戳为空'
+        return callBackDict
+    # 验证token
+    if verificationToken(request) == False:
+        callBackDict['code'] = '9999'
+        callBackDict['msg'] = 'token异常'
+        return callBackDict
+    if len(userId_parm) == 0:
+        callBackDict['code'] = '0'
+        callBackDict['msg'] = '用户的ID为空'
+        return callBackDict
+    try:
+        qrCodeList = qrCode.objects.filter(createTime__lte=timeStamp_parm).order_by("-createTime")[:20]
+        list = []
+        for oneCode in qrCodeList:
+            bagTypeString = getErCodeType(oneCode.qrCodeId)
+            list.append({"bagTypeString":bagTypeString,"id":oneCode.id,"qrCodeId":oneCode.qrCodeId,"roomNumberText":oneCode.roomNumberText,"createTime":oneCode.createTime,"bagNumber":oneCode.bagNumber})
+        callBackDict['code'] = '1'
+        callBackDict['data'] = list
+    except BaseException as e:
+        callBackDict['code'] = '0'
+        callBackDict['msg'] = '系统异常'
+        logger = logging.getLogger("django")
+        logger.info(str(e))
+    return callBackDict
+
+
+# ff24513bc9756889 001 20190110 f43969111
+# 检查一下生成的二维码的袋子的结构
+def getErCodeType(code):
+    try:
+        if len(code) != 36:
+            return False
+        mystr = code[16:19]
+        if mystr == '001':
+            return "玻璃"
+        elif mystr == '002':
+            return "金属"
+        elif mystr == '003':
+            return "纸皮"
+        elif mystr == '004':
+            return "塑料"
+        elif mystr == '005':
+            return "有害垃圾"
+        elif mystr == '006':
+            return "厨余垃圾"
+        elif mystr == '007':
+            return "有害垃圾"
+        elif mystr == '008':
+            return "其它垃圾"
+    except BaseException as e:
+        return ''
