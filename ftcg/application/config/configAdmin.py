@@ -677,9 +677,9 @@ def propertySendBags(request):
     bagNumber_parm = request.GET['bagNumber'];
     callBackDict = {}
     # 验证token
-    if verificationToken(request) == False:
+    if signAdmin.verificationAppToken(request) == False:
         callBackDict['code'] = '9999'
-        callBackDict['msg'] = 'token异常'
+        callBackDict['msg'] = 'token异常，请重新登录'
         return callBackDict
     if len(userId_parm) == 0:
         callBackDict['code'] = '0'
@@ -723,7 +723,7 @@ def getPropertySendList(request):
         callBackDict['msg'] = '时间戳为空'
         return callBackDict
     # 验证token
-    if verificationToken(request) == False:
+    if signAdmin.verificationAppToken(request) == False:
         callBackDict['code'] = '9999'
         callBackDict['msg'] = 'token异常'
         return callBackDict
