@@ -644,3 +644,17 @@ def createErCodeInfo(request):
             index = index + 1
         list.append(mystr + checkCode)
     return list
+
+# ff24513bc9756889 001 20190110 f43969111
+def isCheckErCode(code):
+    if len(code) != 36:
+        return False
+    mystr = code[0:27]
+    index = 0
+    for x in mystr:
+        if index % 3 == 0:
+            checkCode = checkCode + str(x)
+        index = index + 1
+    if checkCode == code[27:]:
+        return True
+    return False

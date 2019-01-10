@@ -15,8 +15,26 @@ from ftcg.models import community
 from ftcg.models import qrCode
 from ftcg.models import roomNumber
 
-
 from ..user import signAdmin
+
+
+# 检查一下生成的二维码的袋子的结构
+def isCheckErCode(code):
+    try:
+        if len(code) != 36:
+            return False
+        mystr = code[0:27]
+        index = 0
+        for x in mystr:
+            if index % 3 == 0:
+                checkCode = checkCode + str(x)
+            index = index + 1
+        if checkCode == code[27:]:
+            return True
+    except BaseException as e:
+        return False
+    return False
+
 
 
 def upSorting(request):
@@ -30,6 +48,10 @@ def upSorting(request):
     callBackDict = {}
     try:
         getqrCodeId = request.GET['qrCodeId']
+        if isCheckErCode(getqrCodeId) == False:
+            callBackDict['code'] = '0'
+            callBackDict['msg'] = '袋子二维码数据校验失败'
+            return callBackDict
     except BaseException as e:
         getqrCodeId = None
     if len(getuserId) == 0:
