@@ -89,18 +89,13 @@ def upSorting(request):
         sortingObj.imgs = getimgs
         sortingObj.remarks = getremarks
         if getqrCodeId:
-            sorting.qrCodeId = getqrCodeId
             # 校验state的数据是否正确的
             qrCodeList = qrCode.objects.filter(qrCodeId=getqrCodeId)
             if len(qrCodeList) > 0:
-                oneQrCode = qrCodeList[0]
-                roomNumberObj = roomNumber.objects.get(id=oneQrCode.roomNumberId)
-                if roomNumberObj.villageId == getvillageId:
-                    sortingObj.state = 1  #提交给审核的数据
-                else:
-                    sortingObj.state = -1 #异常考核的数据
+                sortingObj.qrCodeId = getqrCodeId
+                sortingObj.state = 1  # 提交给审核的数据
             else:
-                sortingObj.state = -1  # 异常考核的数据
+                sortingObj.state = -1  # 异常考核的数据-没有找到相关的对应的二维码房号
         sortingObj.save()
         callBackDict['code'] = '1'
         callBackDict['data'] = sortingObj.id
