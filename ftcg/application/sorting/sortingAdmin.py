@@ -131,7 +131,7 @@ def makeSortingInfoData(sortingList):
                userIdDict[str(oneSorting.userId)] = {"id": userObj.id, "name": userObj.name}
             # householdInfo 查询住户的信息，判断是否有二维码信息，以及判断二维码是否已经关联了用户的信息
             oneQrCode = None
-            if oneSorting.qrCodeId:
+            if oneSorting.qrCodeId :
                 qrCodeList = qrCode.objects.filter(qrCodeId=oneSorting.qrCodeId)
                 if len(qrCodeList) > 0:
                    oneQrCode = qrCodeList[0]

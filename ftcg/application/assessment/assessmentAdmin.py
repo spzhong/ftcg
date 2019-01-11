@@ -122,9 +122,9 @@ def upAssessmentQuestion(request):
             assessmentOne.save()
             # 判断是否是加分项
             if firstAssessmentQuestionObj.assessmentType == 1:
-                allfraction = allfraction + assess.fraction
+                allfraction = allfraction + assessmentOne.fraction
             else:
-                allfraction = allfraction - assess.fraction
+                allfraction = allfraction - assessmentOne.fraction
         # 重新计算一下总分数
         userAssessmentObj = userAssessment.objects.get(id=getuserAssessmentId)
         userAssessmentObj.totalFraction = allfraction
