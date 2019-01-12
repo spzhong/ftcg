@@ -72,6 +72,8 @@ def upAssessmentQuestion(request):
         getinfo = "";
     try:
         getimgs = request.GET['jsonImgs'];
+        if len(getimgs) == 0:
+            getimgs = "[]";
     except BaseException as e:
         getimgs = "[]";
     getfraction = int(request.GET['fraction'])
