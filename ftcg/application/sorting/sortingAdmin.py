@@ -49,10 +49,11 @@ def upSorting(request):
     callBackDict = {}
     try:
         getqrCodeId = request.GET['qrCodeId']
-        if isCheckErCode(getqrCodeId) == False:
-            callBackDict['code'] = '0'
-            callBackDict['msg'] = '袋子二维码数据校验失败'
-            return callBackDict
+        if len(getqrCodeId) > 0:
+            if isCheckErCode(getqrCodeId) == False:
+                callBackDict['code'] = '0'
+                callBackDict['msg'] = '袋子二维码数据校验失败'
+                return callBackDict
     except BaseException as e:
         getqrCodeId = None
     if len(getuserId) == 0:
