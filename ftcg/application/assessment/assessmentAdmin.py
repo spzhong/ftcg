@@ -111,7 +111,10 @@ def upAssessmentQuestion(request):
                 assess.info = getinfo
                 assess.imgs = getimgs
                 assess.save()
-            assessmentQuestionObj = assessmentQuestion.objects.get(id=assess.assessmentQuestionId)
+            try:
+                assessmentQuestionObj = assessmentQuestion.objects.get(id=assess.assessmentQuestionId)
+            except BaseException as e:
+                continue
             # 判断是否是加分项
             if assessmentQuestionObj.assessmentType == 1:
                 allfraction = allfraction + assess.fraction
