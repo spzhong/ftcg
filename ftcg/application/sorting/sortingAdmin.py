@@ -116,8 +116,7 @@ def makeSortingInfoData(sortingList):
     communityIdDict = {}
     villageIdDict = {}
     userIdDict = {}
-    try:
-        for oneSorting in sortingList:
+    for oneSorting in sortingList:
             try:
                 if streetIdDict.has_key(str(oneSorting.streetId)) == False:
                     streetObj = street.objects.get(id=oneSorting.streetId)
@@ -150,7 +149,6 @@ def makeSortingInfoData(sortingList):
                 logger = logging.getLogger("django")
                 logger.info("用户ID异常了"+str(e))
                 userIdDict[str(oneSorting.userId)] = {}
-
             # householdInfo 查询住户的信息，判断是否有二维码信息，以及判断二维码是否已经关联了用户的信息
             oneQrCode = None
             if oneSorting.qrCodeId :
@@ -166,9 +164,6 @@ def makeSortingInfoData(sortingList):
                              "streetInfo": streetIdDict[str(oneSorting.streetId)], "id": oneSorting.id,
                              "remarks": oneSorting.remarks, "state": oneSorting.state, "qrCodeId": oneSorting.qrCodeId,
                              "createTime": oneSorting.createTime, "imgs": json.loads(oneSorting.imgs)})
-    except BaseException as e:
-        logger = logging.getLogger("django")
-        logger.info(str(e))
     return list
 
 
