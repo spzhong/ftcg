@@ -95,7 +95,7 @@ def upAssessmentQuestion(request):
         callBackDict['msg'] = 'token异常，请重新登录'
         return callBackDict
     try:
-        firstAssessmentQuestionObj = assessmentQuestion.objects.get(id=str(getquestionId))
+        firstAssessmentQuestionObj = assessmentQuestion.objects.get(id=int(getquestionId))
         if getfraction > firstAssessmentQuestionObj.fraction :
             callBackDict['code'] = '0'
             callBackDict['msg'] = '考核的分数大于总分'
