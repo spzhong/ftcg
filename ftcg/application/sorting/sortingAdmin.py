@@ -52,7 +52,7 @@ def upSorting(request):
     except BaseException as e:
         getimgs = "[]"
     callBackDict = {}
-    getqrCodeId = None
+    getqrCodeId = ''
     try:
         getqrCodeId = request.GET['qrCodeId']
         copyqrCodeId = request.GET['qrCodeId']
@@ -62,7 +62,7 @@ def upSorting(request):
                 callBackDict['msg'] = '袋子二维码数据校验失败'
                 return callBackDict
     except BaseException as e:
-        getqrCodeId = None
+        getqrCodeId = ''
     if len(getuserId) == 0:
         callBackDict['code'] = '0'
         callBackDict['msg'] = '用户的id为空'
@@ -93,19 +93,22 @@ def upSorting(request):
         return callBackDict
     try:
         createTime = int(time.time() * 1000)
-        sortingObj = sorting.objects.create(userId=getuserId, streetId=getstreetId,communityId = getcommunityId,villageId=getvillageId, createTime=createTime)
-        sortingObj.imgs = getimgs
-        sortingObj.remarks = getremarks
+        upstate = 0
         if getqrCodeId:
             # 校验state的数据是否正确的
             qrCodeList = qrCode.objects.filter(qrCodeId=getqrCodeId)
             if len(qrCodeList) > 0:
                 logger = logging.getLogger("django")
                 logger.info('二维码的ID:'+str(getqrCodeId))
-                sortingObj.qrCodeId = getqrCodeId
-                sortingObj.state = 1  # 提交给审核的数据
+                upstate = 1
             else:
-                sortingObj.state = -1  # 异常考核的数据-没有找到相关的对应的二维码房号
+                upstate = -1  # 异常考核的数据-没有找到相关的对应的二维码房号
+
+        sortingObj = sorting.objects.create(qrCodeId = getqrCodeId,userId=getuserId, streetId=getstreetId, communityId=getcommunityId,
+                                                    villageId=getvillageId, createTime=createTime)
+        sortingObj.imgs = getimgs
+        sortingObj.remarks = getremarks
+        sortingObj.state = upstate
         sortingObj.save()
         callBackDict['code'] = '1'
         callBackDict['data'] = sortingObj.id
