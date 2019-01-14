@@ -118,10 +118,12 @@ class sorting(models.Model):
     remarks = models.CharField(max_length=1024,null=True)
     imgs = models.CharField(max_length=1024,null=True)
     # 二维码的id，允许为空
+    models.CharField(max_length=512, null=True, db_index=True)
     qrCodeId = models.CharField(db_index=True,max_length=512,null=True)
     createTime = models.BigIntegerField(default=0)
     # 是否是考核结束(0是进行中，1是审核中，2是审核打回，3是审核通过，-1是异常的数据，-2删除)
     state = models.IntegerField(default=0)
+
 
 
 # 考核配置的问题

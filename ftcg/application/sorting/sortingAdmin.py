@@ -52,6 +52,7 @@ def upSorting(request):
     except BaseException as e:
         getimgs = "[]"
     callBackDict = {}
+    getqrCodeId = None
     try:
         getqrCodeId = request.GET['qrCodeId']
         copyqrCodeId = request.GET['qrCodeId']
@@ -99,6 +100,8 @@ def upSorting(request):
             # 校验state的数据是否正确的
             qrCodeList = qrCode.objects.filter(qrCodeId=getqrCodeId)
             if len(qrCodeList) > 0:
+                logger = logging.getLogger("django")
+                logger.info('二维码的ID:'+str(getqrCodeId))
                 sortingObj.qrCodeId = getqrCodeId
                 sortingObj.state = 1  # 提交给审核的数据
             else:
