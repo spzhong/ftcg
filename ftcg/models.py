@@ -96,7 +96,7 @@ class rsUserVillage(models.Model):
 class qrCode(models.Model):
     id = models.UUIDField(primary_key=True)
     # 袋子的信息
-    qrCodeId = models.CharField(max_length=512,null=True,db_index=True)
+    qrCodeId = models.CharField(max_length=500,null=True,db_index=True)
     # 二维码的备注信息
     remarks = models.CharField(max_length=1024, null=True)
     # 分发人
@@ -119,7 +119,7 @@ class sorting(models.Model):
     imgs = models.CharField(max_length=1024,null=True)
     # 二维码的id，允许为空
     models.CharField(max_length=512, null=True, db_index=True)
-    qrCodeId = models.CharField(db_index=True,max_length=512,null=True)
+    qrCodeId = models.CharField(max_length=500, null=True, db_index=True)
     createTime = models.BigIntegerField(default=0)
     # 是否是考核结束(0是进行中，1是审核中，2是审核打回，3是审核通过，-1是异常的数据，-2删除)
     state = models.IntegerField(default=0)
