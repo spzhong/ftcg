@@ -123,39 +123,43 @@ def makeSortingInfoData(sortingList):
                     streetIdDict[str(oneSorting.streetId)] = {"id": streetObj.id, "name": streetObj.name}
             except BaseException as e:
                 streetIdDict[str(oneSorting.streetId)] = {}
-                logger.info("街道ID异常了" + str(e))
                 logger = logging.getLogger("django")
+                logger.info("街道ID异常了" + str(e))
             try:
                 if communityIdDict.has_key(str(oneSorting.communityId)) == False:
                     communityObj = community.objects.get(id=oneSorting.communityId)
                     communityIdDict[str(oneSorting.communityId)] = {"id": communityObj.id, "name": communityObj.name}
             except BaseException as e:
                 communityIdDict[str(oneSorting.communityId)] = {}
-                logger.info("社区ID异常了" + str(e))
                 logger = logging.getLogger("django")
+                logger.info("社区ID异常了" + str(e))
             try:
                 if villageIdDict.has_key(str(oneSorting.villageId)) == False:
                     villageObj = village.objects.get(id=oneSorting.villageId)
                     villageIdDict[str(oneSorting.villageId)] = {"id": villageObj.id, "name": villageObj.name}
             except BaseException as e:
                 villageIdDict[str(oneSorting.villageId)] = {}
-                logger.info("小区ID异常了" + str(e))
                 logger = logging.getLogger("django")
+                logger.info("小区ID异常了" + str(e))
+
             try:
                 if userIdDict.has_key(str(oneSorting.userId)) == False:
                     userObj = user.objects.get(id=oneSorting.userId)
                     userIdDict[str(oneSorting.userId)] = {"id": userObj.id, "name": userObj.name}
             except BaseException as e:
                 logger = logging.getLogger("django")
-                logger.info("用户ID异常了"+str(e))
+                logger.info("用户ID异常了" + str(e))
                 userIdDict[str(oneSorting.userId)] = {}
             # householdInfo 查询住户的信息，判断是否有二维码信息，以及判断二维码是否已经关联了用户的信息
             oneQrCode = None
             if oneSorting.qrCodeId :
                 qrCodeList = qrCode.objects.filter(qrCodeId=oneSorting.qrCodeId)
+                logger = logging.getLogger("django")
+                logger.info("找到对应的二维码了。。。长度为： " + str(len(qrCodeList)))
                 if len(qrCodeList) > 0:
                    oneQrCode = qrCodeList[0]
-            if oneQrCode:
+                   logger.info("oneQrCode 第一个原色： " + str(oneQrCode.roomNumberText))
+            if oneQrCode != None:
                 list.append({"householdInfo":oneQrCode.roomNumberText,"userInfo":userIdDict[str(oneSorting.userId)],"villageInfo":villageIdDict[str(oneSorting.villageId)],"communityInfo":communityIdDict[str(oneSorting.communityId)],"streetInfo":streetIdDict[str(oneSorting.streetId)],"id":oneSorting.id,"remarks":oneSorting.remarks,"state":oneSorting.state,"qrCodeId":oneSorting.qrCodeId,"createTime":oneSorting.createTime,"imgs":json.loads(oneSorting.imgs)})
             else:
                 list.append({"householdInfo": "", "userInfo": userIdDict[str(oneSorting.userId)],

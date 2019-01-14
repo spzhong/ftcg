@@ -732,7 +732,7 @@ def getPropertySendList(request):
         callBackDict['msg'] = '用户的ID为空'
         return callBackDict
     try:
-        qrCodeList = qrCode.objects.filter(createTime__lte=timeStamp_parm).order_by("-createTime")[:20]
+        qrCodeList = qrCode.objects.filter(userId=userId_parm,createTime__lte=timeStamp_parm).order_by("-createTime")[:20]
         list = []
         for oneCode in qrCodeList:
             bagTypeString = getErCodeType(oneCode.qrCodeId)
