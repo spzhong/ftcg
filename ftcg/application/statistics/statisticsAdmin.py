@@ -3,7 +3,7 @@ import logging
 import django.utils.log
 import logging.handlers
 import json
-
+from django.db.models import Avg
 import sys
 sys.path.append('...')
 
@@ -123,7 +123,7 @@ def getSortingStatistics(request):
         # 街道
         for dict in listTime:
             countSorting = sorting.objects.filter(state__gte=0, streetId = businessId_parm, createTime__gte=dict["timeStamp"],createTime__lt=endTime).count()
-            avgtotalFraction = sorting.objects.filter(state__gte=0, streetId=businessId_parm, createTime__gte=dict["timeStamp"],createTime__lt=endTime).Avg("totalFraction")
+            avgtotalFraction = sorting.objects.filter(state__gte=0, streetId=businessId_parm, createTime__gte=dict["timeStamp"],createTime__lt=endTime).aggregate(Avg("totalFraction"))
 
             endTime = dict["timeStamp"]
             list2.append({"date": dict["date"], "num": countSorting,"average":avgtotalFraction})
@@ -135,7 +135,7 @@ def getSortingStatistics(request):
             countSorting = sorting.objects.filter(state__gte=0, communityId = businessId_parm, createTime__gte=dict["timeStamp"],createTime__lt=endTime).count()
             avgtotalFraction = sorting.objects.filter(state__gte=0, communityId=businessId_parm,
                                                       createTime__gte=dict["timeStamp"],
-                                                      createTime__lt=endTime).Avg("totalFraction")
+                                                      createTime__lt=endTime).aggregate(Avg("totalFraction"))
             endTime = dict["timeStamp"]
             list2.append({"date": dict["date"], "num": countSorting, "average": avgtotalFraction})
             cout2 = cout2 + countSorting
@@ -146,7 +146,7 @@ def getSortingStatistics(request):
             countSorting = sorting.objects.filter(state__gte=0, villageId = businessId_parm, createTime__gte=int(dict["timeStamp"]),createTime__lt=endTime).count()
             avgtotalFraction = sorting.objects.filter(state__gte=0, communityId=businessId_parm,
                                                       createTime__gte=dict["timeStamp"],
-                                                      createTime__lt=endTime).Avg("totalFraction")
+                                                      createTime__lt=endTime).aggregate(Avg("totalFraction"))
             endTime = dict["timeStamp"]
             list2.append({"date": dict["date"], "num": countSorting, "average": avgtotalFraction})
             cout2 = cout2 + countSorting
