@@ -13,7 +13,6 @@ from ftcg.models import user
 from ftcg.models import street
 from ftcg.models import community
 from ftcg.models import qrCode
-import copy
 
 from ..user import signAdmin
 
@@ -55,8 +54,9 @@ def upSorting(request):
     callBackDict = {}
     try:
         getqrCodeId = request.GET['qrCodeId']
+        copyqrCodeId = request.GET['qrCodeId']
         if len(getqrCodeId) > 0:
-            if isCheckErCode(copy.deepcopy(getqrCodeId)) == False:
+            if isCheckErCode(copyqrCodeId) == False:
                 callBackDict['code'] = '0'
                 callBackDict['msg'] = '袋子二维码数据校验失败'
                 return callBackDict
@@ -161,15 +161,20 @@ def makeSortingInfoData(sortingList):
                 qrCodeList = qrCode.objects.filter(qrCodeId=oneSorting.qrCodeId)
                 if len(qrCodeList) > 0:
                    oneQrCode = qrCodeList[0]
+
+            try :
+                imgsJosn = json.loads(oneSorting.imgs)
+            except BaseException as e:
+                imgsJosn = []
             if oneQrCode != None:
-                list.append({"householdInfo":oneQrCode.roomNumberText,"userInfo":userIdDict[str(oneSorting.userId)],"villageInfo":villageIdDict[str(oneSorting.villageId)],"communityInfo":communityIdDict[str(oneSorting.communityId)],"streetInfo":streetIdDict[str(oneSorting.streetId)],"id":oneSorting.id,"remarks":oneSorting.remarks,"state":oneSorting.state,"qrCodeId":oneSorting.qrCodeId,"createTime":oneSorting.createTime,"imgs":json.loads(oneSorting.imgs)})
+                list.append({"householdInfo":oneQrCode.roomNumberText,"userInfo":userIdDict[str(oneSorting.userId)],"villageInfo":villageIdDict[str(oneSorting.villageId)],"communityInfo":communityIdDict[str(oneSorting.communityId)],"streetInfo":streetIdDict[str(oneSorting.streetId)],"id":oneSorting.id,"remarks":oneSorting.remarks,"state":oneSorting.state,"qrCodeId":oneSorting.qrCodeId,"createTime":oneSorting.createTime,"imgs":imgsJosn})
             else:
                 list.append({"householdInfo": "", "userInfo": userIdDict[str(oneSorting.userId)],
                              "villageInfo": villageIdDict[str(oneSorting.villageId)],
                              "communityInfo": communityIdDict[str(oneSorting.communityId)],
                              "streetInfo": streetIdDict[str(oneSorting.streetId)], "id": oneSorting.id,
                              "remarks": oneSorting.remarks, "state": oneSorting.state, "qrCodeId": oneSorting.qrCodeId,
-                             "createTime": oneSorting.createTime, "imgs": json.loads(oneSorting.imgs)})
+                             "createTime": oneSorting.createTime, "imgs": imgsJosn})
     return list
 
 
