@@ -20,7 +20,7 @@ def getAllStatistics(request):
     list2 = []
     cout1 = 0
     cout2 = 0
-    listTime = getAllStatistics()
+    listTime = getTimeStatistics()
     endTime = int(time.time() * 1000)
     for dict in listTime:
         countUserAssessment = userAssessment.objects.filter(state__gte=0, createTime__gte=int(dict["timeStamp"]) ,createTime__lt=endTime).count()
@@ -36,7 +36,7 @@ def getAllStatistics(request):
 
 
 # 时间的长度
-def getAllStatistics():
+def getTimeStatistics():
     myear = datetime.now().year
     mmouth = datetime.now().month
     list = []
@@ -67,7 +67,7 @@ def getAssessmentStatistics(request):
         return callBackDict
     list1 = []
     cout1 = 0
-    listTime = getAllStatistics()
+    listTime = getTimeStatistics()
     endTime = int(time.time() * 1000)
     if type_parm == "0":
         #街道
@@ -116,7 +116,7 @@ def getSortingStatistics(request):
         return callBackDict
     list2 = []
     cout2 = 0
-    listTime = getAllStatistics()
+    listTime = getTimeStatistics()
     endTime = int(time.time() * 1000)
     if type_parm == "0":
         # 街道
