@@ -23,6 +23,7 @@ def getAllStatistics(request):
     listTime = getTimeStatistics()
     endTime = int(time.time() * 1000)
     for dict in listTime:
+        print dict
         countUserAssessment = userAssessment.objects.filter(state__gte=0, createTime__gte=int(dict["timeStamp"]) ,createTime__lt=endTime).count()
         countSorting = sorting.objects.filter(state__gte=0, createTime__gte=int(dict["timeStamp"]),createTime__lt=endTime).count()
         endTime = int(dict["timeStamp"])
