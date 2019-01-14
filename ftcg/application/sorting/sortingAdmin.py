@@ -13,7 +13,7 @@ from ftcg.models import user
 from ftcg.models import street
 from ftcg.models import community
 from ftcg.models import qrCode
-from ftcg.models import roomNumber
+
 
 from ..user import signAdmin
 
@@ -157,7 +157,7 @@ def makeSortingInfoData(sortingList):
                 logger.info("找到对应的二维码了。。。长度为： " + str(len(qrCodeList)))
                 if len(qrCodeList) > 0:
                    oneQrCode = qrCodeList[0]
-                   logger.info("oneQrCode 第一个原色： " + str(oneQrCode.roomNumberText))
+                   logger.info("oneQrCode 第一个元素： " + str(oneQrCode.roomNumberText))
             if oneQrCode != None:
                 list.append({"householdInfo":oneQrCode.roomNumberText,"userInfo":userIdDict[str(oneSorting.userId)],"villageInfo":villageIdDict[str(oneSorting.villageId)],"communityInfo":communityIdDict[str(oneSorting.communityId)],"streetInfo":streetIdDict[str(oneSorting.streetId)],"id":oneSorting.id,"remarks":oneSorting.remarks,"state":oneSorting.state,"qrCodeId":oneSorting.qrCodeId,"createTime":oneSorting.createTime,"imgs":json.loads(oneSorting.imgs)})
             else:

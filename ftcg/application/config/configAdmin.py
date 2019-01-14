@@ -698,6 +698,12 @@ def propertySendBags(request):
         callBackDict['msg'] = '请输出领取的袋子数量'
         return callBackDict
     try:
+        qrCodeList = qrCode.objects.filter(qrCodeId=qrCodeId_parm)
+        if len(qrCodeList) > 0:
+            oneQrCode = qrCodeList[0]
+            callBackDict['code'] = '0'
+            callBackDict['msg'] = '二维码袋子已经发放过了'
+            return callBackDict
         getcreateTime = int(time.time() * 1000)
         obj = qrCode.objects.create(id=str(uuid.uuid4().hex),createTime=getcreateTime,qrCodeId=qrCodeId_parm,userId=userId_parm,bagNumber=bagNumber_parm,roomNumberText=roomNumberText_parm)
         obj.save()
