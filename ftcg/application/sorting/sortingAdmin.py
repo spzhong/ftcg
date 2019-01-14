@@ -13,7 +13,7 @@ from ftcg.models import user
 from ftcg.models import street
 from ftcg.models import community
 from ftcg.models import qrCode
-
+import copy
 
 from ..user import signAdmin
 
@@ -44,13 +44,19 @@ def upSorting(request):
     getcommunityId = request.GET['communityId']
     getvillageId = request.GET['villageId']
     getuserId = request.GET['userId']
-    getremarks = request.GET['remarks']
-    getimgs = request.GET['imgs']
+    try:
+        getremarks = request.GET['remarks']
+    except BaseException as e:
+        getremarks = ''
+    try:
+        getimgs = request.GET['imgs']
+    except BaseException as e:
+        getimgs = "[]"
     callBackDict = {}
     try:
         getqrCodeId = request.GET['qrCodeId']
         if len(getqrCodeId) > 0:
-            if isCheckErCode(getqrCodeId) == False:
+            if isCheckErCode(copy.deepcopy(getqrCodeId)) == False:
                 callBackDict['code'] = '0'
                 callBackDict['msg'] = '袋子二维码数据校验失败'
                 return callBackDict
