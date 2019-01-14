@@ -147,7 +147,7 @@ def makeSortingInfoData(sortingList):
                     userIdDict[str(oneSorting.userId)] = {"id": userObj.id, "name": userObj.name}
             except BaseException as e:
                 logger = logging.getLogger("django")
-                logger.info("用户ID异常了" + str(e) + "    userid:" +oneSorting.userId)
+                logger.info("用户ID异常了" + str(e) + "    userid:" +str(oneSorting.userId))
                 userIdDict[str(oneSorting.userId)] = {}
             # householdInfo 查询住户的信息，判断是否有二维码信息，以及判断二维码是否已经关联了用户的信息
             oneQrCode = None
