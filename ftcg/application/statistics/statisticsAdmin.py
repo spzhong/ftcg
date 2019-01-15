@@ -9,6 +9,8 @@ sys.path.append('...')
 
 from ftcg.models import userAssessment
 from ftcg.models import sorting
+from ftcg.models import street
+
 import time
 from datetime import datetime
 
@@ -74,10 +76,13 @@ def getAssessmentStatistics(request):
         for dict in listTime:
             countUserAssessment = userAssessment.objects.filter(state__gte=0, streetId = businessId_parm, createTime__gte= dict["timeStamp"],
                                                                 createTime__lt=endTime).count()
-            avgtotalFraction = userAssessment.objects.filter(state__gte=0, streetId = businessId_parm, createTime__gte= dict["timeStamp"],
+            totalFraction__avg = 0
+            if countUserAssessment > 0:
+                avgtotalFraction = userAssessment.objects.filter(state__gte=0, streetId = businessId_parm, createTime__gte= dict["timeStamp"],
                                                                 createTime__lt=endTime).aggregate(Avg("totalFraction"))
+                totalFraction__avg = avgtotalFraction['totalFraction__avg']
             endTime = dict["timeStamp"]
-            list1.append({"date": dict["date"], "num": countUserAssessment,"average":['totalFraction__avg']})
+            list1.append({"date": dict["date"], "num": countUserAssessment,"average":totalFraction__avg})
             cout1 = cout1 + countUserAssessment
         callBackDict["data"] = {"totalNumber": cout1, "list": list1}
     elif type_parm == "1":
@@ -86,11 +91,14 @@ def getAssessmentStatistics(request):
             countUserAssessment = userAssessment.objects.filter(state__gte=0, communityId=businessId_parm,
                                                                 createTime__gte=dict["timeStamp"],
                                                                 createTime__lt=endTime).count()
-            avgtotalFraction = userAssessment.objects.filter(state__gte=0, communityId=businessId_parm,
+            totalFraction__avg = 0
+            if countUserAssessment > 0:
+                avgtotalFraction = userAssessment.objects.filter(state__gte=0, communityId=businessId_parm,
                                                                 createTime__gte=dict["timeStamp"],
                                                                 createTime__lt=endTime).aggregate(Avg("totalFraction"))
+                totalFraction__avg = avgtotalFraction['totalFraction__avg']
             endTime = dict["timeStamp"]
-            list1.append({"date": dict["date"], "num": countUserAssessment,"average":avgtotalFraction['totalFraction__avg']})
+            list1.append({"date": dict["date"], "num": countUserAssessment,"average":totalFraction__avg})
             cout1 = cout1 + countUserAssessment
         callBackDict["data"] = {"totalNumber": cout1, "list": list1}
     elif type_parm == "2":
@@ -99,11 +107,14 @@ def getAssessmentStatistics(request):
             countUserAssessment = userAssessment.objects.filter(state__gte=0, villageId=businessId_parm,
                                                                 createTime__gte=int(dict["timeStamp"]),
                                                                 createTime__lt=endTime).count()
-            avgtotalFraction = userAssessment.objects.filter(state__gte=0, villageId=businessId_parm,
+            totalFraction__avg = 0
+            if countUserAssessment > 0:
+                avgtotalFraction = userAssessment.objects.filter(state__gte=0, villageId=businessId_parm,
                                                                 createTime__gte=int(dict["timeStamp"]),
                                                                 createTime__lt=endTime).aggregate(Avg("totalFraction"))
+                totalFraction__avg = avgtotalFraction['totalFraction__avg']
             endTime = int(dict["timeStamp"])
-            list1.append({"date": dict["date"], "num": countUserAssessment,"average":['totalFraction__avg']})
+            list1.append({"date": dict["date"], "num": countUserAssessment,"average":totalFraction__avg})
             cout1 = cout1 + countUserAssessment
         callBackDict["data"] = {"totalNumber": cout1, "list": list1}
     else:
@@ -158,3 +169,51 @@ def getSortingStatistics(request):
         return callBackDict
     return callBackDict
 
+
+
+# 考核的
+def getAllStreetsAssessmentStatistics(request):
+    # 获取所有街道的数据
+    streetList = street.objects.all()
+    list = []
+    callBackDict = {}
+    for oneStreet in streetList:
+        listTime = getTimeStatistics()
+        endTime = int(time.time() * 1000)
+        # 街道
+        for dict in listTime:
+            countUserAssessment = userAssessment.objects.filter(state__gte=0, streetId=oneStreet.id,createTime__gte=dict["timeStamp"],createTime__lt=endTime).count()
+            totalFraction__avg = 0
+            if countUserAssessment > 0:
+                avgtotalFraction = userAssessment.objects.filter(state__gte=0, streetId=oneStreet.id,
+                                                                     createTime__gte=dict["timeStamp"],
+                                                                     createTime__lt=endTime).aggregate(Avg("totalFraction"))
+                totalFraction__avg = avgtotalFraction['totalFraction__avg']
+                endTime = dict["timeStamp"]
+                list.append({"date": dict["date"], "num": countUserAssessment, "average": totalFraction__avg})
+                cout1 = cout1 + countUserAssessment
+            callBackDict["data"] = {"totalNumber": cout1, "list": list}
+    callBackDict['code'] = '1'
+    callBackDict['data'] = list
+    return callBackDict
+
+
+
+# 分拣的
+def getAllStreetsSortingStatistics(request):
+    # 获取所有街道的数据
+    streetList = street.objects.all()
+    list = []
+    callBackDict = {}
+    for oneStreet in streetList:
+        listTime = getTimeStatistics()
+        endTime = int(time.time() * 1000)
+        for dict in listTime:
+            countSorting = sorting.objects.filter(state__gte=-1, streetId = oneStreet.id, createTime__gte=dict["timeStamp"],createTime__lt=endTime).count()
+            endTime = dict["timeStamp"]
+            list.append({"date": dict["date"], "num": countSorting})
+            cout2 = cout2 + countSorting
+        callBackDict["data"] = {"totalNumber": cout2, "list": list}
+    callBackDict['code'] = '1'
+    callBackDict['data'] = list
+    return callBackDict

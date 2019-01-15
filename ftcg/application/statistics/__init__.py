@@ -11,6 +11,13 @@ def index(request,route):
         callBackDict = statisticsAdmin.getAssessmentStatistics(request)
     elif route == 'getSortingStatistics':
         callBackDict = statisticsAdmin.getSortingStatistics(request)
+    elif route == 'getAllStreetsAssessmentStatistics':
+        callBackDict = statisticsAdmin.getAllStreetsAssessmentStatistics(request)
+    elif route == 'getAllStreetsSortingStatistics':
+        callBackDict = statisticsAdmin.getAllStreetsSortingStatistics(request)
     else:
          return HttpResponse("no found !!!")
     return HttpResponse(json.dumps(callBackDict))
+
+
+
