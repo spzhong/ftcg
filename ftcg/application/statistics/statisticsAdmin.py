@@ -192,8 +192,8 @@ def getAllStreetsAssessmentStatistics(request):
                                                                      createTime__lt=endTime).aggregate(Avg("totalFraction"))
                 totalFraction__avg = avgtotalFraction['totalFraction__avg']
                 endTime = dict["timeStamp"]
-                list.append({"date": dict["date"], "num": countUserAssessment, "average": totalFraction__avg})
-                cout1 = cout1 + countUserAssessment
+            list.append({"date": dict["date"], "num": countUserAssessment, "average": totalFraction__avg})
+            cout1 = cout1 + countUserAssessment
         streetsList.append({"streetId": oneStreet.id, "totalNumber": cout1, "list": list})
     callBackDict['code'] = '1'
     callBackDict['data'] = streetsList
