@@ -367,6 +367,9 @@ def searchVillage(request):
 # 删除街道
 def deleteStreet(request):
     callBackDict = {}
+    callBackDict['code'] = '0'
+    callBackDict['msg'] = '请联系管理员进行删除'
+    return callBackDict
     streetId = request.GET['streetId']
     if len(streetId) == 0:
         callBackDict['code'] = '0'
@@ -394,6 +397,9 @@ def deleteStreet(request):
 # 删除社区
 def deleteCommunity(request):
     callBackDict = {}
+    callBackDict['code'] = '0'
+    callBackDict['msg'] = '请联系管理员进行删除'
+    return callBackDict
     communityId = request.GET['communityId']
     if len(communityId) == 0:
         callBackDict['code'] = '0'
@@ -422,6 +428,9 @@ def deleteCommunity(request):
 # 删除小区
 def deleteVillage(request):
     callBackDict = {}
+    callBackDict['code'] = '0'
+    callBackDict['msg'] = '请联系管理员进行删除'
+    return callBackDict
     villageId = request.GET['villageId']
     if len(villageId) == 0:
         callBackDict['code'] = '0'

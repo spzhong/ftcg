@@ -149,6 +149,9 @@ def editConfigAssessment(request):
 # 删除问题
 def deleteConfigAssessment(request):
     callBackDict = {}
+    callBackDict['code'] = '0'
+    callBackDict['msg'] = '请联系管理员进行删除'
+    return callBackDict
     assessmentTypeId = request.GET['id']
     if len(assessmentTypeId) == 0:
         callBackDict['code'] = '0'

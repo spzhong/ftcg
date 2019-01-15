@@ -257,6 +257,10 @@ def getAllUserList(request):
 
 # 管理员删除用户
 def adminDeleteUser(request):
+    callBackDict = {}
+    callBackDict['code'] = '0'
+    callBackDict['msg'] = '请联系管理员进行删除'
+    return callBackDict
     token = request.GET['token'];
     userId = request.GET['userId'];
     callBackDict = {}
