@@ -175,12 +175,14 @@ def getSortingStatistics(request):
 def getAllStreetsAssessmentStatistics(request):
     # 获取所有街道的数据
     streetList = street.objects.all()
-    list = []
+    streetsList = []
     callBackDict = {}
     for oneStreet in streetList:
         listTime = getTimeStatistics()
         endTime = int(time.time() * 1000)
         # 街道
+        list = []
+        cout1 = 0
         for dict in listTime:
             countUserAssessment = userAssessment.objects.filter(state__gte=0, streetId=oneStreet.id,createTime__gte=dict["timeStamp"],createTime__lt=endTime).count()
             totalFraction__avg = 0
@@ -192,9 +194,9 @@ def getAllStreetsAssessmentStatistics(request):
                 endTime = dict["timeStamp"]
                 list.append({"date": dict["date"], "num": countUserAssessment, "average": totalFraction__avg})
                 cout1 = cout1 + countUserAssessment
-            callBackDict["data"] = {"totalNumber": cout1, "list": list}
+        streetsList.append({"streetId": oneStreet.id, "totalNumber": cout1, "list": list})
     callBackDict['code'] = '1'
-    callBackDict['data'] = list
+    callBackDict['data'] = streetsList
     return callBackDict
 
 
@@ -203,17 +205,19 @@ def getAllStreetsAssessmentStatistics(request):
 def getAllStreetsSortingStatistics(request):
     # 获取所有街道的数据
     streetList = street.objects.all()
-    list = []
+    streetsList = []
     callBackDict = {}
     for oneStreet in streetList:
         listTime = getTimeStatistics()
         endTime = int(time.time() * 1000)
+        cout2 = 0
+        list = []
         for dict in listTime:
             countSorting = sorting.objects.filter(state__gte=-1, streetId = oneStreet.id, createTime__gte=dict["timeStamp"],createTime__lt=endTime).count()
             endTime = dict["timeStamp"]
             list.append({"date": dict["date"], "num": countSorting})
             cout2 = cout2 + countSorting
-        callBackDict["data"] = {"totalNumber": cout2, "list": list}
+        streetsList.append({"streetId":oneStreet.id,"totalNumber": cout2, "list": list})
     callBackDict['code'] = '1'
-    callBackDict['data'] = list
+    callBackDict['data'] = streetsList
     return callBackDict
