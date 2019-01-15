@@ -77,7 +77,7 @@ def getAssessmentStatistics(request):
             avgtotalFraction = userAssessment.objects.filter(state__gte=0, streetId = businessId_parm, createTime__gte= dict["timeStamp"],
                                                                 createTime__lt=endTime).aggregate(Avg("totalFraction"))
             endTime = dict["timeStamp"]
-            list1.append({"date": dict["date"], "num": countUserAssessment,"average":avgtotalFraction})
+            list1.append({"date": dict["date"], "num": countUserAssessment,"average":['totalFraction__avg']})
             cout1 = cout1 + countUserAssessment
         callBackDict["data"] = {"totalNumber": cout1, "list": list1}
     elif type_parm == "1":
@@ -90,7 +90,7 @@ def getAssessmentStatistics(request):
                                                                 createTime__gte=dict["timeStamp"],
                                                                 createTime__lt=endTime).aggregate(Avg("totalFraction"))
             endTime = dict["timeStamp"]
-            list1.append({"date": dict["date"], "num": countUserAssessment,"average":avgtotalFraction})
+            list1.append({"date": dict["date"], "num": countUserAssessment,"average":avgtotalFraction['totalFraction__avg']})
             cout1 = cout1 + countUserAssessment
         callBackDict["data"] = {"totalNumber": cout1, "list": list1}
     elif type_parm == "2":
@@ -103,7 +103,7 @@ def getAssessmentStatistics(request):
                                                                 createTime__gte=int(dict["timeStamp"]),
                                                                 createTime__lt=endTime).aggregate(Avg("totalFraction"))
             endTime = int(dict["timeStamp"])
-            list1.append({"date": dict["date"], "num": countUserAssessment,"average":avgtotalFraction})
+            list1.append({"date": dict["date"], "num": countUserAssessment,"average":['totalFraction__avg']})
             cout1 = cout1 + countUserAssessment
         callBackDict["data"] = {"totalNumber": cout1, "list": list1}
     else:
