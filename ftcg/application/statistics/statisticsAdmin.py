@@ -23,9 +23,8 @@ def getAllStatistics(request):
     listTime = getTimeStatistics()
     endTime = int(time.time() * 1000)
     for dict in listTime:
-        print dict
         countUserAssessment = userAssessment.objects.filter(state__gte=0, createTime__gte=dict["timeStamp"] ,createTime__lt=endTime).count()
-        countSorting = sorting.objects.filter(state__gte=0, createTime__gte=int(dict["timeStamp"]),createTime__lt=endTime).count()
+        countSorting = sorting.objects.filter(state__gte=-1, createTime__gte=int(dict["timeStamp"]),createTime__lt=endTime).count()
         endTime = dict["timeStamp"]
         list1.append({"date":dict["date"],"num":countUserAssessment})
         list2.append({"date": dict["date"],"num":countSorting})
@@ -75,8 +74,10 @@ def getAssessmentStatistics(request):
         for dict in listTime:
             countUserAssessment = userAssessment.objects.filter(state__gte=0, streetId = businessId_parm, createTime__gte= dict["timeStamp"],
                                                                 createTime__lt=endTime).count()
+            avgtotalFraction = userAssessment.objects.filter(state__gte=0, streetId = businessId_parm, createTime__gte= dict["timeStamp"],
+                                                                createTime__lt=endTime).aggregate(Avg("totalFraction"))
             endTime = dict["timeStamp"]
-            list1.append({"date": dict["date"], "num": countUserAssessment})
+            list1.append({"date": dict["date"], "num": countUserAssessment,"average":avgtotalFraction})
             cout1 = cout1 + countUserAssessment
         callBackDict["data"] = {"totalNumber": cout1, "list": list1}
     elif type_parm == "1":
@@ -85,8 +86,11 @@ def getAssessmentStatistics(request):
             countUserAssessment = userAssessment.objects.filter(state__gte=0, communityId=businessId_parm,
                                                                 createTime__gte=dict["timeStamp"],
                                                                 createTime__lt=endTime).count()
+            avgtotalFraction = userAssessment.objects.filter(state__gte=0, communityId=businessId_parm,
+                                                                createTime__gte=dict["timeStamp"],
+                                                                createTime__lt=endTime).aggregate(Avg("totalFraction"))
             endTime = dict["timeStamp"]
-            list1.append({"date": dict["date"], "num": countUserAssessment})
+            list1.append({"date": dict["date"], "num": countUserAssessment,"average":avgtotalFraction})
             cout1 = cout1 + countUserAssessment
         callBackDict["data"] = {"totalNumber": cout1, "list": list1}
     elif type_parm == "2":
@@ -95,8 +99,11 @@ def getAssessmentStatistics(request):
             countUserAssessment = userAssessment.objects.filter(state__gte=0, villageId=businessId_parm,
                                                                 createTime__gte=int(dict["timeStamp"]),
                                                                 createTime__lt=endTime).count()
+            avgtotalFraction = userAssessment.objects.filter(state__gte=0, villageId=businessId_parm,
+                                                                createTime__gte=int(dict["timeStamp"]),
+                                                                createTime__lt=endTime).aggregate(Avg("totalFraction"))
             endTime = int(dict["timeStamp"])
-            list1.append({"date": dict["date"], "num": countUserAssessment})
+            list1.append({"date": dict["date"], "num": countUserAssessment,"average":avgtotalFraction})
             cout1 = cout1 + countUserAssessment
         callBackDict["data"] = {"totalNumber": cout1, "list": list1}
     else:
@@ -104,6 +111,8 @@ def getAssessmentStatistics(request):
         callBackDict['msg'] = '业务类型不存在'
         return callBackDict
     return callBackDict
+
+
 
 
 # 获取分拣的统计
@@ -122,33 +131,25 @@ def getSortingStatistics(request):
     if type_parm == "0":
         # 街道
         for dict in listTime:
-            countSorting = sorting.objects.filter(state__gte=0, streetId = businessId_parm, createTime__gte=dict["timeStamp"],createTime__lt=endTime).count()
-            avgtotalFraction = sorting.objects.filter(state__gte=0, streetId=businessId_parm, createTime__gte=dict["timeStamp"],createTime__lt=endTime).aggregate(Avg("totalFraction"))
-
+            countSorting = sorting.objects.filter(state__gte=-1, streetId = businessId_parm, createTime__gte=dict["timeStamp"],createTime__lt=endTime).count()
             endTime = dict["timeStamp"]
-            list2.append({"date": dict["date"], "num": countSorting,"average":avgtotalFraction})
+            list2.append({"date": dict["date"], "num": countSorting})
             cout2 = cout2 + countSorting
         callBackDict["data"] = {"totalNumber": cout2, "list": list2}
     elif type_parm == "1":
         # 社区
         for dict in listTime:
-            countSorting = sorting.objects.filter(state__gte=0, communityId = businessId_parm, createTime__gte=dict["timeStamp"],createTime__lt=endTime).count()
-            avgtotalFraction = sorting.objects.filter(state__gte=0, communityId=businessId_parm,
-                                                      createTime__gte=dict["timeStamp"],
-                                                      createTime__lt=endTime).aggregate(Avg("totalFraction"))
+            countSorting = sorting.objects.filter(state__gte=-1, communityId = businessId_parm, createTime__gte=dict["timeStamp"],createTime__lt=endTime).count()
             endTime = dict["timeStamp"]
-            list2.append({"date": dict["date"], "num": countSorting, "average": avgtotalFraction})
+            list2.append({"date": dict["date"], "num": countSorting})
             cout2 = cout2 + countSorting
         callBackDict["data"] = {"totalNumber": cout2, "list": list2}
     elif type_parm == "2":
         # 小区
         for dict in listTime:
-            countSorting = sorting.objects.filter(state__gte=0, villageId = businessId_parm, createTime__gte=int(dict["timeStamp"]),createTime__lt=endTime).count()
-            avgtotalFraction = sorting.objects.filter(state__gte=0, communityId=businessId_parm,
-                                                      createTime__gte=dict["timeStamp"],
-                                                      createTime__lt=endTime).aggregate(Avg("totalFraction"))
+            countSorting = sorting.objects.filter(state__gte=-1, villageId = businessId_parm, createTime__gte=int(dict["timeStamp"]),createTime__lt=endTime).count()
             endTime = dict["timeStamp"]
-            list2.append({"date": dict["date"], "num": countSorting, "average": avgtotalFraction})
+            list2.append({"date": dict["date"], "num": countSorting})
             cout2 = cout2 + countSorting
         callBackDict["data"] = {"totalNumber": cout2, "list": list2}
     else:
