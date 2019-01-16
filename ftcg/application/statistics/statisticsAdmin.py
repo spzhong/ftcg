@@ -53,7 +53,12 @@ def getTimeStatistics():
         dict["timeStamp"] = int(time.mktime(time.strptime(dict['date']+"-01", "%Y-%m-%d")))*1000
         list.append(dict)
         mmouth = mmouth - 1;
-    return list.reverse()
+    newList = []
+    allLen = len(list)
+    for dict in list:
+        allLen = allLen-1
+        newList.append(list[allLen])
+    return newList
 
 
 
