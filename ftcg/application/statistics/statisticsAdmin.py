@@ -32,9 +32,17 @@ def getAllStatistics(request):
         list2.append({"date": dict["date"],"num":countSorting})
         cout1 = cout1 + countUserAssessment
         cout2 = cout2 + countSorting
-    callBackDict["data"] = {"assessment":{"totalNumber":cout1,"list":list1},"sorting":{"totalNumber":cout2,"list":list2}}
+
+    callBackDict["data"] = {"assessment":{"totalNumber":cout1,"list":reversed_arr(list1)},"sorting":{"totalNumber":cout2,"list":reversed_arr(list2)}}
     return callBackDict
 
+
+# 倒叙数组
+def reversed_arr(list):
+    reversed_arr = []
+    for i in reversed(list):
+        reversed_arr.append(i)
+    return reversed_arr
 
 
 # 时间的长度
@@ -53,12 +61,7 @@ def getTimeStatistics():
         dict["timeStamp"] = int(time.mktime(time.strptime(dict['date']+"-01", "%Y-%m-%d")))*1000
         list.append(dict)
         mmouth = mmouth - 1;
-    newList = []
-    allLen = len(list)
-    for dict in list:
-        allLen = allLen-1
-        newList.append(list[allLen])
-    return newList
+    return list
 
 
 
@@ -89,7 +92,7 @@ def getAssessmentStatistics(request):
             endTime = dict["timeStamp"]
             list1.append({"date": dict["date"], "num": countUserAssessment,"average":totalFraction__avg})
             cout1 = cout1 + countUserAssessment
-        callBackDict["data"] = {"totalNumber": cout1, "list": list1}
+        callBackDict["data"] = {"totalNumber": cout1, "list": reversed_arr(list1)}
     elif type_parm == "1":
         # 社区
         for dict in listTime:
@@ -105,7 +108,7 @@ def getAssessmentStatistics(request):
             endTime = dict["timeStamp"]
             list1.append({"date": dict["date"], "num": countUserAssessment,"average":totalFraction__avg})
             cout1 = cout1 + countUserAssessment
-        callBackDict["data"] = {"totalNumber": cout1, "list": list1}
+        callBackDict["data"] = {"totalNumber": cout1, "list": reversed_arr(list1)}
     elif type_parm == "2":
         # 小区
         for dict in listTime:
@@ -121,7 +124,7 @@ def getAssessmentStatistics(request):
             endTime = int(dict["timeStamp"])
             list1.append({"date": dict["date"], "num": countUserAssessment,"average":totalFraction__avg})
             cout1 = cout1 + countUserAssessment
-        callBackDict["data"] = {"totalNumber": cout1, "list": list1}
+        callBackDict["data"] = {"totalNumber": cout1, "list": reversed_arr(list1)}
     else:
         callBackDict['code'] = '0'
         callBackDict['msg'] = '业务类型不存在'
@@ -151,7 +154,7 @@ def getSortingStatistics(request):
             endTime = dict["timeStamp"]
             list2.append({"date": dict["date"], "num": countSorting})
             cout2 = cout2 + countSorting
-        callBackDict["data"] = {"totalNumber": cout2, "list": list2}
+        callBackDict["data"] = {"totalNumber": cout2, "list": reversed_arr(list2)}
     elif type_parm == "1":
         # 社区
         for dict in listTime:
@@ -159,7 +162,7 @@ def getSortingStatistics(request):
             endTime = dict["timeStamp"]
             list2.append({"date": dict["date"], "num": countSorting})
             cout2 = cout2 + countSorting
-        callBackDict["data"] = {"totalNumber": cout2, "list": list2}
+        callBackDict["data"] = {"totalNumber": cout2, "list": reversed_arr(list2)}
     elif type_parm == "2":
         # 小区
         for dict in listTime:
@@ -167,7 +170,7 @@ def getSortingStatistics(request):
             endTime = dict["timeStamp"]
             list2.append({"date": dict["date"], "num": countSorting})
             cout2 = cout2 + countSorting
-        callBackDict["data"] = {"totalNumber": cout2, "list": list2}
+        callBackDict["data"] = {"totalNumber": cout2, "list": reversed_arr(list2)}
     else:
         callBackDict['code'] = '0'
         callBackDict['msg'] = '业务类型不存在'
@@ -199,7 +202,7 @@ def getAllStreetsAssessmentStatistics(request):
                 endTime = dict["timeStamp"]
             list.append({"date": dict["date"], "num": countUserAssessment, "average": totalFraction__avg})
             cout1 = cout1 + countUserAssessment
-        streetsList.append({"streetId": oneStreet.id, "totalNumber": cout1, "list": list})
+        streetsList.append({"streetId": oneStreet.id, "totalNumber": cout1, "list": reversed_arr(list)})
     callBackDict['code'] = '1'
     callBackDict['data'] = streetsList
     return callBackDict
@@ -222,7 +225,7 @@ def getAllStreetsSortingStatistics(request):
             endTime = dict["timeStamp"]
             list.append({"date": dict["date"], "num": countSorting})
             cout2 = cout2 + countSorting
-        streetsList.append({"streetId":oneStreet.id,"totalNumber": cout2, "list": list})
+        streetsList.append({"streetId":oneStreet.id,"totalNumber": cout2, "list": reversed_arr(list)})
     callBackDict['code'] = '1'
     callBackDict['data'] = streetsList
     return callBackDict
