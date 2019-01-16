@@ -262,7 +262,7 @@ def adminGetVillages(request):
             villageList = village.objects.filter(streetId=streetId_parm, communityId=communityId_parm)
         list = []
         for oneVillage in villageList:
-             communityObj = community.objects.filter(id=oneVillage.communityId)
+             communityObj = community.objects.get(id=oneVillage.communityId)
              list.append({"streetId":streetId_parm,"communityInfo":{"id":oneVillage.communityId,"name":communityObj.name},'id': oneVillage.id, 'isOpen': oneVillage.isOpen,'name': oneVillage.name,'type': oneVillage.type,'number': oneVillage.number,
                                         'address': oneVillage.address, 'personCharge': oneVillage.personCharge,
                                         'phone': oneVillage.phone, 'remarks': oneVillage.remarks,
