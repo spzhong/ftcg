@@ -231,7 +231,7 @@ def getVillages(request):
             villageList = village.objects.filter(streetId=streetId_parm, communityId=communityId_parm,isOpen=0)
         list = []
         for oneVillage in villageList:
-             list.append({'id': oneVillage.id, 'name': oneVillage.name,'type': oneVillage.type,'number': oneVillage.number,
+             list.append({"streetId":streetId_parm,"communityId":oneVillage.communityId,'id': oneVillage.id, 'name': oneVillage.name,'type': oneVillage.type,'number': oneVillage.number,
                                         'address': oneVillage.address, 'personCharge': oneVillage.personCharge,
                                         'phone': oneVillage.phone, 'remarks': oneVillage.remarks,
                                         'managementSubsetNum': oneVillage.managementSubsetNum})
@@ -782,7 +782,7 @@ def getErCodeType(code):
         elif mystr == '006':
             return "厨余垃圾"
         elif mystr == '007':
-            return "有害垃圾"
+            return "其它垃圾"
         return "其它垃圾"
     except BaseException as e:
         return ''
