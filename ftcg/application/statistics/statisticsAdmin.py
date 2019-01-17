@@ -10,6 +10,9 @@ sys.path.append('...')
 from ftcg.models import userAssessment
 from ftcg.models import sorting
 from ftcg.models import street
+from ftcg.models import community
+from ftcg.models import village
+
 
 import time
 from datetime import datetime
@@ -207,6 +210,81 @@ def getAllStreetsAssessmentStatistics(request):
     return callBackDict
 
 
+# 考核
+def getCommunityAssessmentStatistics(request):
+    # 获取所有街道的数据
+    streetId_parm = request.GET['streetId'];
+    callBackDict = {}
+    if len(streetId_parm) == 0:
+        callBackDict['code'] = '0'
+        callBackDict['msg'] = '街道的id为空'
+        return callBackDict
+    streetsList = []
+    communityList = community.objects.filter(streetId=streetId_parm)
+    for oneCommunit in communityList:
+        listTime = getTimeStatistics()
+        endTime = int(time.time() * 1000)
+        # 街道
+        list = []
+        cout1 = 0
+        for dict in listTime:
+            countUserAssessment = userAssessment.objects.filter(state__gte=0, communityId=oneCommunit.id,
+                                                                createTime__gte=dict["timeStamp"],
+                                                                createTime__lt=endTime).count()
+            totalFraction__avg = 0
+            if countUserAssessment > 0:
+                avgtotalFraction = userAssessment.objects.filter(state__gte=0, communityId=oneCommunit.id,
+                                                                 createTime__gte=dict["timeStamp"],
+                                                                 createTime__lt=endTime).aggregate(Avg("totalFraction"))
+                totalFraction__avg = avgtotalFraction['totalFraction__avg']
+                endTime = dict["timeStamp"]
+            list.append({"name": dict["date"], "value": countUserAssessment, "average": totalFraction__avg})
+            cout1 = cout1 + countUserAssessment
+        streetsList.append(
+            {"communityId": oneCommunit.id, "name": oneCommunit.name, "totalNumber": cout1, "list": reversed_arr(list)})
+    callBackDict['code'] = '1'
+    callBackDict['data'] = streetsList
+    return callBackDict
+
+
+# 考核
+def getVillageIdAssessmentStatistics(request):
+    # 获取所有街道的数据
+    communityId_parm = request.GET['communityId'];
+    callBackDict = {}
+    if len(communityId_parm) == 0:
+        callBackDict['code'] = '0'
+        callBackDict['msg'] = '社区的id为空'
+        return callBackDict
+    streetsList = []
+    villageList = village.objects.filter(communityId=communityId_parm)
+    for onevillage in villageList:
+        listTime = getTimeStatistics()
+        endTime = int(time.time() * 1000)
+        # 街道
+        list = []
+        cout1 = 0
+        for dict in listTime:
+            countUserAssessment = userAssessment.objects.filter(state__gte=0, villageId=onevillage.id,
+                                                                createTime__gte=dict["timeStamp"],
+                                                                createTime__lt=endTime).count()
+            totalFraction__avg = 0
+            if countUserAssessment > 0:
+                avgtotalFraction = userAssessment.objects.filter(state__gte=0, villageId=onevillage.id,
+                                                                 createTime__gte=dict["timeStamp"],
+                                                                 createTime__lt=endTime).aggregate(Avg("totalFraction"))
+                totalFraction__avg = avgtotalFraction['totalFraction__avg']
+                endTime = dict["timeStamp"]
+            list.append({"name": dict["date"], "value": countUserAssessment, "average": totalFraction__avg})
+            cout1 = cout1 + countUserAssessment
+        streetsList.append(
+            {"villageId": onevillage.id, "name": onevillage.name, "totalNumber": cout1, "list": reversed_arr(list)})
+    callBackDict['code'] = '1'
+    callBackDict['data'] = streetsList
+    return callBackDict
+
+
+
 
 # 分拣的
 def getAllStreetsSortingStatistics(request):
@@ -228,3 +306,61 @@ def getAllStreetsSortingStatistics(request):
     callBackDict['code'] = '1'
     callBackDict['data'] = streetsList
     return callBackDict
+
+
+# 分拣 社区
+def getCommunitySortingStatistics(request):
+    streetId_parm = request.GET['streetId'];
+    callBackDict = {}
+    if len(streetId_parm) == 0:
+        callBackDict['code'] = '0'
+        callBackDict['msg'] = '街道的id为空'
+        return callBackDict
+    streetsList = []
+    communityList = community.objects.filter(streetId=streetId_parm)
+    for oneCommunity in communityList:
+        listTime = getTimeStatistics()
+        endTime = int(time.time() * 1000)
+        cout2 = 0
+        list = []
+        for dict in listTime:
+            countSorting = sorting.objects.filter(state__gte=-1, communityId=oneCommunity.id,
+                                                  createTime__gte=dict["timeStamp"], createTime__lt=endTime).count()
+            endTime = dict["timeStamp"]
+            list.append({"name": dict["date"], "value": countSorting})
+            cout2 = cout2 + countSorting
+        streetsList.append(
+            {"communityId": oneCommunity.id, "name": oneCommunity.name, "totalNumber": cout2, "list": reversed_arr(list)})
+    callBackDict['code'] = '1'
+    callBackDict['data'] = streetsList
+    return callBackDict
+
+
+# 分拣 小区
+def getVillageSortingStatistics(request):
+    communityId_parm = request.GET['communityId'];
+    callBackDict = {}
+    if len(communityId_parm) == 0:
+        callBackDict['code'] = '0'
+        callBackDict['msg'] = '街道的id为空'
+        return callBackDict
+    streetsList = []
+    villageList = village.objects.filter(communityId=communityId_parm)
+    for oneVillage in villageList:
+        listTime = getTimeStatistics()
+        endTime = int(time.time() * 1000)
+        cout2 = 0
+        list = []
+        for dict in listTime:
+            countSorting = sorting.objects.filter(state__gte=-1, villageId=oneVillage.id,
+                                                  createTime__gte=dict["timeStamp"], createTime__lt=endTime).count()
+            endTime = dict["timeStamp"]
+            list.append({"name": dict["date"], "value": countSorting})
+            cout2 = cout2 + countSorting
+        streetsList.append(
+            {"villageId": oneVillage.id, "name": oneVillage.name, "totalNumber": cout2,
+             "list": reversed_arr(list)})
+    callBackDict['code'] = '1'
+    callBackDict['data'] = streetsList
+    return callBackDict
+
