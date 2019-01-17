@@ -222,7 +222,7 @@ def getAllStreetsSortingStatistics(request):
         for dict in listTime:
             countSorting = sorting.objects.filter(state__gte=-1, streetId = oneStreet.id, createTime__gte=dict["timeStamp"],createTime__lt=endTime).count()
             endTime = dict["timeStamp"]
-            list.append({"date": dict["date"], "num": countSorting})
+            list.append({"name": dict["date"], "value": countSorting})
             cout2 = cout2 + countSorting
         streetsList.append({"streetId":oneStreet.id,"name":oneStreet.name,"totalNumber": cout2, "list": reversed_arr(list)})
     callBackDict['code'] = '1'
