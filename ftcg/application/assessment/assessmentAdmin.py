@@ -12,6 +12,7 @@ from ftcg.models import assessment
 from ftcg.models import assessmentQuestion
 from ftcg.models import village
 from ..user import signAdmin
+from ..user import userConfigAdmin
 
 # 创建考核
 def createAssessment(request):
@@ -380,7 +381,9 @@ def getAssessmentList(request):
             for userAssessmentObj in assessmentUserList:
                 # 查询出来审核员
                 userObj = user.objects.get(id=userAssessmentObj.userId)
-                list.append({"id":userAssessmentObj.id,"state":userAssessmentObj.state,"totalFraction":userAssessmentObj.totalFraction,"createTime":userAssessmentObj.createTime,"correctTotalFraction":userAssessmentObj.correctTotalFraction,"type":userAssessmentObj.type,"userInfo":{"id":userObj.id,"name":userObj.name,"phone":userObj.phone,"role":userObj.role}})
+                # 查询所属的街道的名称
+                streetcommunityvillageInfo = userConfigAdmin.selectStreetcommunityvillage(userAssessmentObj.streetId,userAssessmentObj.communityId,userAssessmentObj.villageId)
+                list.append({"id":userAssessmentObj.id,"streetcommunityvillageInfo":streetcommunityvillageInfo,"state":userAssessmentObj.state,"totalFraction":userAssessmentObj.totalFraction,"createTime":userAssessmentObj.createTime,"correctTotalFraction":userAssessmentObj.correctTotalFraction,"type":userAssessmentObj.type,"userInfo":{"id":userObj.id,"name":userObj.name,"phone":userObj.phone,"role":userObj.role}})
             callBackDict['code'] = '1'
             callBackDict['totalNum'] = allPage
             callBackDict['data'] = list

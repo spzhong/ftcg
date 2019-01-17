@@ -89,3 +89,36 @@ def selectUserAndStreetRS(userId):
         logger = logging.getLogger("django")
         logger.info(str(e))
         return None
+
+
+# 查询用户所在的街道和小区的关系
+def selectStreetcommunityvillage(streetId,communityId,villageId):
+    try:
+        # 查询小区
+        villageObj = village.objects.get(id=villageId)
+
+        # 查询街道的名称
+        streetObj = street.objects.get(id=streetId)
+
+        # 查询社区的名称
+        communityObj = community.objects.get(communityId)
+
+        regionDict = {'villageInfo': {'id': villageId, 'name': villageObj.name, 'type': villageObj.type,
+                                      'number': villageObj.number, 'address': villageObj.address,
+                                      'personCharge': villageObj.personCharge, 'phone': villageObj.phone,
+                                      'remarks': villageObj.remarks,
+                                      'managementSubsetNum': villageObj.managementSubsetNum},
+                      'communityInfo': {'id': communityObj.id, 'name': communityObj.name, 'number': villageObj.number,
+                                        'address': villageObj.address, 'personCharge': villageObj.personCharge,
+                                        'phone': villageObj.phone, 'remarks': villageObj.remarks,
+                                        'managementSubsetNum': villageObj.managementSubsetNum},
+                      'streetInfo': {'id': streetObj.id, 'name': streetObj.name, 'number': villageObj.number,
+                                     'address': villageObj.address, 'personCharge': villageObj.personCharge,
+                                     'phone': villageObj.phone, 'remarks': villageObj.remarks,
+                                     'managementSubsetNum': villageObj.managementSubsetNum}}
+        # 返回用户和小区及街道的关系
+        return regionDict
+    except BaseException as e:
+        logger = logging.getLogger("django")
+        logger.info(str(e))
+        return None

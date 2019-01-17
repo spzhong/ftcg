@@ -32,7 +32,6 @@ def getAllStatistics(request):
         list2.append({"date": dict["date"],"num":countSorting})
         cout1 = cout1 + countUserAssessment
         cout2 = cout2 + countSorting
-
     callBackDict["data"] = {"assessment":{"totalNumber":cout1,"list":reversed_arr(list1)},"sorting":{"totalNumber":cout2,"list":reversed_arr(list2)}}
     return callBackDict
 
@@ -202,7 +201,7 @@ def getAllStreetsAssessmentStatistics(request):
                 endTime = dict["timeStamp"]
             list.append({"date": dict["date"], "num": countUserAssessment, "average": totalFraction__avg})
             cout1 = cout1 + countUserAssessment
-        streetsList.append({"streetId": oneStreet.id, "totalNumber": cout1, "list": reversed_arr(list)})
+        streetsList.append({"streetId": oneStreet.id,"name":oneStreet.name,"totalNumber": cout1, "list": reversed_arr(list)})
     callBackDict['code'] = '1'
     callBackDict['data'] = streetsList
     return callBackDict
@@ -225,7 +224,7 @@ def getAllStreetsSortingStatistics(request):
             endTime = dict["timeStamp"]
             list.append({"date": dict["date"], "num": countSorting})
             cout2 = cout2 + countSorting
-        streetsList.append({"streetId":oneStreet.id,"totalNumber": cout2, "list": reversed_arr(list)})
+        streetsList.append({"streetId":oneStreet.id,"name":oneStreet.name,"totalNumber": cout2, "list": reversed_arr(list)})
     callBackDict['code'] = '1'
     callBackDict['data'] = streetsList
     return callBackDict
