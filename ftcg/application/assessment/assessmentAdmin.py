@@ -379,11 +379,36 @@ def getAssessmentList(request):
         if len(assessmentUserList) > 0:
             list = []
             for userAssessmentObj in assessmentUserList:
-                # 查询出来审核员
-                userObj = user.objects.get(id=userAssessmentObj.userId)
-                # 查询所属的街道的名称
-                streetcommunityvillageInfo = userConfigAdmin.selectStreetcommunityvillage(userAssessmentObj.streetId,userAssessmentObj.communityId,userAssessmentObj.villageId)
-                list.append({"id":userAssessmentObj.id,"streetcommunityvillageInfo":streetcommunityvillageInfo,"state":userAssessmentObj.state,"totalFraction":userAssessmentObj.totalFraction,"createTime":userAssessmentObj.createTime,"correctTotalFraction":userAssessmentObj.correctTotalFraction,"type":userAssessmentObj.type,"userInfo":{"id":userObj.id,"name":userObj.name,"phone":userObj.phone,"role":userObj.role}})
+                try:
+                    # 查询出来审核员
+                    userObj = user.objects.get(id=userAssessmentObj.userId)
+                    # 查询对应的小区类型
+                    oneVillage = village.objects.get(id=userAssessmentObj.villageId)
+                except BaseException as e:
+                    userObj = None
+                    oneVillage = None
+                # 判断异常的信息
+                if userObj and oneVillage:
+                    list.append({"id": userAssessmentObj.id,
+                                 "village": {'id': oneVillage.id, 'name': oneVillage.name, 'type': oneVillage.type,
+                                             'number': oneVillage.number,
+                                             'address': oneVillage.address, 'personCharge': oneVillage.personCharge,
+                                             'phone': oneVillage.phone, 'remarks': oneVillage.remarks,
+                                             'managementSubsetNum': oneVillage.managementSubsetNum},
+                                 "state": userAssessmentObj.state, "totalFraction": userAssessmentObj.totalFraction,
+                                 "createTime": userAssessmentObj.createTime,
+                                 "correctTotalFraction": userAssessmentObj.correctTotalFraction,
+                                 "type": userAssessmentObj.type,
+                                 "userInfo": {"id": userObj.id, "name": userObj.name, "phone": userObj.phone,
+                                              "role": userObj.role}})
+                else:
+                    list.append({"id": userAssessmentObj.id,
+                                 "village": None,
+                                 "state": userAssessmentObj.state, "totalFraction": userAssessmentObj.totalFraction,
+                                 "createTime": userAssessmentObj.createTime,
+                                 "correctTotalFraction": userAssessmentObj.correctTotalFraction,
+                                 "type": userAssessmentObj.type,
+                                 "userInfo": None})
             callBackDict['code'] = '1'
             callBackDict['totalNum'] = allPage
             callBackDict['data'] = list
