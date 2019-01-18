@@ -229,6 +229,8 @@ def adminResetPassword(request):
 # 管理员获取所有用户
 def getAllUserList(request):
     token = request.GET['token'];
+    getpage = int(request.GET['page'])
+    getpageSize = int(request.GET['pageSize'])
     callBackDict = {}
     if len(token) != 32:
         callBackDict['code'] = '0'
@@ -240,12 +242,13 @@ def getAllUserList(request):
         callBackDict['msg'] = 'token异常'
         return callBackDict
     try:
-        userList = user.objects.all()
+        userList = user.objects.all()[getpage:getpageSize]
         list = []
         for oneUser in userList:
             list.append({'id': oneUser.id, 'name': oneUser.name, 'role': oneUser.role, 'phone':oneUser.phone})
         callBackDict['code'] = '1'
         callBackDict['data'] = list
+        callBackDict['allPage'] = user.objects.all().count()
     except BaseException as e:
         callBackDict['code'] = '0'
         callBackDict['msg'] = '系统异常'
