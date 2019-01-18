@@ -374,7 +374,7 @@ def getAssessmentList(request):
                 assessmentUserList = userAssessment.objects.filter(streetId=getstreetId, villageId = getvillageId).order_by("-createTime")[getpage*getpageSize:getpageSize]
                 allPage = userAssessment.objects.filter(streetId=getstreetId, villageId = getvillageId).count()
             else :
-                assessmentUserList = userAssessment.objects.filter(streetId=getstreetId).order_by("-createTime")[(getpage*getpageSize):getpageSize]
+                assessmentUserList = userAssessment.objects.filter(streetId=getstreetId).order_by("-createTime")[getpage:getpageSize]
                 allPage = userAssessment.objects.filter(streetId=getstreetId).count()
                 logger = logging.getLogger("django")
                 logger.info("page:"+str(getpage))
