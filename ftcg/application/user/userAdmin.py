@@ -19,7 +19,7 @@ import hashlib
 # 查询用户信息
 def selectUser(name):
     if name :
-        if len(name) > 4:
+        if len(name) >= 2:
             try:
                 oneUserList = user.objects.filter(name=name)
                 if len(oneUserList) == 0:
@@ -42,7 +42,7 @@ def registerUser(request):
     phone = request.GET['phone'];
     role = int(roles)
     callBackDict = {}
-    if len(name) < 3:
+    if len(name) < 2:
         callBackDict['code'] = '0'
         callBackDict['msg'] = '账号太短了'
         return callBackDict
@@ -50,12 +50,16 @@ def registerUser(request):
         callBackDict['code'] = '0'
         callBackDict['msg'] = 'token验证失败'
         return callBackDict
-    # 匹配手机号
-    ret = re.match(r"^1[35678]\d{9}$", phone)
-    if ret is None:
+    if len(phone) == 0:
         callBackDict['code'] = '0'
-        callBackDict['msg'] = '手机号码验证失败'
+        callBackDict['msg'] = '手机电话号码为空'
         return callBackDict
+    # 匹配手机号
+    # ret = re.match(r"^1[35678]\d{9}$", phone)
+    # if ret is None:
+    #     callBackDict['code'] = '0'
+    #     callBackDict['msg'] = '手机号码验证失败'
+    #     return callBackDict
     if role < 0 or role > 3:
         callBackDict['code'] = '0'
         callBackDict['msg'] = '注册用户类型不存在'
@@ -245,7 +249,10 @@ def getAllUserList(request):
         userList = user.objects.all()[getpage*getpageSize:(getpage*getpageSize+getpageSize)]
         list = []
         for oneUser in userList:
-            list.append({'id': oneUser.id, 'name': oneUser.name, 'role': oneUser.role, 'phone':oneUser.phone})
+            region = None
+            if oneUser.role == 2:
+                region = userConfigAdmin.selectUserAndStreetRS(oneUser.id)
+            list.append({'id': oneUser.id, 'name': oneUser.name, 'role': oneUser.role, 'phone':oneUser.phone,"region":region})
         callBackDict['code'] = '1'
         callBackDict['data'] = list
         callBackDict['allPage'] = user.objects.all().count()
