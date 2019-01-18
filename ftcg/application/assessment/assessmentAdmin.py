@@ -376,6 +376,9 @@ def getAssessmentList(request):
             else :
                 assessmentUserList = userAssessment.objects.filter(streetId=getstreetId).order_by("-createTime")[getpage*getpageSize:getpageSize]
                 allPage = userAssessment.objects.filter(streetId=getstreetId).count()
+                logger = logging.getLogger("django")
+                logger.info("page:"+str(getpage))
+                logger.info("getpageSize:"+str(getpageSize))
         if len(assessmentUserList) > 0:
             list = []
             for userAssessmentObj in assessmentUserList:
