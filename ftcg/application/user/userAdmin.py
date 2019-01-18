@@ -242,7 +242,7 @@ def getAllUserList(request):
         callBackDict['msg'] = 'token异常'
         return callBackDict
     try:
-        userList = user.objects.all()[getpage:getpageSize]
+        userList = user.objects.all()[getpage*getpageSize:(getpage*getpageSize+getpageSize)]
         list = []
         for oneUser in userList:
             list.append({'id': oneUser.id, 'name': oneUser.name, 'role': oneUser.role, 'phone':oneUser.phone})

@@ -197,7 +197,7 @@ def getAllSortingInfo(request):
         callBackDict['msg'] = 'token异常，请重新登录'
         return callBackDict
     try:
-        sortingList = sorting.objects.all().order_by("-createTime")[getpage:getpageSize]
+        sortingList = sorting.objects.all().order_by("-createTime")[getpage*getpageSize:(getpage*getpageSize+getpageSize)]
         callBackDict['code'] = '1'
         callBackDict['allPage'] = sorting.objects.all().count()
         callBackDict['data'] = makeSortingInfoData(sortingList)
@@ -233,7 +233,7 @@ def getSortingVillage(request):
         callBackDict['msg'] = 'token异常，请重新登录'
         return callBackDict
     try:
-        sortingList = sorting.objects.filter(villageId=getvillageId,state__gte=-1).order_by("-createTime")[getpage:getpageSize]
+        sortingList = sorting.objects.filter(villageId=getvillageId,state__gte=-1).order_by("-createTime")[getpage*getpageSize:(getpage*getpageSize+getpageSize)]
         callBackDict['code'] = '1'
         callBackDict['allPage'] = sorting.objects.filter(villageId=getvillageId,state__gte=-1).count()
         callBackDict['data'] = makeSortingInfoData(sortingList)
@@ -269,7 +269,7 @@ def getSortingcommunity(request):
         return callBackDict
     try:
         sortingList = sorting.objects.filter(communityId=getcommunityId,state__gte=-1).order_by("-createTime")[
-                      getpage:getpageSize]
+                      getpage * getpageSize:(getpage * getpageSize + getpageSize)]
         callBackDict['code'] = '1'
         callBackDict['allPage'] = sorting.objects.filter(communityId=getcommunityId,state__gte=-1).count()
         callBackDict['data'] = makeSortingInfoData(sortingList)
@@ -305,7 +305,7 @@ def getSortingStreet(request):
         return callBackDict
     try:
         sortingList = sorting.objects.filter(streetId=getstreetId,state__gte=-1).order_by("-createTime")[
-                      getpage:getpageSize]
+                      getpage * getpageSize:(getpage * getpageSize + getpageSize)]
         callBackDict['code'] = '1'
         callBackDict['allPage'] = sorting.objects.filter(streetId=getstreetId,state__gte=-1).count()
         callBackDict['data'] = makeSortingInfoData(sortingList)

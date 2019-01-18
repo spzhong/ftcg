@@ -364,17 +364,17 @@ def getAssessmentList(request):
     try:
         if getcommunityId:
             if getvillageId:
-                assessmentUserList = userAssessment.objects.filter(streetId=getstreetId, villageId = getvillageId, communityId = getcommunityId).order_by("-createTime")[getpage:getpageSize]
+                assessmentUserList = userAssessment.objects.filter(streetId=getstreetId, villageId = getvillageId, communityId = getcommunityId).order_by("-createTime")[getpage*getpageSize:(getpage*getpageSize+getpageSize)]
                 allPage = userAssessment.objects.filter(streetId=getstreetId, villageId = getvillageId, communityId = getcommunityId).count()
             else :
-                assessmentUserList = userAssessment.objects.filter(streetId=getstreetId, communityId = getcommunityId).order_by("-createTime")[getpage:getpageSize]
+                assessmentUserList = userAssessment.objects.filter(streetId=getstreetId, communityId = getcommunityId).order_by("-createTime")[getpage*getpageSize:(getpage*getpageSize+getpageSize)]
                 allPage = userAssessment.objects.filter(streetId=getstreetId, communityId = getcommunityId).count()
         else :
             if getvillageId:
-                assessmentUserList = userAssessment.objects.filter(streetId=getstreetId, villageId = getvillageId).order_by("-createTime")[getpage:getpageSize]
+                assessmentUserList = userAssessment.objects.filter(streetId=getstreetId, villageId = getvillageId).order_by("-createTime")[getpage*getpageSize:(getpage*getpageSize+getpageSize)]
                 allPage = userAssessment.objects.filter(streetId=getstreetId, villageId = getvillageId).count()
             else :
-                assessmentUserList = userAssessment.objects.filter(streetId=getstreetId).order_by("-createTime")[getpage:getpageSize]
+                assessmentUserList = userAssessment.objects.filter(streetId=getstreetId).order_by("-createTime")[getpage*getpageSize:(getpage*getpageSize+getpageSize)]
                 allPage = userAssessment.objects.filter(streetId=getstreetId).count()
         if len(assessmentUserList) > 0:
             list = []
