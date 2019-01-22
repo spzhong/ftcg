@@ -246,7 +246,7 @@ def getAllUserList(request):
         callBackDict['msg'] = 'token异常'
         return callBackDict
     try:
-        userList = user.objects.all()[getpage*getpageSize:(getpage*getpageSize+getpageSize)]
+        userList = user.objects.all().order_by("-createTime")[getpage*getpageSize:(getpage*getpageSize+getpageSize)]
         list = []
         for oneUser in userList:
             region = None
