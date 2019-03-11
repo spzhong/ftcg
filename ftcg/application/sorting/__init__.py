@@ -18,6 +18,8 @@ def index(request,route):
         callBackDict = sortingAdmin.getSortingStreet(request)
     elif route == 'deleteSortingInfo':
         callBackDict = sortingAdmin.deleteSortingInfo(request)
+    elif route == 'sweepcCodeSorting':
+        callBackDict = sortingAdmin.sweepcCodeSorting(request)
     else:
          return HttpResponse("no found !!!")
     return HttpResponse(json.dumps(callBackDict))

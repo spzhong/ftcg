@@ -13,6 +13,8 @@ from ftcg.models import user
 from ftcg.models import street
 from ftcg.models import community
 from ftcg.models import qrCode
+from ftcg.models import rsUserVillage
+
 
 from ..user import signAdmin
 
@@ -340,3 +342,89 @@ def deleteSortingInfo(request):
         logger = logging.getLogger("django")
         logger.info(str(e))
     return callBackDict
+
+
+
+
+# 扫码，进行督检
+def sweepcCodeSorting(request):
+    callBackDict = {}
+    getuserId = request.GET['userId']
+    getqrCodeId = request.GET['qrCodeId']
+    token = request.GET['token'];
+    if len(getqrCodeId) == 0:
+        callBackDict['code'] = '0'
+        callBackDict['msg'] = '袋子二维码数据为空'
+        return callBackDict
+    if signAdmin.verificationToken(token) == False:
+        callBackDict['code'] = '9999'
+        callBackDict['msg'] = 'token异常，请重新登录'
+        return callBackDict
+    # 查询关联的二维码的数组
+    try:
+        qrCodeList = qrCode.objects.filter(qrCodeId=getqrCodeId)
+        if len(qrCodeList) == 0 :
+            callBackDict['code'] = '0'
+            callBackDict['msg'] = '尚未查询到对应的数据'
+            return callBackDict
+        qrCodeObj = qrCodeList[0]
+        if qrCodeObj.userId == None:
+            callBackDict['code'] = '0'
+            callBackDict['msg'] = '尚未绑定到对应的小区'
+            return callBackDict
+        # 查询出来对应的小区关系
+        dict = selectUserAndStreetRS(qrCodeObj.userId)
+        if dict == None:
+            callBackDict['code'] = '0'
+            callBackDict['msg'] = '尚未绑定到对应的小区'
+            return callBackDict
+        dict['roomNumberText'] = qrCodeObj.roomNumberText
+        callBackDict['code'] = '1'
+        callBackDict['data'] = dict
+        return callBackDict
+    except BaseException as e:
+        callBackDict['code'] = '0'
+        callBackDict['msg'] = '数据异常'
+        logger = logging.getLogger("django")
+        logger.info(str(e))
+    return callBackDict
+
+
+
+# 查询用户所在的街道和小区的关系
+def selectUserAndStreetRS(userId):
+    try:
+        # 查询小区-和用户的
+        rsUserVillageObj = rsUserVillage.objects.get(userId=userId)
+
+        # 获取用户的城市的ID
+        villageId = rsUserVillageObj.rsStreetVillageId
+
+        # 查询小区
+        villageObj = village.objects.get(id=villageId)
+
+        # 查询街道的名称
+        streetObj = street.objects.get(id=villageObj.streetId)
+
+        # 查询社区的名称
+        communityObj = community.objects.get(id=villageObj.communityId)
+
+        regionDict = {'villageInfo': {'id': villageId, 'name': villageObj.name, 'type': villageObj.type,
+                                      'number': villageObj.number, 'address': villageObj.address,
+                                      'personCharge': villageObj.personCharge, 'phone': villageObj.phone,
+                                      'remarks': villageObj.remarks,
+                                      'managementSubsetNum': villageObj.managementSubsetNum},
+                      'communityInfo': {'id': communityObj.id, 'name': communityObj.name, 'number': villageObj.number,
+                                        'address': villageObj.address, 'personCharge': villageObj.personCharge,
+                                        'phone': villageObj.phone, 'remarks': villageObj.remarks,
+                                        'managementSubsetNum': villageObj.managementSubsetNum},
+                      'streetInfo': {'id': streetObj.id, 'name': streetObj.name, 'number': villageObj.number,
+                                     'address': villageObj.address, 'personCharge': villageObj.personCharge,
+                                     'phone': villageObj.phone, 'remarks': villageObj.remarks,
+                                     'managementSubsetNum': villageObj.managementSubsetNum}}
+        # 返回用户和小区及街道的关系
+        return regionDict
+    except BaseException as e:
+        logger = logging.getLogger("django")
+        logger.info(str(e))
+        return None
