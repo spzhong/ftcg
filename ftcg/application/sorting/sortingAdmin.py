@@ -356,7 +356,7 @@ def sweepcCodeSorting(request):
         callBackDict['code'] = '0'
         callBackDict['msg'] = '袋子二维码数据为空'
         return callBackDict
-    if signAdmin.verificationToken(token) == False:
+    if signAdmin.verificationAppToken(token) == False:
         callBackDict['code'] = '9999'
         callBackDict['msg'] = 'token异常，请重新登录'
         return callBackDict
