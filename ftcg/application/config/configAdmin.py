@@ -763,6 +763,38 @@ def getPropertySendList(request):
     return callBackDict
 
 
+
+
+# 获取发放的记录
+def adminGetBagSendList(request):
+    getpage = int(request.GET['page'])
+    getpageSize = int(request.GET['pageSize'])
+    callBackDict = {}
+    # 验证token
+    if signAdmin.verificationToken(request.GET['token']) == False:
+        callBackDict['code'] = '9999'
+        callBackDict['msg'] = 'token异常'
+        return callBackDict
+    try:
+        qrCodeList = qrCode.objects.all().order_by("-createTime")[
+                      getpage * getpageSize:(getpage * getpageSize + getpageSize)]
+        list = []
+        for oneCode in qrCodeList:
+            bagTypeString = getErCodeType(oneCode.qrCodeId)
+            list.append({"bagTypeString":bagTypeString,"id":str(oneCode.id),"qrCodeId":oneCode.qrCodeId,"roomNumberText":oneCode.roomNumberText,"createTime":oneCode.createTime,"bagNumber":oneCode.bagNumber})
+        callBackDict['code'] = '1'
+        callBackDict['allPage'] = qrCode.objects.all().count()
+        callBackDict['data'] = list
+    except BaseException as e:
+        callBackDict['code'] = '0'
+        callBackDict['msg'] = '系统异常'
+        logger = logging.getLogger("django")
+        logger.info(str(e))
+    return callBackDict
+
+
+
+
 # ff24513bc9756889 001 20190110 f43969111
 # 检查一下生成的二维码的袋子的结构
 def getErCodeType(code):
