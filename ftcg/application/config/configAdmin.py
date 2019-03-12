@@ -12,6 +12,7 @@ from ftcg.models import street
 from ftcg.models import community
 from ftcg.models import village
 from ftcg.models import qrCode
+from ftcg.models import rsUserVillage
 
 
 
@@ -781,7 +782,8 @@ def adminGetBagSendList(request):
         list = []
         for oneCode in qrCodeList:
             bagTypeString = getErCodeType(oneCode.qrCodeId)
-            list.append({"bagTypeString":bagTypeString,"id":str(oneCode.id),"qrCodeId":oneCode.qrCodeId,"roomNumberText":oneCode.roomNumberText,"createTime":oneCode.createTime,"bagNumber":oneCode.bagNumber})
+            dict = selectUserAndStreetRS(oneCode.userId)
+            list.append({"regionOrigin":dict,"bagTypeString":bagTypeString,"id":str(oneCode.id),"qrCodeId":oneCode.qrCodeId,"roomNumberText":oneCode.roomNumberText,"createTime":oneCode.createTime,"bagNumber":oneCode.bagNumber})
         callBackDict['code'] = '1'
         callBackDict['allPage'] = qrCode.objects.all().count()
         callBackDict['data'] = list
@@ -792,6 +794,46 @@ def adminGetBagSendList(request):
         logger.info(str(e))
     return callBackDict
 
+
+
+
+# 查询用户所在的街道和小区的关系
+def selectUserAndStreetRS(userId):
+    try:
+        # 查询小区-和用户的
+        rsUserVillageObj = rsUserVillage.objects.get(userId=userId)
+
+        # 获取用户的城市的ID
+        villageId = rsUserVillageObj.rsStreetVillageId
+
+        # 查询小区
+        villageObj = village.objects.get(id=villageId)
+
+        # 查询街道的名称
+        streetObj = street.objects.get(id=villageObj.streetId)
+
+        # 查询社区的名称
+        communityObj = community.objects.get(id=villageObj.communityId)
+
+        regionDict = {'villageInfo': {'id': villageId, 'name': villageObj.name, 'type': villageObj.type,
+                                      'number': villageObj.number, 'address': villageObj.address,
+                                      'personCharge': villageObj.personCharge, 'phone': villageObj.phone,
+                                      'remarks': villageObj.remarks,
+                                      'managementSubsetNum': villageObj.managementSubsetNum},
+                      'communityInfo': {'id': communityObj.id, 'name': communityObj.name, 'number': villageObj.number,
+                                        'address': villageObj.address, 'personCharge': villageObj.personCharge,
+                                        'phone': villageObj.phone, 'remarks': villageObj.remarks,
+                                        'managementSubsetNum': villageObj.managementSubsetNum},
+                      'streetInfo': {'id': streetObj.id, 'name': streetObj.name, 'number': villageObj.number,
+                                     'address': villageObj.address, 'personCharge': villageObj.personCharge,
+                                     'phone': villageObj.phone, 'remarks': villageObj.remarks,
+                                     'managementSubsetNum': villageObj.managementSubsetNum}}
+        # 返回用户和小区及街道的关系
+        return regionDict
+    except BaseException as e:
+        logger = logging.getLogger("django")
+        logger.info(str(e))
+        return None
 
 
 
