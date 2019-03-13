@@ -356,13 +356,13 @@ def updateInfo(request):
         userObj = user.objects.get(id=getuserId)
         try:
             if getname :
-                user.name = getname;
+                userObj.name = getname;
             if getphone :
-                user.phone = getphone;
+                userObj.phone = getphone;
             if getrole :
-                user.role = getrole;
+                userObj.role = getrole;
             if getpassword:
-                user.password = getpassword;
+                userObj.password = getpassword;
             userObj.save()
             callBackDict['code'] = '1'
             callBackDict['msg'] = '更新成功了'
