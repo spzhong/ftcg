@@ -359,8 +359,6 @@ def updateInfo(request):
                 user.name = getname;
             if getphone :
                 user.phone = getphone;
-            if getcode :
-                user.password = getcode;
             if getrole :
                 user.role = getrole;
             if getpassword:
@@ -370,6 +368,8 @@ def updateInfo(request):
             callBackDict['msg'] = '更新成功了'
             return callBackDict
         except BaseException as e:
+            logger = logging.getLogger("django")
+            logger.info(str(e))
             callBackDict['code'] = '0'
             callBackDict['msg'] = '用户名已存在，更新异常'
             return callBackDict
