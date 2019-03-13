@@ -366,6 +366,9 @@ def updateInfo(request):
             if getpassword:
                 user.password = getpassword;
             userObj.save()
+            callBackDict['code'] = '1'
+            callBackDict['msg'] = '更新成功了'
+            return callBackDict
         except BaseException as e:
             callBackDict['code'] = '0'
             callBackDict['msg'] = '用户名已存在，更新异常'
