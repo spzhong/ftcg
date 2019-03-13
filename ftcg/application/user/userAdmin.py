@@ -299,3 +299,78 @@ def adminDeleteUser(request):
     return callBackDict
 
 
+
+# 更新用户信息
+def updateInfo(request):
+    token = request.GET['token'];
+    userId = request.GET['userId'];
+    callBackDict = {}
+    if len(userId) == 0:
+        callBackDict['code'] = '0'
+        callBackDict['msg'] = '用户的id为空'
+        return callBackDict
+    if len(token) != 32:
+        callBackDict['code'] = '0'
+        callBackDict['msg'] = 'token错误'
+        return callBackDict
+    try:
+        getname = request.GET['name'];
+        if len(getname) < 2:
+            callBackDict['code'] = '0'
+            callBackDict['msg'] = '账号太短了'
+            return callBackDict
+    except BaseException as e:
+        getname = None
+    try:
+        getphone = request.GET['phone'];
+        if len(getphone) < 6:
+            callBackDict['code'] = '0'
+            callBackDict['msg'] = '手机电话号码太短了'
+            return callBackDict
+    except BaseException as e:
+        getphone = None
+    try:
+        getcode = request.GET['code'];
+        hash = hashlib.md5()
+        hash.update(str(getcode).encode("utf-8"))
+        md = hash.hexdigest()
+        hash2 = hashlib.md5()
+        hash2.update(str(md).encode("utf-8"))
+        getpassword = str(hash2.hexdigest())
+    except BaseException as e:
+        getpassword = None
+    try:
+        getrole = request.GET['role'];
+        if int(getrole) < 1 or int(getrole) > 5:
+            callBackDict['code'] = '0'
+            callBackDict['msg'] = '用户角色类型错误'
+            return callBackDict
+    except BaseException as e:
+        getrole = None
+     # 查看管理员登录的token
+    if signAdmin.verificationToken(token) == False:
+        callBackDict['code'] = '9999'
+        callBackDict['msg'] = 'token异常'
+        return callBackDict
+    try:
+        userObj = user.objects.get(id=userId)
+        try:
+            if getname :
+                user.name = getname;
+            if getphone :
+                user.phone = getphone;
+            if getcode :
+                user.password = getcode;
+            if getrole :
+                user.role = getrole;
+            if getpassword:
+                user.password = getpassword;
+            userObj.save()
+        except BaseException as e:
+            callBackDict['code'] = '0'
+            callBackDict['msg'] = '用户名已存在，更新异常'
+            return callBackDict
+    except BaseException as e:
+        callBackDict['code'] = '0'
+        callBackDict['msg'] = '更新的数据异常'
+        return callBackDict
