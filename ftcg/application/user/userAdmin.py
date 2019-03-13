@@ -303,9 +303,9 @@ def adminDeleteUser(request):
 # 更新用户信息
 def updateInfo(request):
     token = request.GET['token'];
-    userId = request.GET['userId'];
+    getuserId = request.GET['userId'];
     callBackDict = {}
-    if len(userId) == 0:
+    if len(getuserId) == 0:
         callBackDict['code'] = '0'
         callBackDict['msg'] = '用户的id为空'
         return callBackDict
@@ -353,7 +353,7 @@ def updateInfo(request):
         callBackDict['msg'] = 'token异常'
         return callBackDict
     try:
-        userObj = user.objects.get(id=userId)
+        userObj = user.objects.get(id=getuserId)
         try:
             if getname :
                 user.name = getname;
