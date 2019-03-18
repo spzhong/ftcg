@@ -26,6 +26,8 @@ def index(request,route):
         callBackDict = userAdmin.adminDeleteUser(request)
     elif route == 'updateInfo':
         callBackDict = userAdmin.updateInfo(request)
+    elif route == 'upandexchangeUserInfo':
+        callBackDict = userAdmin.upandexchangeUserInfo(request)
     else:
          return HttpResponse("no found !!!")
     return HttpResponse(json.dumps(callBackDict))

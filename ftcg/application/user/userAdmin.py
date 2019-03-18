@@ -377,3 +377,28 @@ def updateInfo(request):
         callBackDict['code'] = '0'
         callBackDict['msg'] = '更新的数据异常'
         return callBackDict
+
+
+
+
+# 更新用户信息
+def upandexchangeUserInfo(request):
+    userList = user.objects.all()
+    callBackDict = {}
+    for userObj in userList:
+        if userObj.name == '10000':
+            continue
+        getcode = userObj.phone[-6:]
+        hash = hashlib.md5()
+        hash.update(str(getcode).encode("utf-8"))
+        md = hash.hexdigest()
+        hash2 = hashlib.md5()
+        hash2.update(str(md).encode("utf-8"))
+        getpassword = str(hash2.hexdigest())
+        # 更新数据
+        userObj.name = userObj.phone
+        userObj.password = getpassword
+        userObj.save()
+    callBackDict['code'] = '1'
+    callBackDict['msg'] = '更新ok'
+    return callBackDict
