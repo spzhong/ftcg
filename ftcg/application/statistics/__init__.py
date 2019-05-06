@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import json
-import statisticsAdmin
+from .  import statisticsAdmin
 
 from django.http import HttpResponse
 from django.db import connections

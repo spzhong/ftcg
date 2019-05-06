@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import json
-import sortingAdmin
+from .  import sortingAdmin
 
 from django.http import HttpResponse
 

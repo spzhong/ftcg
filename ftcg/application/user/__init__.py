@@ -2,8 +2,8 @@
 
 from django.http import HttpResponse
 import json
-import signAdmin
-import userAdmin
+from .  import signAdmin
+from .  import userAdmin
 
 from django.db import connections
 

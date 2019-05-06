@@ -10,8 +10,8 @@ from ftcg.models import user
 from ftcg.models import sign
 from ftcg.models import village
 
-import signAdmin
-import userConfigAdmin
+from .  import signAdmin
+from .  import userConfigAdmin
 import re
 import hashlib
 

@@ -14,7 +14,7 @@ import hashlib
 sys.path.append('...')
 from ftcg.models import user
 from ftcg.models import sign
-import userConfigAdmin
+from .  import userConfigAdmin
 
 def signIn(request):
     name = request.GET['name'];
