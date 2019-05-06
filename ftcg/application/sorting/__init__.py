@@ -2,10 +2,16 @@
 import json
 import sortingAdmin
 
-
 from django.http import HttpResponse
 
+from django.db import connections
+def close_old_connections():
+    for conn in connections.all():
+        conn.close_if_unusable_or_obsolete()
+
+
 def index(request,route):
+    close_old_connections()
     if route == 'upSorting':
         callBackDict = sortingAdmin.upSorting(request)
     elif route == 'getAllSortingInfo':
