@@ -127,9 +127,9 @@ def createSignRecord(userId):
         createTime = int(time.time() * 1000)
         # 两次加密
         hash = hashlib.md5()
-        hash.update(str(createTime))
+        hash.update(str(createTime).encode("utf8"))
         md = hash.hexdigest()
-        hash.update(str(md))
+        hash.update(str(md).encode("utf8"))
         token = str(hash.hexdigest())
         uid = str(uuid.uuid1())
         obj = sign.objects.create(id=uid, token=token, userId=userId, signTime=createTime)
