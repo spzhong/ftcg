@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 import json
-import assessmentType
-import configAdmin
+
+from . import assessmentType
+from . import configAdmin
 
 from django.db import connections
 from django.http import HttpResponse
