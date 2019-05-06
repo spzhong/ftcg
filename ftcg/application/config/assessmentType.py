@@ -9,7 +9,7 @@ sys.path.append('...')
 from ftcg.models import user
 from ftcg.models import assessmentQuestion
 import django.utils.log
-import configAdmin
+from . import configAdmin
 
 
 # 验证为空的Parm信息

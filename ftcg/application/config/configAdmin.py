@@ -15,6 +15,7 @@ from ftcg.models import qrCode
 from ftcg.models import rsUserVillage
 
 
+
 from ..user import signAdmin
 import django.utils.log
 
