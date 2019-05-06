@@ -32,7 +32,7 @@ def signIn(request):
         userObj = user.objects.get(name=name)
         if userObj.password == password:
             signObj = createSignRecord(userObj.id)
-            if isinstance(signObj, sign):
+            if signObj :
                 callBackDict['code'] = '1'
                 # 物业管理员和小区的用户，需要锁定其管理的区域
                 if userObj.role == 2 or userObj.role == 3:
@@ -72,6 +72,9 @@ def autoSign(request):
         if len(oldeSignObjList) > 0 :
             oldeSignObj = oldeSignObjList[0]
             signObj = createSignRecord(oldeSignObj.userId)
+            if signObj == None :
+                callBackDict['code'] = '0'
+                callBackDict['msg'] = '登录异常'
             userObj = user.objects.get(id = oldeSignObj.userId)
             # 物业管理员和小区的用户，需要锁定其管理的区域
             if userObj.role == 2 or userObj.role == 3:
@@ -133,8 +136,9 @@ def createSignRecord(userId):
         obj.save()
         return obj
     except BaseException as e:
+        logger.info('加密的问题')
         logger.info(str(e))
-        return "登录异常"
+        return None
 
 
 # 验证token
