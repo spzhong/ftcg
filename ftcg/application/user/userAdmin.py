@@ -22,24 +22,23 @@ def selectUser(name):
         if len(name) >= 2:
             try:
                 oneUserList = user.objects.filter(name=name)
-                if len(oneUserList) == 0:
-	   	    return "账号不存在"
-		return oneUserList[0]
             except BaseException as e:
-                logger = logging.getLogger("django")
-                logger.info(str(e))
                 return "账号不存在"
-        return "账号太短了";
+            if len(oneUserList) == 0:
+                return "账号不存在"
+            else:
+                return oneUserList[0]
+        return "账号太短了"
     return "账号为空"
 
 
 
 # 注册用户
 def registerUser(request):
-    name = request.GET['name'];
-    token = request.GET['token'];
-    roles = request.GET['role'];
-    phone = request.GET['phone'];
+    name = request.GET['name']
+    token = request.GET['token']
+    roles = request.GET['role']
+    phone = request.GET['phone']
     role = int(roles)
     callBackDict = {}
     if len(name) < 2:
@@ -89,7 +88,7 @@ def registerUser(request):
             return callBackDict
         # 查询用户信息
         userInfo = selectUser(name)
-    	if isinstance(userInfo,user):
+        if isinstance(userInfo,user):
             callBackDict['code'] = '0'
             callBackDict['msg'] = '用户账号已存在'
         else:
