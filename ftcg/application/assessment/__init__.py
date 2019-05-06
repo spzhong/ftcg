@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import json
-import assessmentAdmin
+from . import assessmentAdmin
 
 from django.http import HttpResponse
 
