@@ -140,7 +140,7 @@ def makeSortingInfoData(sortingList):
                 logger = logging.getLogger("django")
                 logger.info("街道ID异常了" + str(e))
             try:
-                if communityIdDict[oneSorting.communityId] == False:
+                if communityIdDict[oneSorting.communityId]:
                     communityObj = community.objects.get(id=oneSorting.communityId)
                     communityIdDict[str(oneSorting.communityId)] = {"id": communityObj.id, "name": communityObj.name}
             except BaseException as e:
