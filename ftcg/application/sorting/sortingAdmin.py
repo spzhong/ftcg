@@ -132,33 +132,29 @@ def makeSortingInfoData(sortingList):
     userIdDict = {}
     for oneSorting in sortingList:
             try:
-                if streetIdDict[str(oneSorting.streetId)]:
-                    streetObj = street.objects.get(id=oneSorting.streetId)
-                    streetIdDict[str(oneSorting.streetId)] = {"id": streetObj.id, "name": streetObj.name}
+                streetObj = street.objects.get(id=oneSorting.streetId)
+                streetIdDict[str(streetObj.id)] = {"id": streetObj.id, "name": streetObj.name}
             except BaseException as e:
                 streetIdDict[str(oneSorting.streetId)] = {}
                 logger = logging.getLogger("django")
                 logger.info("街道ID异常了" + str(e))
             try:
-                if communityIdDict[oneSorting.communityId]:
-                    communityObj = community.objects.get(id=oneSorting.communityId)
-                    communityIdDict[str(oneSorting.communityId)] = {"id": communityObj.id, "name": communityObj.name}
+                communityObj = community.objects.get(id=oneSorting.communityId)
+                communityIdDict[str(communityObj.id)] = {"id": communityObj.id, "name": communityObj.name}
             except BaseException as e:
                 communityIdDict[str(oneSorting.communityId)] = {}
                 logger = logging.getLogger("django")
                 logger.info("社区ID异常了" + str(e))
             try:
-                if villageIdDict[str(oneSorting.villageId)]:
-                    villageObj = village.objects.get(id=oneSorting.villageId)
-                    villageIdDict[str(oneSorting.villageId)] = {"id": villageObj.id, "name": villageObj.name}
+                villageObj = village.objects.get(id=oneSorting.villageId)
+                villageIdDict[str(villageObj.id)] = {"id": villageObj.id, "name": villageObj.name}
             except BaseException as e:
                 villageIdDict[str(oneSorting.villageId)] = {}
                 logger = logging.getLogger("django")
                 logger.info("小区ID异常了" + str(e))
             try:
-                if userIdDict[str(oneSorting.userId)]:
-                    userObj = user.objects.get(id=oneSorting.userId)
-                    userIdDict[str(oneSorting.userId)] = {"id": userObj.id, "name": userObj.name}
+                userObj = user.objects.get(id=oneSorting.userId)
+                userIdDict[str(userObj.id)] = {"id": userObj.id, "name": userObj.name}
             except BaseException as e:
                 logger = logging.getLogger("django")
                 logger.info("用户ID异常了" + str(e) + "    userid:" +str(oneSorting.userId))
@@ -169,7 +165,6 @@ def makeSortingInfoData(sortingList):
                 qrCodeList = qrCode.objects.filter(qrCodeId=oneSorting.qrCodeId)
                 if len(qrCodeList) > 0:
                    oneQrCode = qrCodeList[0]
-
             try :
                 imgsJosn = json.loads(oneSorting.imgs)
             except BaseException as e:
