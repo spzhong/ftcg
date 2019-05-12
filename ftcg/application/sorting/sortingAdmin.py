@@ -132,7 +132,7 @@ def makeSortingInfoData(sortingList):
     userIdDict = {}
     for oneSorting in sortingList:
             try:
-                if streetIdDict.has_key(str(oneSorting.streetId)) == False:
+                if streetIdDict[str(oneSorting.streetId)]:
                     streetObj = street.objects.get(id=oneSorting.streetId)
                     streetIdDict[str(oneSorting.streetId)] = {"id": streetObj.id, "name": streetObj.name}
             except BaseException as e:
@@ -140,7 +140,7 @@ def makeSortingInfoData(sortingList):
                 logger = logging.getLogger("django")
                 logger.info("街道ID异常了" + str(e))
             try:
-                if communityIdDict.has_key(str(oneSorting.communityId)) == False:
+                if communityIdDict[oneSorting.communityId] == False:
                     communityObj = community.objects.get(id=oneSorting.communityId)
                     communityIdDict[str(oneSorting.communityId)] = {"id": communityObj.id, "name": communityObj.name}
             except BaseException as e:
@@ -148,7 +148,7 @@ def makeSortingInfoData(sortingList):
                 logger = logging.getLogger("django")
                 logger.info("社区ID异常了" + str(e))
             try:
-                if villageIdDict.has_key(str(oneSorting.villageId)) == False:
+                if villageIdDict[str(oneSorting.villageId)]:
                     villageObj = village.objects.get(id=oneSorting.villageId)
                     villageIdDict[str(oneSorting.villageId)] = {"id": villageObj.id, "name": villageObj.name}
             except BaseException as e:
@@ -156,7 +156,7 @@ def makeSortingInfoData(sortingList):
                 logger = logging.getLogger("django")
                 logger.info("小区ID异常了" + str(e))
             try:
-                if userIdDict.has_key(str(oneSorting.userId)) == False:
+                if userIdDict[str(oneSorting.userId)]:
                     userObj = user.objects.get(id=oneSorting.userId)
                     userIdDict[str(oneSorting.userId)] = {"id": userObj.id, "name": userObj.name}
             except BaseException as e:
