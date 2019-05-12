@@ -646,7 +646,7 @@ def createErCodeInfo(request):
     list = []
     for num in range(0, int(num_parm)):
         hash = hashlib.md5()
-        hash.update(str(uuid.uuid1().encode('utf-8')))
+        hash.update(str(uuid.uuid1()).encode('utf-8'))
         batchNumber = hash.hexdigest()[8:-8]
         bagType = str(bagType_parm)
         createDay = time.strftime("%Y%m%d", time.localtime())
