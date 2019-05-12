@@ -11,6 +11,7 @@ from ftcg.models import userAssessment
 from ftcg.models import assessment
 from ftcg.models import assessmentQuestion
 from ftcg.models import village
+from ftcg.models import community
 from ..user import signAdmin
 from ..user import userConfigAdmin
 
@@ -356,6 +357,10 @@ def getAssessmentList(request):
     getvillageId = None
     try:
         getcommunityId = request.GET['communityId']
+    except BaseException as e:
+        logger = logging.getLogger("django")
+        logger.info(str(e))
+    try:
         getvillageId = request.GET['villageId']
     except BaseException as e:
         logger = logging.getLogger("django")
@@ -384,11 +389,14 @@ def getAssessmentList(request):
                     userObj = user.objects.get(id=userAssessmentObj.userId)
                     # 查询对应的小区类型
                     oneVillage = village.objects.get(id=userAssessmentObj.villageId)
+                    # 查询出对应的社区
+                    communityObj = community.objects.get(id=userAssessmentObj.communityId)
                 except BaseException as e:
                     userObj = None
                     oneVillage = None
+                    communityObj = None
                 # 判断异常的信息
-                if userObj and oneVillage:
+                if userObj and oneVillage and community:
                     list.append({"id": userAssessmentObj.id,
                                  "village": {'id': oneVillage.id, 'name': oneVillage.name, 'type': oneVillage.type,
                                              'number': oneVillage.number,
@@ -400,7 +408,9 @@ def getAssessmentList(request):
                                  "correctTotalFraction": userAssessmentObj.correctTotalFraction,
                                  "type": userAssessmentObj.type,
                                  "userInfo": {"id": userObj.id, "name": userObj.name, "phone": userObj.phone,
-                                              "role": userObj.role}})
+                                              "role": userObj.role},
+                                 "communityInfo": {"id": communityObj.id, "name": communityObj.name}
+                                 })
                 else:
                     list.append({"id": userAssessmentObj.id,
                                  "village": None,
@@ -408,7 +418,8 @@ def getAssessmentList(request):
                                  "createTime": userAssessmentObj.createTime,
                                  "correctTotalFraction": userAssessmentObj.correctTotalFraction,
                                  "type": userAssessmentObj.type,
-                                 "userInfo": None})
+                                 "userInfo": None,
+                                 "communityInfo":None})
             callBackDict['code'] = '1'
             callBackDict['totalNum'] = allPage
             callBackDict['data'] = list
