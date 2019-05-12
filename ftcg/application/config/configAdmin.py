@@ -645,7 +645,9 @@ def createErCodeInfo(request):
         logger.info(str(e))
     list = []
     for num in range(0, int(num_parm)):
-        batchNumber = hashlib.md5(str(uuid.uuid1()).encode("utf-8")).encode("utf-8").hexdigest()[8:-8]
+        hash = hashlib.md5()
+        hash.update(str(uuid.uuid1().encode('utf-8')))
+        batchNumber = hash.hexdigest()[8:-8]
         bagType = str(bagType_parm)
         createDay = time.strftime("%Y%m%d", time.localtime())
         mystr = batchNumber + bagType + createDay
