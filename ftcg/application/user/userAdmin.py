@@ -53,6 +53,10 @@ def registerUser(request):
         callBackDict['code'] = '0'
         callBackDict['msg'] = '手机电话号码为空'
         return callBackDict
+    if len(phone) < 8:
+        callBackDict['code'] = '0'
+        callBackDict['msg'] = '手机电话号码太短了'
+        return callBackDict
     # 匹配手机号
     # ret = re.match(r"^1[35678]\d{9}$", phone)
     # if ret is None:
